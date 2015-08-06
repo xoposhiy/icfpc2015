@@ -4,7 +4,7 @@ namespace Lib
 {
     public class VM
     {
-        public static Logger log = LogManager.GetCurrentClassLogger();
+        private static readonly Logger log = LogManager.GetCurrentClassLogger();
 
         public VM()
         {
