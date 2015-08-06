@@ -4,11 +4,11 @@ namespace Lib
 {
     public class VM
     {
-	    public static Logger log = LogManager.GetCurrentClassLogger();
+        public static Logger log = LogManager.GetCurrentClassLogger();
 
-	    public VM()
-	    {
-			log.Info("Start");
-	    }
+        public VM()
+        {
+            log.Info("Start");
+        }
     }
 }
