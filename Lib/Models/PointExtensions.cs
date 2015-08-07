@@ -2,14 +2,6 @@
 
 namespace Lib.Models
 {
-	public static class CommonExtensions
-	{
-		public static bool InRange(this int x, int low, int high)
-		{
-			return low <= x && x <= high;
-		}
-	}
-	
 	public static class PointExtensions
 	{
 		public static Point Rotate(this Point point, Point center, double angle)
