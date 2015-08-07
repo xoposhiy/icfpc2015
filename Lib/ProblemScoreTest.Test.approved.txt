@@ -1,0 +1,11 @@
+﻿{
+  "powerScore": 0,
+  "seed": 0,
+  "tag": null,
+  "createdAt": "0001-01-01T00:00:00",
+  "score": 0,
+  "authorId": 0,
+  "teamId": 0,
+  "problemId": 0,
+  "solution": null
+}

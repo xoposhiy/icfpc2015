@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Lib
 {
-    public class VM
+	public class VM
     {
         private static readonly Logger log = LogManager.GetCurrentClassLogger();
 
