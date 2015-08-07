@@ -6,6 +6,8 @@ namespace Lib.Finder
 {
     public class FinderUnit
     {
+        private static readonly PointsComparer pointsComparer = new PointsComparer();
+
         private Point[] points;
         public int period { get; set; }
 
@@ -14,15 +16,8 @@ namespace Lib.Finder
             this.points = points;
             for (int i = 0; i < this.points.Length; i++)
                 this.points[i] = this.points[i].Sub(pivot);
+            Array.Sort(this.points, pointsComparer);
             period = GetPeriod();
-        }
-
-        private FinderUnit(Point[] points, Point pivot, int period)
-        {
-            this.points = points;
-            for (int i = 0; i < this.points.Length; i++)
-                this.points[i] = this.points[i].Sub(pivot);
-            this.period = period;
         }
 
         private int GetPeriod()
@@ -35,9 +30,10 @@ namespace Lib.Finder
             {
                 for (int j = 0; j < points.Length; j++)
                     rotated[j] = rotated[j].Rotate();
+                Array.Sort(rotated, pointsComparer);
                 bool ok = true;
                 for (int k = 0; k < points.Length && ok; k++)
-                    if (points[k].X != rotated[k].X || points[k].Y != rotated[k].Y)
+                    if (points[k].Sub(points[0]) != rotated[k].Sub(rotated[0]))
                         ok = false;
                 if (ok)
                     return i;
@@ -62,7 +58,7 @@ namespace Lib.Finder
                 maxX = Math.Max(maxX, points[i].X);
                 minY = Math.Min(minY, points[i].Y);
             }
-            int prefixX = ((width - maxX) + minX) / 2;
+            int prefixX = ((width - 1 - maxX) + minX) / 2;
             return new Point(prefixX, -minY);
         }
     }

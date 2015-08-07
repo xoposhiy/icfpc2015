@@ -2,22 +2,22 @@ namespace Lib.Finder
 {
     class StateArray<T>
     {
-        T[,,,] array;
+        T[,,] array;
 
         public StateArray(int width, int height, int period)
         {
-            array = new T[width, height, 1 << period, period];
+            array = new T[width, height, period];
         }
 
         public T this[State state]
         {
             get
             {
-                return array[state.position.X, state.position.Y, state.mask, state.angle];
+                return array[state.position.X, state.position.Y, state.angle];
             }
             set
             {
-                array[state.position.X, state.position.Y, state.mask, state.angle] = value;
+                array[state.position.X, state.position.Y, state.angle] = value;
             }
         }
     }

@@ -43,7 +43,7 @@ namespace Lib.Finder
         {
             foreach (var movement in movements[state.position.Y % 2])
             {
-                var to = new State {position = state.position.Add(movement.delta), mask = state.mask, angle = state.angle};
+                var to = new State {position = state.position.Add(movement.delta), angle = state.angle};
                 if (!CanBePlaced(field, figure.FixAt(state)) || parents[to] != null)
                     continue;
                 parents[to] = new TransitionInfo {state = state, operation = movement.operation};
@@ -53,10 +53,7 @@ namespace Lib.Finder
             for (var delta = -1; delta <= 1; delta += 2)
             {
                 var angle = (state.angle + delta + figure.period) % figure.period;
-                if ((state.mask & (1 << angle)) != 0)
-                    continue;
-
-                var to = new State {position = state.position, mask = state.mask | angle, angle = angle};
+                var to = new State {position = state.position, angle = angle};
                 if (!CanBePlaced(field, figure.FixAt(state)) || parents[to] != null)
                     continue;
                 parents[to] = new TransitionInfo {state = state, operation = delta == -1 ? 'L' : 'R'};
@@ -66,6 +63,8 @@ namespace Lib.Finder
 
         private static string RestorePath(State state, StateArray<TransitionInfo> parents)
         {
+            if (parents[state] == null)
+                return null;
             var path = new StringBuilder();
             while (true)
             {
@@ -81,7 +80,7 @@ namespace Lib.Finder
 
         public static string GetPath(bool[,] field, FinderUnit figure, Point target)
         {
-            var startState = new State {position = figure.GetStartPosition(field.GetLength(0)), mask = 1, angle = 0};
+            var startState = new State {position = figure.GetStartPosition(field.GetLength(0)), angle = 0};
             if (!CanBePlaced(field, figure.FixAt(startState)))
                 return null;
 
@@ -92,7 +91,7 @@ namespace Lib.Finder
 
             for (var i = 0; i < figure.period; i++)
             {
-                var path = RestorePath(new State {position = target, mask = 1 << i}, parents);
+                var path = RestorePath(new State {position = target, angle = i}, parents);
                 if (path != null)
                     return path;
             }

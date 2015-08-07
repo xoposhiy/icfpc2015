@@ -73,6 +73,7 @@
     <Compile Include="Finder\Finder.cs" />
     <Compile Include="Finder\FinderUnit.cs" />
     <Compile Include="Finder\Movement.cs" />
+    <Compile Include="Finder\PointsComparer.cs" />
     <Compile Include="Finder\State.cs" />
     <Compile Include="Finder\StateArray.cs" />
     <Compile Include="Finder\TestFinder.cs" />
