@@ -38,6 +38,23 @@ namespace Lib.Model
             return new Point { X = mapX, Y = mapY };
         }
 
+        public Point RotateMapLocationCW60AroundZero(Point point)
+        {
+            var k = point.X - point.Y / 2;
+            var l = point.Y;
+            if (l > 0)
+                return new Point((k - l) / 2, k + l);
+            else
+                return new Point(k / 2 - l, k + l );
+        }
+
+        public Point RotateMapLocationCCW60AroundZero(Point point,)
+        {
+            var k = point.X - point.Y / 2;
+            var l = point.Y;
+            return new Point(k/2+l,-k);
+        }
+
 
     }
 }
