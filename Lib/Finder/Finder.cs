@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lib.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,7 @@ namespace Lib.Finder
 
         public PointInt Rotate()
         {
-
+            throw new NotImplementedException();
         }
 
         public PointInt Rotate(int angle)
