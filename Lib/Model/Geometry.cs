@@ -38,7 +38,7 @@ namespace Lib.Model
             return new Point { X = mapX, Y = mapY };
         }
 
-        public Point RotateMapLocationCW60AroundZero(Point point)
+        public static Point RotateMapLocationCW60AroundZero(Point point)
         {
             var k = point.X - point.Y / 2;
             var l = point.Y;
@@ -48,7 +48,7 @@ namespace Lib.Model
                 return new Point(k / 2 - l, k + l );
         }
 
-        public Point RotateMapLocationCCW60AroundZero(Point point,)
+        public static Point RotateMapLocationCCW60AroundZero(Point point)
         {
             var k = point.X - point.Y / 2;
             var l = point.Y;
