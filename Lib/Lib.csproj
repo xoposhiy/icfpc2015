@@ -72,6 +72,7 @@
     <Compile Include="Model\Model.cs" />
     <Compile Include="ProblemJson.cs" />
     <Compile Include="ProblemScore.cs" />
+    <Compile Include="Tests\MoveTests.cs" />
     <Compile Include="UnitJson.cs" />
     <Compile Include="VM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
