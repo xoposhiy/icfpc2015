@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Lib.Models
 {
@@ -19,6 +20,9 @@ namespace Lib.Models
 		{
 			throw new NotImplementedException();
 		}
+
+        double ccv = 2 * Math.PI - Math.PI / 3;
+        double cv = Math.PI / 3;
 
 		public void Move(Directions direction)
 		{
@@ -41,10 +45,11 @@ namespace Lib.Models
                     return;
 
 				case Directions.CW:
-
+                    Members = Members.Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
 					return;
 				case Directions.CCW:
-					return;
+                    Members = Members.Select(z => z.Rotate(new Point(0, 0), ccv)).ToList();
+                    return;
 			}
 		}
 	}

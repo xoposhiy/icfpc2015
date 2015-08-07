@@ -12,7 +12,7 @@ namespace ManualControl
 
 		public static void Main()
 		{
-			var map = new MapBuilder().BuildFrom(Problems.LoadProblems()[2], 0);
+			var map = new MapBuilder().BuildFrom(Problems.LoadProblems()[7], 0);
 			var form = new TetrisForm(map.Width, map.Height);
 			form.GetMap = (x, y) =>
 			{
