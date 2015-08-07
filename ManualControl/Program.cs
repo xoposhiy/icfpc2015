@@ -10,12 +10,12 @@ namespace ManualControl
 {
     class Program
     {
-        static Point p1 = new Point(5,0);
-        static Point p2 = new Point(5, 1);
+        static Point p1 = new Point(-5,0);
+        static Point p2 = new Point(-5, 1);
 
         public static void Main()
         {
-            var form = new TetrisForm(10, 10);
+            var form = new TetrisForm(30, 30);
             form.GetMap = (x, y) =>
                {
                    if (x == p1.X && y == p1.Y) return Occupation.Occupied;

@@ -11,25 +11,18 @@ namespace ManualControl
 {
     class TetrisForm : Form
     {
-        int Size = 20;
-        int Width;
-        int Height;
-        int YOffset;
+        Geometry geometry = new Geometry();
+        public int Size = 50;
         Dictionary<Keys, Directions> keymap;
         readonly int MapWidth;
         readonly int MapHeight;
+        int XMargin = 30;
+        int YMargin = 30;
         Dictionary<Occupation,Pen> penTypes;
         Dictionary<Occupation,Brush> brushTypes;
 
         public TetrisForm(int mapWidth, int mapHeight)
         {
-            Width = (int)((double) Size / Math.Tan(Math.PI / 6));
-
-            var capHeight = (int)Math.Sqrt(Size * Size - Math.Pow(Width / 2, 2));
-
-            Height = 2*capHeight + Size;
-            YOffset = Size + capHeight;
-
             keymap = new Dictionary<Keys, Directions>();
             keymap[Keys.Q] = Directions.CCW;
             keymap[Keys.W] = Directions.CW;
@@ -48,8 +41,8 @@ namespace ManualControl
             brushTypes[Occupation.Occupied] = Brushes.Gray;
 
             ClientSize = new Size(
-                (MapWidth + 1) * Width,
-                (mapHeight) * YOffset +Height);
+                (int)(geometry.Width*Size*(mapWidth+1)),
+                (int)(geometry.YOffset*Size*mapHeight+geometry.Height* Size));
 
             DoubleBuffered = true;
 
@@ -65,33 +58,41 @@ namespace ManualControl
             Invalidate();
         }
 
-        public void DrawHexagonInGraphicCoordinates(Graphics g, int gx, int gy, Pen pen, Brush brush)
+        public void DrawHexagonInGraphicCoordinates(Graphics g, int gx, int gy, int kx, int ky, Pen pen, Brush brush)
         {
+            var w = (int)(Size * geometry.Width / 2);
+            var h = (int)(Size * geometry.Height / 2);
+            
             var points = new[]
             {
-                new Point(gx+Width/2,gy+Size/2),
-                new Point(gx+Width/2,gy-Size/2),
-                new Point(gx,gy-Height/2),
-               new Point(gx-Width/2,gy-Size/2),
-                new Point(gx-Width/2,gy+Size/2),
-                new Point(gx,gy+Height/2),
-                new Point(gx+Width/2,gy+Size/2),
+                new Point(gx+w,gy+Size/2),
+                new Point(gx+w,gy-Size/2),
+                new Point(gx,gy-h),
+               new Point(gx-w,gy-Size/2),
+                new Point(gx-w,gy+Size/2),
+                new Point(gx,gy+h),
+                new Point(gx+w,gy+Size/2),
                                
             };
             g.FillPolygon(brush, points);
             g.DrawLines(pen, points);
+            g.DrawString(kx.ToString() + "," + ky.ToString(),
+                new Font("Arial", 14),
+                Brushes.Black,
+                new Rectangle(gx - 100, gy - 100, 200, 200),
+                new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center }
+                );
         }
 
         public void DrawHexagon(Graphics g, int x, int y, Pen pen, Brush brush)
         {
-            var gx = x * Width + Width / 2;
-            if (y % 2 != 0) gx += Width / 2;
-            var gy =y * YOffset + Height / 2;
-            DrawHexagonInGraphicCoordinates(g, gx, gy, pen, brush);
+            var p = geometry.GetGeometricLocation(x, y);
+            DrawHexagonInGraphicCoordinates(g, (int)(Size *p.X )+ XMargin, (int)(Size *p.Y)+ YMargin, x,y ,pen, brush);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            e.Graphics.Clear(Color.White);
              for (int x=0;x< MapWidth;x++)
                 for (int y=0;y< MapHeight;y++)
                 {
