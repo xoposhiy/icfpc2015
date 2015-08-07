@@ -60,6 +60,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,7 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellJson.cs" />
-    <Compile Include="Finder\Finder.cs" />
     <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\Geometry.cs" />
     <Compile Include="Models\Map.cs" />
