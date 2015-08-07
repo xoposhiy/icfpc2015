@@ -20,10 +20,7 @@ namespace Lib.Model
             Height = 2 * capHeight + 1;
             YOffset = 1.0 + capHeight;
         }
-
-
-
-
+        
         public PointD GetGeometricLocation(int mapX, int mapY)
         {
             var gx = mapX * Width + Width / 2;

@@ -31,24 +31,19 @@ namespace Lib.Model
         }
 
     }
-    
-
-        public PointF(double x, double y)        {
-            X = x;
-            Y = y;
-        }
-
-        public PointF Rotate(PointF center, double angle)
+    public static class PointFExtensions
+    { 
+        public static PointF Rotate(this PointF point, PointF center, double angle)
         {
-            var vector = new Vector(center, this).Rotate(angle);
+            var vector = new Vector(center, point).Rotate(angle);
             return new PointF(vector.X + center.X, vector.Y + center.Y);
         }
     }
 
     struct Vector
     {
-        public double X { get; set; }
-        public double Y { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
 
         
         public Vector(PointF center, PointF point)
@@ -62,8 +57,8 @@ namespace Lib.Model
         {
             return new Vector()
             {
-                X = X * Math.Cos(angle) - Y * Math.Sin(angle),
-                Y = Y * Math.Cos(angle) + X * Math.Sin(angle)
+                X = X * (float)Math.Cos(angle) - Y * (float)Math.Sin(angle),
+                Y = Y * (float)Math.Cos(angle) + X * (float)Math.Sin(angle)
             };
         }
     }
