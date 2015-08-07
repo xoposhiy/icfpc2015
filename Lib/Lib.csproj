@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellJson.cs" />
+    <Compile Include="Finder\Finder.cs" />
     <Compile Include="Model\Input.cs" />
     <Compile Include="Model\Model.cs" />
     <Compile Include="ProblemJson.cs" />
