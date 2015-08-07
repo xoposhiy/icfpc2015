@@ -78,6 +78,8 @@
     <Compile Include="Finder\StateArray.cs" />
     <Compile Include="Finder\TestFinder.cs" />
     <Compile Include="Finder\TransitionInfo.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="LinearGenerator.cs" />
     <Compile Include="Models\CommonExtensions.cs" />
     <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\Geometry.cs" />
