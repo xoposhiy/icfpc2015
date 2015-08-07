@@ -27,7 +27,7 @@ namespace Lib
 		{
 			var res = client.GetSubmitions();
 			Console.WriteLine(res.Length);
-			foreach (var submission in res.Reverse())
+			foreach (var submission in res.OrderByDescending(x => x.createdAt))
 				Console.WriteLine(submission);
 		}
 

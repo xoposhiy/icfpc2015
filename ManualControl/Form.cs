@@ -8,7 +8,7 @@ namespace ManualControl
 {
 	internal class TetrisForm : Form
 	{
-		public int Size = 30;
+		public int Size = 10;
 		private readonly Dictionary<Keys, Directions> keymap;
 		private readonly int MapWidth;
 		private readonly int MapHeight;
@@ -24,34 +24,39 @@ namespace ManualControl
 
 		public TetrisForm(int mapWidth, int mapHeight)
 		{
-			Text = mapWidth + " " + mapHeight;
-			keymap = new Dictionary<Keys, Directions>();
-			keymap[Keys.Q] = Directions.CCW;
-			keymap[Keys.W] = Directions.CW;
-			keymap[Keys.U] = Directions.W;
-			keymap[Keys.I] = Directions.SW;
-			keymap[Keys.O] = Directions.SE;
-			keymap[Keys.P] = Directions.E;
-			MapWidth = mapWidth;
-			MapHeight = mapHeight;
-
-			penTypes = new Dictionary<Occupation, Pen>();
-			brushTypes = new Dictionary<Occupation, Brush>();
-			penTypes[Occupation.Empty] = Pens.Black;
-			penTypes[Occupation.Occupied] = Pens.Red;
-			penTypes[Occupation.Unit] = Pens.LawnGreen;
-			brushTypes[Occupation.Empty] = Brushes.White;
-			brushTypes[Occupation.Occupied] = Brushes.Gray;
-			brushTypes[Occupation.Unit] = Brushes.LawnGreen;
-
-			ClientSize = new Size(
-				XMargin+(int)(Geometry.Width * Size * (mapWidth + 1)),
-				YMargin+(int)(Geometry.YOffset * Size * mapHeight + Geometry.Height * Size));
-
-			DoubleBuffered = true;
+		    throw new InvalidOperationException("TODO");
 		}
 
-		protected override void OnKeyDown(KeyEventArgs e)
+	    public TetrisForm(Map map)
+	    {
+            Text = "Id: " + map.Id + " - W: " + map.Width + ", H: " + map.Height;
+            keymap = new Dictionary<Keys, Directions>();
+            keymap[Keys.Q] = Directions.CCW;
+            keymap[Keys.W] = Directions.CW;
+            keymap[Keys.U] = Directions.W;
+            keymap[Keys.I] = Directions.SW;
+            keymap[Keys.O] = Directions.SE;
+            keymap[Keys.P] = Directions.E;
+            MapWidth = map.Width;
+            MapHeight = map.Height;
+
+            penTypes = new Dictionary<Occupation, Pen>();
+            brushTypes = new Dictionary<Occupation, Brush>();
+            penTypes[Occupation.Empty] = Pens.Black;
+            penTypes[Occupation.Occupied] = Pens.Red;
+            penTypes[Occupation.Unit] = Pens.LawnGreen;
+            brushTypes[Occupation.Empty] = Brushes.White;
+            brushTypes[Occupation.Occupied] = Brushes.Gray;
+            brushTypes[Occupation.Unit] = Brushes.LawnGreen;
+
+            ClientSize = new Size(
+                XMargin + (int)(Geometry.Width * Size * (MapWidth + 1)),
+                YMargin + (int)(Geometry.YOffset * Size * MapHeight + Geometry.Height * Size));
+
+            DoubleBuffered = true;
+        }
+
+	    protected override void OnKeyDown(KeyEventArgs e)
 		{
 			if (keymap.ContainsKey(e.KeyData) && MovementRequested != null)
 				MovementRequested(keymap[e.KeyData]);
@@ -77,7 +82,7 @@ namespace ManualControl
 			g.DrawLines(pen, points);
             var str = (kx - LabelXOffset).ToString() + "," + (ky - LabetYOffset).ToString();
             g.DrawString(str,
-			             new Font("Arial", 10),
+			             new Font("Arial", 6),
 			             Brushes.Black,
 			             new Rectangle(gx - 100, gy - 100, 200, 200),
 			             new StringFormat {Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center}
