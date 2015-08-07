@@ -54,7 +54,7 @@ namespace Lib.Models
                     RotationIndex = (RotationIndex + 1) % 6;
                     return;
 				case Directions.CCW:
-                    RotationIndex = (RotationIndex - 1) % 6;
+                    RotationIndex = (RotationIndex + 5) % 6;
                     return;
 			}
 		}
