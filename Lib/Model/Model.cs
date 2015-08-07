@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lib.Model
 {
-    enum Directions
+   public enum Directions
     {
         SE,
         SW,
