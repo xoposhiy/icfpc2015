@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellJson.cs" />
+    <Compile Include="Finder\Finder.cs" />
+    <Compile Include="Finder\TestFinder.cs" />
     <Compile Include="Models\CommonExtensions.cs" />
     <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\Geometry.cs" />
@@ -172,6 +174,9 @@
     </None>
     <None Include="problems\solution_0.json" />
     <None Include="problems\submit_0.cmd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

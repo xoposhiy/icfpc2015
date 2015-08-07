@@ -20,7 +20,6 @@ namespace ManualControl
 
         }
 
-
         public static void Main()
 		{
             //RunTest(); return;
@@ -32,7 +31,7 @@ namespace ManualControl
 				{
                     if (map.Filled[x, y]) return Occupation.Occupied;
                     var shiftedPoint = new Point(x - map.Unit.Pivot.X, y - map.Unit.Pivot.Y);
-                    if (map.Unit.Members.Contains(shiftedPoint)) return Occupation.Unit;
+                    if (map.Unit.Rotations[map.Unit.RotationIndex].Contains(shiftedPoint)) return Occupation.Unit;
                     return Occupation.Empty;
 				}
 				else return Occupation.Occupied;
