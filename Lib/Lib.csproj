@@ -60,7 +60,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -70,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellJson.cs" />
+    <Compile Include="Finder\Finder.cs" />
     <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\Geometry.cs" />
     <Compile Include="Models\Map.cs" />
@@ -82,8 +82,8 @@
     <Compile Include="ProblemScore.cs" />
     <Compile Include="SubmissionResultJson.cs" />
     <Compile Include="SubmitionClient.cs" />
-    <Compile Include="SubmitionJson.cs" />
     <Compile Include="SubmitionClientTest.cs" />
+    <Compile Include="SubmitionJson.cs" />
     <Compile Include="Tests\MoveTests.cs" />
     <Compile Include="UnitJson.cs" />
     <Compile Include="VM.cs" />
@@ -93,6 +93,8 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ProblemJsonTest.Test.approved.txt" />
+    <Content Include="ProblemScoreTest.Test.approved.txt" />
     <None Include="packages.config" />
     <None Include="problems\problem_0.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -168,9 +170,6 @@
     </None>
     <None Include="problems\solution_0.json" />
     <None Include="problems\submit_0.cmd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
