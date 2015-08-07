@@ -18,31 +18,33 @@ namespace ManualControl
 			{
 				if (x.InRange(0, map.Width - 1) && y.InRange(0, map.Height - 1))
 				{
-					return map.Filled[x, y] ? Occupation.Occupied : map.Unit.Members.Contains(new Point(x, y)) ? Occupation.Unit : Occupation.Empty;
+                    if (map.Filled[x, y]) return Occupation.Occupied;
+                    var shiftedPoint = new Point(x - map.PivotPointLocation.X, y - map.PivotPointLocation.Y);
+                    if (map.Unit.Members.Contains(shiftedPoint)) return Occupation.Unit;
+                    return Occupation.Empty;
 				}
 				else return Occupation.Occupied;
 
 			};
 			form.MovementRequested = dir =>
 			{
+                var p = map.PivotPointLocation;
 				switch (dir)
 				{
 					case Directions.E:
-						p1 = new Point(p1.X + 1, p1.Y);
-						p2 = new Point(p2.X + 1, p2.Y);
-						break;
+                        map.PivotPointLocation = new Point(p.X + 1, p.Y);
+                        break;
+
 					case Directions.W:
-						p1 = new Point(p1.X - 1, p1.Y);
-						p2 = new Point(p2.X - 1, p2.Y);
-						break;
-					case Directions.SE:
-						p1 = new Point(p1.X - 1, p1.Y + 1);
-						p2 = new Point(p2.X - 1, p2.Y + 1);
+                        map.PivotPointLocation = new Point(p.X - 1, p.Y);
+                        break;
+
+                    case Directions.SE:
+                        map.PivotPointLocation = new Point(p.X + (p.Y%2!=0?1:0), p.Y + 1);
 						break;
 					case Directions.SW:
-						p1 = new Point(p1.X - 1, p1.Y + 1);
-						p2 = new Point(p2.X - 1, p2.Y + 1);
-						break;
+                        map.PivotPointLocation = new Point(p.X - (p.Y % 2 == 0 ? 1 : 0), p.Y + 1);
+                        break;
 				}
 			};
 			Application.Run(form);

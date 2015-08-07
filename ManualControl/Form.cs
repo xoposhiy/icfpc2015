@@ -8,7 +8,7 @@ namespace ManualControl
 {
 	internal class TetrisForm : Form
 	{
-		public int Size = 50;
+		public int Size = 30;
 		private readonly Dictionary<Keys, Directions> keymap;
 		private readonly int MapWidth;
 		private readonly int MapHeight;
@@ -42,8 +42,8 @@ namespace ManualControl
 			brushTypes[Occupation.Unit] = Brushes.LawnGreen;
 
 			ClientSize = new Size(
-				(int)(Geometry.Width * Size * (mapWidth + 1)),
-				(int)(Geometry.YOffset * Size * mapHeight + Geometry.Height * Size));
+				XMargin+(int)(Geometry.Width * Size * (mapWidth + 1)),
+				YMargin+(int)(Geometry.YOffset * Size * mapHeight + Geometry.Height * Size));
 
 			DoubleBuffered = true;
 		}

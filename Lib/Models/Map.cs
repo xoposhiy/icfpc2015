@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Lib.Models
 {
@@ -30,6 +31,8 @@ namespace Lib.Models
 		public bool[,] Filled { get; private set; }
 
 		public Unit Unit { get; private set; }
+
+        public Point PivotPointLocation { get; set; }
 
 		public bool IsSafeMovement(Directions direction)
 		{
