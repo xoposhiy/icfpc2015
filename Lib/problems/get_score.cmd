@@ -1,0 +1,1 @@
+curl --user ":0u0hbMTthhsUHWOZwAngrgZBZZM5J/OuXaexUvIsP0k=" https://davar.icfpcontest.org/teams/37/solutions

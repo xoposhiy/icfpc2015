@@ -60,8 +60,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+<<<<<<< HEAD
     <Reference Include="System.Drawing" />
+=======
     <Reference Include="System.Net.Http" />
+>>>>>>> a3aa4f7efdbbb11cbede11ea7f59f4a7b27c0a86
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,7 +83,6 @@
     <Compile Include="SubmitionClient.cs" />
     <Compile Include="SubmitionJson.cs" />
     <Compile Include="SubmitionClientTest.cs" />
-    <Compile Include="Tests\MoveTests.cs" />
     <Compile Include="UnitJson.cs" />
     <Compile Include="VM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
