@@ -60,6 +60,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +73,7 @@
     <Compile Include="Model\Model.cs" />
     <Compile Include="ProblemJson.cs" />
     <Compile Include="ProblemScore.cs" />
+    <Compile Include="SubmitionJson.cs" />
     <Compile Include="UnitJson.cs" />
     <Compile Include="VM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
