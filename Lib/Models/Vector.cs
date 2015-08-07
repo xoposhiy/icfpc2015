@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Lib.Model
+namespace Lib.Models
 {
 	class Vector
 	{

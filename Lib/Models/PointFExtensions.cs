@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Lib.Model
+namespace Lib.Models
 {
 	public static class PointFExtensions
 	{ 

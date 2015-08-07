@@ -1,4 +1,4 @@
-﻿namespace Lib.Model
+﻿namespace Lib.Models
 {
 	public enum Directions
 	{

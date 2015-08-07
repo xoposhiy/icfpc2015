@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Lib.Model
+namespace Lib.Models
 {
 	public class Unit
 	{
