@@ -67,12 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
+    <Compile Include="CellJson.cs" />
     <Compile Include="Model\Input.cs" />
     <Compile Include="Model\Model.cs" />
-=======
+    <Compile Include="ProblemJson.cs" />
     <Compile Include="ProblemScore.cs" />
->>>>>>> 4e7e744fffc8c2c75607f724d428972a37f9b933
+    <Compile Include="UnitJson.cs" />
     <Compile Include="VM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

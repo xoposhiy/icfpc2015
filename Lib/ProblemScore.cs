@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Lib
 {
-	public class ProblemScore
+	public class ProblemScoreJson
 	{
 		public int powerScore { get; set; }
 		public int seed { get; set; }
@@ -30,7 +30,7 @@ namespace Lib
 				Formatting = Formatting.Indented
 			};
 			
-			var s = JsonConvert.SerializeObject(new ProblemScore(), settings);
+			var s = JsonConvert.SerializeObject(new ProblemScoreJson(), settings);
 			Approvals.Verify(s);
 		}
 	}
