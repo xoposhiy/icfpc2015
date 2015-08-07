@@ -19,17 +19,17 @@ namespace Lib.Models
 
 		public static PointF GetGeometricLocation(int mapX, int mapY)
 		{
-			var gx = mapX * Width + Width / 2;
+			var gx = mapX * Width;
 			if (mapY % 2 != 0) gx += Width / 2;
-			var gy = mapY * YOffset + Height / 2;
+			var gy = mapY * YOffset;
 			return new PointF((float)gx, (float)(gy));
 		}
 
 		public static Point GetMapLocation(double x, double y)
 		{
-			var mapY = (int)(Math.Round((y - Height / 2) / YOffset));
+			var mapY = (int)(Math.Round(y / YOffset));
 			if (mapY % 2 != 0) x -= Width / 2;
-			var mapX = (int)(Math.Round((x - Width / 2) / Width));
+			var mapX = (int)(Math.Round(x / Width));
 			return new Point {X = mapX, Y = mapY};
 		}
 
