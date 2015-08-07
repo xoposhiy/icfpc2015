@@ -1,51 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using Lib;
+using Lib.Models;
 
 namespace ManualControl
 {
-    class Program
-    {
-        static Point p1 = new Point(5,0);
-        static Point p2 = new Point(5, 1);
+	internal class Program
+	{
+		private static Point p1 = new Point(-5, 0);
+		private static Point p2 = new Point(-5, 1);
 
-        public static void Main()
-        {
-            var form = new TetrisForm(10, 10);
-            form.GetMap = (x, y) =>
-               {
-                   if (x == p1.X && y == p1.Y) return Occupation.Occupied;
-                   if (x == p2.X && y == p2.Y) return Occupation.Occupied;
-                   return Occupation.Empty;
-               };
-            form.MovementRequested = dir =>
-            {
-                switch (dir)
-                {
-                    case Lib.Model.Directions.E:
-                        p1 = new Point(p1.X + 1, p1.Y);
-                        p2 = new Point(p2.X + 1, p2.Y);
-                        break;
-                    case Lib.Model.Directions.W:
-                        p1 = new Point(p1.X - 1, p1.Y);
-                        p2 = new Point(p2.X - 1, p2.Y);
-                        break;
-                    case Lib.Model.Directions.SE:
-                        p1 = new Point(p1.X - 1, p1.Y+1);
-                        p2 = new Point(p2.X - 1, p2.Y+1);
-                        break;
-                    case Lib.Model.Directions.SW:
-                        p1 = new Point(p1.X - 1, p1.Y+1);
-                        p2 = new Point(p2.X - 1, p2.Y+1);
-                        break;
-                }
+		public static void Main()
+		{
+			var map = new MapBuilder().BuildFrom(Problems.LoadProblems()[7], 0);
+			var form = new TetrisForm(map.Width, map.Height);
+			form.GetMap = (x, y) =>
+			{
+				if (x.InRange(0, map.Width - 1) && y.InRange(0, map.Height - 1))
+				{
+                    if (map.Filled[x, y]) return Occupation.Occupied;
+                    var shiftedPoint = new Point(x - map.Unit.Pivot.X, y - map.Unit.Pivot.Y);
+                    if (map.Unit.Members.Contains(shiftedPoint)) return Occupation.Unit;
+                    return Occupation.Empty;
+				}
+				else return Occupation.Occupied;
 
-            };
-            Application.Run(form);
-        }
-    }
+			};
+			form.MovementRequested = dir =>
+			{
+                map.Unit.Move(dir);
+			};
+			Application.Run(form);
+		}
+	}
 }
