@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Drawing;
-using Lib.Model;
+using Lib.Models;
 using System;
 
 namespace Lib.Tests

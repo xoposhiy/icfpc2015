@@ -3,6 +3,7 @@
     public enum Occupation
     {
         Empty,
-        Occupied
+        Occupied,
+		Unit
     }
 }
