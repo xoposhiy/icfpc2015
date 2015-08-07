@@ -1,12 +1,24 @@
 ﻿using NUnit.Framework;
+using System.Drawing;
+using Lib.Model;
+using System;
+
 namespace Lib.Tests
 {
     [TestFixture]
     public class MoveTest
     {
-        public void RotateCW(int pointX, int pointY, int centerX, int centerY)
+        [SetUp]
+        public void SetUp()
         {
-            var center = new Point(6, 4);
+            
+        }
+
+        [Test]
+        public void TestRotate()
+        {
+            
+
         }
     }
 }

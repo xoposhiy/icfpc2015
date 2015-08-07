@@ -31,6 +31,16 @@ namespace Lib.Model
         }
 
     }
+
+    public static class PointExtensions
+    {
+        public static Point Rotate(this Point point, Point center, double angle)
+        {
+            var resultF = Geometry.GetGeometricLocation(point.X, point.Y).Rotate(Geometry.GetGeometricLocation(center.X, center.Y), angle);
+            return Geometry.GetMapLocation(resultF.X, resultF.Y);
+        }
+    }
+
     public static class PointFExtensions
     { 
         public static PointF Rotate(this PointF point, PointF center, double angle)
@@ -40,7 +50,7 @@ namespace Lib.Model
         }
     }
 
-    struct Vector
+    class Vector
     {
         public float X { get; set; }
         public float Y { get; set; }
