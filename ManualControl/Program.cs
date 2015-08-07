@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using Lib;
 using Lib.Models;
 
 namespace ManualControl
@@ -11,12 +12,16 @@ namespace ManualControl
 
 		public static void Main()
 		{
-			var form = new TetrisForm(30, 30);
+			var map = new MapBuilder().BuildFrom(Problems.LoadProblems()[3], 0);
+			var form = new TetrisForm(map.Width, map.Height);
 			form.GetMap = (x, y) =>
 			{
-				if (x == p1.X && y == p1.Y) return Occupation.Occupied;
-				if (x == p2.X && y == p2.Y) return Occupation.Occupied;
-				return Occupation.Empty;
+				if (x.InRange(0, map.Width - 1) && y.InRange(0, map.Height - 1))
+				{
+					return map.Filled[x, y] ? Occupation.Occupied : map.Unit.Members.Contains(new Point(x, y)) ? Occupation.Unit : Occupation.Empty;
+				}
+				else return Occupation.Occupied;
+
 			};
 			form.MovementRequested = dir =>
 			{

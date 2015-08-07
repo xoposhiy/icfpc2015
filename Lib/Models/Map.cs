@@ -2,6 +2,18 @@
 
 namespace Lib.Models
 {
+	public class MapBuilder
+	{
+		public Map BuildFrom(ProblemJson problem, int unitIndex)
+		{
+			var f = new bool[problem.width, problem.height];
+			foreach (var cell in problem.filled)
+				f[cell.x, cell.y] = true;
+			var u = problem.units[unitIndex].ToUnit();
+			return new Map(problem.height, problem.width, f, u);
+		}
+	}
+
 	public class Map
 	{
 		public readonly int Height;
