@@ -5,11 +5,10 @@ using System.Linq;
 
 namespace Lib.Models
 {
-	public class Unit
-	{
-		public List<Point> Members;
-        public List<Point>[] Rotations;
-        public int RotationIndex;
+    public class Unit
+    {
+        public readonly List<Point> Members;
+        public readonly List<Point>[] Rotations;
         public Unit(List<Point> members, Point pivot)
         {
             Members = members.Select(c => c.Sub(pivot)).ToList();
@@ -21,10 +20,10 @@ namespace Lib.Models
                 Rotations[i] = Rotations[i - 1].Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
         }
 
-		public bool IsSafePath(IEnumerable<Directions> path)
-		{
-			throw new NotImplementedException();
-		}
+        public bool IsSafePath(IEnumerable<Directions> path)
+        {
+            throw new NotImplementedException();
+        }
 
-	}
+    }
 }
