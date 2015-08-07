@@ -22,7 +22,7 @@ namespace Lib.Tests
             Assert.AreEqual(new Point(expX, expY), new Point(x, y).Rotate(center, cw));           
         }
 
-        [TestCase(0, -1, -1, 0)]
+        [TestCase(0, -1, -1, -1)]
         [TestCase(0, 1, 1, 0)]
         public void TestRotateCCW(int x, int y, int expX, int expY)
         {

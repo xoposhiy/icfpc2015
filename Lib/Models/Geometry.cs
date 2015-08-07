@@ -33,9 +33,15 @@ namespace Lib.Models
 			return new Point {X = mapX, Y = mapY};
 		}
 
+        public static int floor2(int x)
+        {
+            if (x >= 0) return x / 2;
+            return (x - 1) / 2;
+        }
+
 		public static Point RotateMapLocationCW60AroundZero(Point point)
 		{
-			var k = point.X - point.Y / 2;
+            var k = point.X - floor2(point.Y);
 			var l = point.Y;
 			if (l > 0)
 				return new Point((k - l) / 2, k + l);
@@ -44,7 +50,7 @@ namespace Lib.Models
 
 		public static Point RotateMapLocationCCW60AroundZero(Point point)
 		{
-			var k = point.X - point.Y / 2;
+            var k = point.X - floor2(point.Y);
 			var l = point.Y;
 			return new Point(k / 2 + l, -k);
 		}

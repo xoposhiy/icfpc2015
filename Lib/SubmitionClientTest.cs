@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Lib.Models;
 using NUnit.Framework;
 
 namespace Lib
@@ -14,10 +15,10 @@ namespace Lib
 		{
 			client.PostSubmitions(new SubmitionJson
 			{
-				problemId = 0,
+				problemId = 1,
 				seed = 0,
 				tag = "SubmissionClientTest.SendOne-" + DateTime.Now,
-				solution = "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!Ei!Ei!"
+				solution = "Ei! ".Repeat(30)
 			});
 		}
 
@@ -26,7 +27,7 @@ namespace Lib
 		{
 			var res = client.GetSubmitions();
 			Console.WriteLine(res.Length);
-			foreach (var submission in res)
+			foreach (var submission in res.Reverse())
 				Console.WriteLine(submission);
 		}
 
@@ -41,8 +42,8 @@ namespace Lib
 					problemId = p.id,
 					seed = seed,
 					tag = "SubmissionClientTest.SendAllProblems-" + DateTime.Now,
-					solution = "Ei!Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!Ei!Ei!Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!"
-				};
+					solution = string.Join("", Phrases.all)
+                    };
 			client.PostSubmitions(submissions.ToArray());
 		}
 	}
