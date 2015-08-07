@@ -8,21 +8,27 @@ namespace Lib.Models
 	public class Unit
 	{
 		public List<Point> Members;
+        public List<Point>[] Rotations;
 		public Point Pivot;
+        public int RotationIndex;
+        public Unit(List<Point> members, Point pivot)
+        {
+            Members = members;
+            Pivot = pivot;
 
-		public Unit(List<Point> members, Point pivot)
-		{
-			Members = members;
-			Pivot = pivot;
-		}
+            double cv = Math.PI / 3;
+            Rotations = new List<Point>[6];
+            Rotations[0] = members.Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
+            for (int i = 1; i < 6; i++)
+                Rotations[i] = Rotations[i - 1].Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
+        }
 
 		public bool IsSafePath(IEnumerable<Directions> path)
 		{
 			throw new NotImplementedException();
 		}
-
-        double ccv = 2 * Math.PI - Math.PI / 3;
-        double cv = Math.PI / 3;
+        
+        
 
 		public void Move(Directions direction)
 		{
@@ -45,10 +51,10 @@ namespace Lib.Models
                     return;
 
 				case Directions.CW:
-                    Members = Members.Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
-					return;
+                    RotationIndex = (RotationIndex + 1) % 6;
+                    return;
 				case Directions.CCW:
-                    Members = Members.Select(z => z.Rotate(new Point(0, 0), ccv)).ToList();
+                    RotationIndex = (RotationIndex - 1) % 6;
                     return;
 			}
 		}

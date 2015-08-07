@@ -30,10 +30,10 @@ namespace Lib.Tests
         }
 
         [Test]
-        public void CheckNewMethod([Range(-5, 5)] int x, [Range(-5, 5)] int y)
+        public void CheckNewMethod([Range(-10, 10)] int x, [Range(-10, 10)] int y)
         {
             var point = new Point(x, y);
-            Assert.AreEqual(point.Rotate(center, ccw), Geometry.RotateMapLocationCCW60AroundZero(point));
+           Assert.AreEqual(point.Rotate(center, ccw), Geometry.RotateMapLocationCCW60AroundZero(point));
         }
     }
 }
