@@ -1,44 +1,58 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Drawing;
+using System.Linq;
 
 namespace Lib.Models
 {
-	public class MapBuilder
-	{
-		public Map BuildFrom(ProblemJson problem, int unitIndex)
-		{
-			var f = new bool[problem.width, problem.height];
-			foreach (var cell in problem.filled)
-				f[cell.x, cell.y] = true;
-			var u = problem.units[unitIndex].ToUnit();
-			return new Map(problem.height, problem.width, f, u, problem.id);
-		}
-	}
+    public class Map
+    {
+        public readonly ImmutableStack<Unit> NextUnits;
+        public readonly int Height;
+        public readonly int Width;
+        public readonly int Id;
 
-	public class Map
-	{
-		public readonly int Height;
-		public readonly int Width;
+        public Map(int id, bool[,] filled, ImmutableStack<Unit> nextUnits)
+            : this(id, filled, PositionNewUnit(filled.GetLength(0), nextUnits), nextUnits.Pop())
+        {
+        }
 
-		public Map(int height, int width, bool[,] filled, Unit unit, int id)
-		{
-			Height = height;
-			Width = width;
-			Filled = filled;
-			Unit = unit;
-		    Id = id;
-		}
+        private static PositionedUnit PositionNewUnit(int width, ImmutableStack<Unit> nextUnits)
+        {
+            return nextUnits.IsEmpty ? null
+                : new PositionedUnit(nextUnits.Peek(), 0, new Point(width / 2, 0));
+        }
 
-	    public int Id { get; private set; }
+        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits)
+        {
+            Id = id;
+            NextUnits = nextUnits;
+            Width = filled.GetLength(0);
+            Height = filled.GetLength(1);
+            Filled = filled;
+            Unit = unit;
+        }
 
-	    public bool[,] Filled { get; private set; }
+        public bool[,] Filled { get; private set; }
 
-	    public Unit Unit { get; private set; }
-        
+        public PositionedUnit Unit { get; private set; }
 
-		public bool IsSafeMovement(Directions direction)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public Map LockUnit()
+        {
+            bool[,] f = (bool[,])Filled.Clone();
+            foreach (var cell in Unit.Members)
+                f[cell.X, cell.Y] = true;
+            return new Map(Id, f, NextUnits);
+        }
+
+        public bool IsSafeMovement(Directions direction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Map Move(Directions dir)
+        {
+            return new Map(Id, Filled, Unit.Move(dir), NextUnits);
+        }
+    }
 }

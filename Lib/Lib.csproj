@@ -78,7 +78,6 @@
     <Compile Include="Finder\StateArray.cs" />
     <Compile Include="Finder\TestFinder.cs" />
     <Compile Include="Finder\TransitionInfo.cs" />
-    <Compile Include="Game.cs" />
     <Compile Include="LinearGenerator.cs" />
     <Compile Include="Models\CommonExtensions.cs" />
     <Compile Include="Models\Directions.cs" />
@@ -86,6 +85,7 @@
     <Compile Include="Models\Map.cs" />
     <Compile Include="Models\PointExtensions.cs" />
     <Compile Include="Models\PointFExtensions.cs" />
+    <Compile Include="Models\PositionedUnit.cs" />
     <Compile Include="Models\Unit.cs" />
     <Compile Include="Models\Vector.cs" />
     <Compile Include="Phrases.cs" />

@@ -4,6 +4,6 @@
     {
         Empty,
         Occupied,
-		Unit
+        Unit,
     }
 }

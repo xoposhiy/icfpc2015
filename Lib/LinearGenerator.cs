@@ -4,18 +4,18 @@ namespace Lib
 {
     public class LinearGenerator
     {
+        public LinearGenerator(int seed)
+        {
+            next = (ulong)seed;
+        }
+
         private static ulong next = 1;
 
-        public uint Next()
+        public int Next()
         {
             var prev = next;
             next = next * 1103515245 + 12345;
-            return (uint)(prev >> 16) % 32768;
-        }
-
-        public void SetSeed(int seed)
-        {
-            next = (uint)seed;
+            return (int)(prev >> 16) % 32768;
         }
     }
 
@@ -25,8 +25,7 @@ namespace Lib
         [Test]
         public void Test()
         {
-            var gen = new LinearGenerator();
-            gen.SetSeed(17);
+            var gen = new LinearGenerator(17);
             foreach (var expected in new[] {0, 24107, 16552, 12125, 9427, 13152, 21440, 3383, 6873, 16117})
                 Assert.AreEqual(expected, gen.Next());
         }
