@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellJson.cs" />
+    <Compile Include="Finder\Finder.cs" />
+    <Compile Include="Finder\TestFinder.cs" />
     <Compile Include="Models\CommonExtensions.cs" />
     <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\Geometry.cs" />

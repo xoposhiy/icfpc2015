@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib.Finder
+namespace Lib
 {
-    class PointInt
+    public class PointInt
     {
         public int x { get; set; }
         public int y { get; set; }
@@ -30,7 +30,8 @@ namespace Lib.Finder
 
         public PointInt Rotate()
         {
-            throw new NotImplementedException();
+            var p = Geometry.RotateMapLocationCCW60AroundZero(new System.Drawing.Point(x, y));
+            return new PointInt(p.X, p.Y);
         }
 
         public PointInt Rotate(int angle)
@@ -42,12 +43,12 @@ namespace Lib.Finder
         }
     }
 
-    class Unit
+    public class FinderUnit
     {
         private PointInt[] points;
         public int period { get; set; }
 
-        public Unit(PointInt[] points, PointInt pivot)
+        public FinderUnit(PointInt[] points, PointInt pivot)
         {
             this.points = points;
             for (int i = 0; i < this.points.Length; i++)
@@ -55,7 +56,7 @@ namespace Lib.Finder
             period = GetPeriod();
         }
 
-        private Unit(PointInt[] points, PointInt pivot, int period)
+        private FinderUnit(PointInt[] points, PointInt pivot, int period)
         {
             this.points = points;
             for (int i = 0; i < this.points.Length; i++)
@@ -105,7 +106,7 @@ namespace Lib.Finder
         }
     }
 
-    class State
+    public class State
     {
         public PointInt position { get; set; }
         public int mask { get; set; }
@@ -146,9 +147,9 @@ namespace Lib.Finder
         }
     }
 
-    class Finder
+    static class Finder
     {
-        private readonly Movement[][] movements = new Movement[][]
+        private static readonly Movement[][] movements = new Movement[][]
         {
             new Movement[]
             {
@@ -166,7 +167,7 @@ namespace Lib.Finder
             }
         };
 
-        private bool CanBePlaced(bool[,] field, PointInt[] points)
+        private static bool CanBePlaced(bool[,] field, PointInt[] points)
         {
             int width = field.GetLength(0);
             int height = field.GetLength(1);
@@ -180,7 +181,7 @@ namespace Lib.Finder
             return true;
         }
 
-        private void DFS(State state, bool[,] field, Unit figure, StateArray<TransitionInfo> parents)
+        private static void DFS(State state, bool[,] field, FinderUnit figure, StateArray<TransitionInfo> parents)
         {
             foreach (var movement in movements[state.position.y % 2])
             {
@@ -205,7 +206,7 @@ namespace Lib.Finder
             }
         }
 
-        private string RestorePath(State state, StateArray<TransitionInfo> parents)
+        private static string RestorePath(State state, StateArray<TransitionInfo> parents)
         {
             var path = new StringBuilder();
             while (true)
@@ -220,7 +221,7 @@ namespace Lib.Finder
             return string.Join("", path.ToString().Reverse());
         }
 
-        public string GetPath(bool[,] field, Unit figure, PointInt target)
+        public static string GetPath(bool[,] field, FinderUnit figure, PointInt target)
         {
             var startState = new State { position = figure.GetStartPosition(field.GetLength(0)), mask = 1, angle = 0 };
             if (!CanBePlaced(field, figure.FixAt(startState)))
