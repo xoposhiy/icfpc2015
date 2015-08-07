@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Drawing;
+using NUnit.Framework;
 
-namespace Lib
+namespace Lib.Finder
 {
     [TestFixture]
     public class FinderTest
@@ -9,9 +10,9 @@ namespace Lib
         public void Test()
         {
             var field = new bool[5, 10];
-            var figure = new FinderUnit(new PointInt[] { new PointInt(1, 0), new PointInt(2, 0) }, new PointInt(1, 0));
-            var target = new PointInt(1, 9);
-            var x = Finder.GetPath(field, figure, target);
+            var figure = new FinderUnit(new Point[] { new Point(1, 0), new Point(2, 0) }, new Point(1, 0));
+            var target = new Point(1, 9);
+            var x = Lib.Finder.Finder.GetPath(field, figure, target);
         }
     }
 }
