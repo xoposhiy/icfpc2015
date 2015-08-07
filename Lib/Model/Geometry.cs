@@ -19,8 +19,7 @@ namespace Lib.Model
             var capHeight = Math.Sqrt(1.0 - Math.Pow(Width / 2, 2));
             Height = 2 * capHeight + 1;
             YOffset = 1.0 + capHeight;
-        }
-        
+        }         
 
         public static PointF GetGeometricLocation(int mapX, int mapY)
         {
