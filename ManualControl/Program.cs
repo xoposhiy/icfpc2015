@@ -12,14 +12,14 @@ namespace ManualControl
 
 		public static void Main()
 		{
-			var map = new MapBuilder().BuildFrom(Problems.LoadProblems()[3], 0);
+			var map = new MapBuilder().BuildFrom(Problems.LoadProblems()[2], 0);
 			var form = new TetrisForm(map.Width, map.Height);
 			form.GetMap = (x, y) =>
 			{
 				if (x.InRange(0, map.Width - 1) && y.InRange(0, map.Height - 1))
 				{
                     if (map.Filled[x, y]) return Occupation.Occupied;
-                    var shiftedPoint = new Point(x - map.PivotPointLocation.X, y - map.PivotPointLocation.Y);
+                    var shiftedPoint = new Point(x - map.Unit.Pivot.X, y - map.Unit.Pivot.Y);
                     if (map.Unit.Members.Contains(shiftedPoint)) return Occupation.Unit;
                     return Occupation.Empty;
 				}
@@ -28,24 +28,7 @@ namespace ManualControl
 			};
 			form.MovementRequested = dir =>
 			{
-                var p = map.PivotPointLocation;
-				switch (dir)
-				{
-					case Directions.E:
-                        map.PivotPointLocation = new Point(p.X + 1, p.Y);
-                        break;
-
-					case Directions.W:
-                        map.PivotPointLocation = new Point(p.X - 1, p.Y);
-                        break;
-
-                    case Directions.SE:
-                        map.PivotPointLocation = new Point(p.X + (p.Y%2!=0?1:0), p.Y + 1);
-						break;
-					case Directions.SW:
-                        map.PivotPointLocation = new Point(p.X - (p.Y % 2 == 0 ? 1 : 0), p.Y + 1);
-                        break;
-				}
+                map.Unit.Move(dir);
 			};
 			Application.Run(form);
 		}

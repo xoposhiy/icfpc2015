@@ -33,12 +33,12 @@ namespace Lib.Models
 					return;
 
 				case Directions.SE:
-					Pivot = new Point(Pivot.X, Pivot.Y + 1);
-					return;
+					Pivot = new Point(Pivot.X + (Pivot.Y % 2 != 0 ? 1 : 0), Pivot.Y + 1);
+                    return;
 
 				case Directions.SW:
-					Pivot = new Point(Pivot.X - 1, Pivot.Y + 1);
-					return;
+					Pivot = new Point(Pivot.X - (Pivot.Y % 2 == 0 ? 1 : 0), Pivot.Y + 1);
+                    return;
 
 				case Directions.CW:
 
