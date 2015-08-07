@@ -55,7 +55,11 @@ namespace Lib.Model
         public float X { get; set; }
         public float Y { get; set; }
 
-        
+        public Vector()
+        {
+
+        }
+
         public Vector(PointF center, PointF point)
         {
             X = point.X - center.X;

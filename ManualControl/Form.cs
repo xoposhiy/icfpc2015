@@ -11,7 +11,6 @@ namespace ManualControl
 {
     class TetrisForm : Form
     {
-        Geometry geometry = new Geometry();
         public int Size = 50;
         Dictionary<Keys, Directions> keymap;
         readonly int MapWidth;
@@ -41,8 +40,8 @@ namespace ManualControl
             brushTypes[Occupation.Occupied] = Brushes.Gray;
 
             ClientSize = new Size(
-                (int)(geometry.Width*Size*(mapWidth+1)),
-                (int)(geometry.YOffset*Size*mapHeight+geometry.Height* Size));
+                (int)(Geometry.Width*Size*(mapWidth+1)),
+                (int)(Geometry.YOffset*Size*mapHeight+Geometry.Height* Size));
 
             DoubleBuffered = true;
 
@@ -60,8 +59,8 @@ namespace ManualControl
 
         public void DrawHexagonInGraphicCoordinates(Graphics g, int gx, int gy, int kx, int ky, Pen pen, Brush brush)
         {
-            var w = (int)(Size * geometry.Width / 2);
-            var h = (int)(Size * geometry.Height / 2);
+            var w = (int)(Size * Geometry.Width / 2);
+            var h = (int)(Size * Geometry.Height / 2);
             
             var points = new[]
             {
@@ -86,7 +85,7 @@ namespace ManualControl
 
         public void DrawHexagon(Graphics g, int x, int y, Pen pen, Brush brush)
         {
-            var p = geometry.GetGeometricLocation(x, y);
+            var p = Geometry.GetGeometricLocation(x, y);
             DrawHexagonInGraphicCoordinates(g, (int)(Size *p.X )+ XMargin, (int)(Size *p.Y)+ YMargin, x,y ,pen, brush);
         }
 
