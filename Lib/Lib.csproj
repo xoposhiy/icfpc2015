@@ -70,11 +70,21 @@
   <ItemGroup>
     <Compile Include="CellJson.cs" />
     <Compile Include="Finder\Finder.cs" />
-    <Compile Include="Model\Input.cs" />
-    <Compile Include="Model\Model.cs" />
+    <Compile Include="Models\Directions.cs" />
+    <Compile Include="Models\Geometry.cs" />
+    <Compile Include="Models\Map.cs" />
+    <Compile Include="Models\PointExtensions.cs" />
+    <Compile Include="Models\PointFExtensions.cs" />
+    <Compile Include="Models\Unit.cs" />
+    <Compile Include="Models\Vector.cs" />
     <Compile Include="ProblemJson.cs" />
+    <Compile Include="Problems.cs" />
     <Compile Include="ProblemScore.cs" />
+    <Compile Include="SubmissionResultJson.cs" />
+    <Compile Include="SubmitionClient.cs" />
+    <Compile Include="SubmitionClientTest.cs" />
     <Compile Include="SubmitionJson.cs" />
+    <Compile Include="Tests\MoveTests.cs" />
     <Compile Include="UnitJson.cs" />
     <Compile Include="VM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +93,8 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ProblemJsonTest.Test.approved.txt" />
+    <Content Include="ProblemScoreTest.Test.approved.txt" />
     <None Include="packages.config" />
     <None Include="problems\problem_0.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
