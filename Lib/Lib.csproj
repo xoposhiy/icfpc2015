@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Input.cs" />
+    <Compile Include="Model\Model.cs" />
     <Compile Include="VM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
