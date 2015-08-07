@@ -80,6 +80,7 @@
     <Compile Include="SubmitionClient.cs" />
     <Compile Include="SubmitionJson.cs" />
     <Compile Include="SubmitionClientTest.cs" />
+    <Compile Include="Tests\MoveTests.cs" />
     <Compile Include="UnitJson.cs" />
     <Compile Include="VM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

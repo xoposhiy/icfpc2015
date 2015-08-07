@@ -7,24 +7,22 @@ using System.Threading.Tasks;
 
 namespace Lib.Model
 {
-    public class Geometry
+    public static class Geometry
     {
-        public readonly double Width;
-        public readonly double Height;
-        public readonly double YOffset;
+        public static readonly double Width;
+        public static readonly double Height;
+        public static readonly double YOffset;
 
-        public Geometry()
+        static Geometry()
         {
             Width = 1.0 / Math.Tan(Math.PI / 6);
             var capHeight = Math.Sqrt(1.0 - Math.Pow(Width / 2, 2));
             Height = 2 * capHeight + 1;
             YOffset = 1.0 + capHeight;
         }
+        
 
-
-
-
-        public PointF GetGeometricLocation(int mapX, int mapY)
+        public static PointF GetGeometricLocation(int mapX, int mapY)
         {
             var gx = mapX * Width + Width / 2;
             if (mapY % 2 != 0) gx += Width / 2;
@@ -32,7 +30,7 @@ namespace Lib.Model
             return new PointF((float)gx, (float)(gy));
         }
 
-        public Point GetMapLocation(double x, double y)
+        public static Point GetMapLocation(double x, double y)
         {
             var mapY = (int)(Math.Round((y - Height / 2) / YOffset));
             if (mapY % 2 != 0) x -= Width / 2;
