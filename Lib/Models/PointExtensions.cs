@@ -14,8 +14,10 @@ namespace Lib.Models
 	{
 		public static Point Rotate(this Point point, Point center, double angle)
 		{
-			var resultF = Geometry.GetGeometricLocation(point.X, point.Y).Rotate(Geometry.GetGeometricLocation(center.X, center.Y), angle);
-			return Geometry.GetMapLocation(resultF.X, resultF.Y);
+            var geometryLocation = Geometry.GetGeometricLocation(point.X, point.Y);
+            var geometryCenter = Geometry.GetGeometricLocation(center.X, center.Y);
+            var rotated = geometryLocation.Rotate(geometryCenter, angle);
+			return Geometry.GetMapLocation(rotated.X, rotated.Y);
 		}
 	}
 }
