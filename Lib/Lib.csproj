@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellJson.cs" />
+    <Compile Include="Models\CommonExtensions.cs" />
     <Compile Include="Models\Directions.cs" />
     <Compile Include="Models\Geometry.cs" />
     <Compile Include="Models\Map.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Models\PointFExtensions.cs" />
     <Compile Include="Models\Unit.cs" />
     <Compile Include="Models\Vector.cs" />
+    <Compile Include="Phrases.cs" />
     <Compile Include="ProblemJson.cs" />
     <Compile Include="Problems.cs" />
     <Compile Include="ProblemScore.cs" />
