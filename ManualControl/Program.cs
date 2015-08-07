@@ -10,8 +10,20 @@ namespace ManualControl
 		private static Point p1 = new Point(-5, 0);
 		private static Point p2 = new Point(-5, 1);
 
-		public static void Main()
+        public static void RunTest()
+        {
+            var form = new TetrisForm(20, 14);
+            form.GetMap = (x, y) => Occupation.Empty;
+            form.LabelXOffset = 9;
+            form.LabetYOffset = 6;
+            Application.Run(form);
+
+        }
+
+
+        public static void Main()
 		{
+            //RunTest(); return;
 			var map = new MapBuilder().BuildFrom(Problems.LoadProblems()[7], 0);
 			var form = new TetrisForm(map.Width, map.Height);
 			form.GetMap = (x, y) =>

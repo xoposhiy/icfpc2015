@@ -19,6 +19,9 @@ namespace ManualControl
 		public Action<Directions> MovementRequested;
 		public Func<int, int, Occupation> GetMap;
 
+       public int LabelXOffset;
+        public int LabetYOffset;
+
 		public TetrisForm(int mapWidth, int mapHeight)
 		{
 			Text = mapWidth + " " + mapHeight;
@@ -72,8 +75,9 @@ namespace ManualControl
 			};
 			g.FillPolygon(brush, points);
 			g.DrawLines(pen, points);
-			g.DrawString(kx + "," + ky,
-			             new Font("Arial", 14),
+            var str = (kx - LabelXOffset).ToString() + "," + (ky - LabetYOffset).ToString();
+            g.DrawString(str,
+			             new Font("Arial", 10),
 			             Brushes.Black,
 			             new Rectangle(gx - 100, gy - 100, 200, 200),
 			             new StringFormat {Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center}
