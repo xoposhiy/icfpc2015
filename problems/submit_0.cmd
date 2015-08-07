@@ -1,1 +1,0 @@
-curl --user ":0u0hbMTthhsUHWOZwAngrgZBZZM5J/OuXaexUvIsP0k=" -X POST -H "Content-Type: application/json" -d "[{\"problemId\": 0,\"seed\": 0,\"solution\": \"ei!ei!\"}]" https://davar.icfpcontest.org/teams/37/solutions

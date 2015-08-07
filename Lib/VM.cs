@@ -1,6 +1,4 @@
-﻿using System;
-using NLog;
-using NUnit.Framework;
+﻿using NLog;
 
 namespace Lib
 {
