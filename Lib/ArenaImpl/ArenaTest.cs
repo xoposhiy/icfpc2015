@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using ApprovalTests;
 using Lib.Finder;
 using Lib.Intelligence;
@@ -13,7 +14,7 @@ namespace Lib.ArenaImpl
         [Test]
         public void Test()
         {
-            var arena = new Arena();
+            var arena = new Arena(Problems.LoadProblems().Take(5).ToArray());
 //            var solver = new PhrasesOnlySolver();
 //            var solver = new NamiraOracle();
             var solver = new Solver(new DfsFinder(), new NamiraOracle());
