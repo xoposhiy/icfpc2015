@@ -16,6 +16,7 @@ namespace ManualControl
         public Action Finished;
         public Action Started;
         Stack<Map> mapHistory;
+        public int TimerInterval {  get { return timer.Interval; } set { timer.Interval = value; } }
         string program;
         int ProgramPointer;
         public bool Running;

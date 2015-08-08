@@ -94,7 +94,8 @@ namespace ManualControl
 
         private void PlayBot_Click(object sender, EventArgs e)
         {
-            var pr=new NamiraOracle().MakeMove(Map);
+            var pr=new NamiraOracle().PlayGame(Map);
+            controller.TimerInterval = 1;
             if (pr != null)
                 controller.Run(pr);
         }
