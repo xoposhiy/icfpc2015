@@ -69,6 +69,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArenaImpl\Arena.cs" />
+    <Compile Include="ArenaImpl\ArenaMapResult.cs" />
+    <Compile Include="ArenaImpl\ArenaModel.cs" />
+    <Compile Include="ArenaImpl\ArenaModelTest.cs" />
+    <Compile Include="ArenaImpl\ArenaProblem.cs" />
+    <Compile Include="ArenaImpl\ISolver.cs" />
+    <Compile Include="ArenaImpl\SolverResult.cs" />
     <Compile Include="CellJson.cs" />
     <Compile Include="Finder\Finder.cs" />
     <Compile Include="Finder\Movement.cs" />
@@ -99,6 +106,7 @@
     <Compile Include="Problems.cs" />
     <Compile Include="ProblemScore.cs" />
     <Compile Include="PhrasesOnlySolver.cs" />
+    <Compile Include="ProblemsTest.cs" />
     <Compile Include="SubmissionResultJson.cs" />
     <Compile Include="SubmitionClient.cs" />
     <Compile Include="SubmitionClientTest.cs" />
@@ -112,8 +120,6 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ProblemJsonTest.Test.approved.txt" />
-    <Content Include="ProblemScoreTest.Test.approved.txt" />
     <None Include="packages.config" />
     <None Include="problems\problem_0.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
