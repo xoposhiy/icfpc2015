@@ -34,6 +34,7 @@ namespace Lib.Intelligence
                     if (!map.IsValidPosition(nextPosition))
                     {
                         suggestions.Add(new OracleSuggestion(position, dir));
+                        break;
                     }
                 }
             }
