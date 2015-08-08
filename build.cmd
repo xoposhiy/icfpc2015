@@ -1,6 +1,9 @@
 @echo off
 pushd %~dp0
 
+if exist bin (
+	rd bin /Q /S
+)
 for /D %%d in (*) DO (
 	pushd "%%d"
 	if exist bin (

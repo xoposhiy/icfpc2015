@@ -54,7 +54,8 @@ namespace ManualControl
             }
             var c = Program[ProgramPointer];
             var dir = c.ToDirection();
-            mapHistory.Push(mapHistory.Peek().Move(dir));
+            if (!mapHistory.Peek().IsOver)
+                mapHistory.Push(mapHistory.Peek().Move(dir));
             if (Updated != null) Updated();
             ProgramPointer++;
         }
