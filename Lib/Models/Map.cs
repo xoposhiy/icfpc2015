@@ -32,7 +32,7 @@ namespace Lib.Models
         {
         }
 
-        private Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
+        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
         {
             Id = id;
             NextUnits = nextUnits;

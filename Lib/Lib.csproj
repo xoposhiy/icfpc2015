@@ -79,6 +79,7 @@
     <Compile Include="CellJson.cs" />
     <Compile Include="Finder\DfsFinder.cs" />
     <Compile Include="Finder\IFinder.cs" />
+    <Compile Include="Finder\MagicDfsFinder.cs" />
     <Compile Include="Intelligence\AzuraOracle.cs" />
     <Compile Include="Intelligence\IOracle.cs" />
     <Compile Include="Intelligence\NamiraOracle.cs" />
