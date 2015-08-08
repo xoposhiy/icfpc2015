@@ -9,8 +9,8 @@ for /D %%d in (*) DO (
 	popd
 )
 
+call build.cmd
+
 set targetZip=hack-the-loop.zip
-
 erase %targetZip%
-
 7za.exe a -ir@filesToSubmit.txt -xr@filesNotToSubmit.txt %targetZip%
