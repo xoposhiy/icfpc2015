@@ -2,6 +2,7 @@
 using Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace ManualControl
         {
             get; private set;
         }
+
+        public List<Point> OraclePresense = new List<Point>();
 
         public int Position
         {
@@ -30,6 +33,13 @@ namespace ManualControl
             Position = 0;
             Unit = unit;
             Suggestions = suggestions.ToList();
+            OraclePresense = suggestions
+                .Take(200)
+                .Select(z => new PositionedUnit(unit, z.Position))
+                .SelectMany(z => z.Members)
+                .Distinct()
+                .ToList();
+
             OnUpdated();
         }
 
