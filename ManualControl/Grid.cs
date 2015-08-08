@@ -111,12 +111,11 @@ namespace ManualControl
 
             if (requestedLocation != null)
             {
-                string path = null;
+                IEnumerable<Directions> path = null;
                 try
                 {
-                    path = Finder.GetPath(
-                    Map.Filled,
-                    Map.Unit.Unit,
+                    path = mapHistory.Solver.Finder.GetPath(
+                    Map,
                     requestedLocation.Position);
                 }
                 catch { }
@@ -141,12 +140,11 @@ namespace ManualControl
                 return;
 
             requestedLocation = new PositionedUnit(Map.Unit.Unit, new UnitPosition(location, angle));
-            string path = null;
+            IEnumerable<Directions> path = null;
             try
             {
-                path = Finder.GetPath(
-                    Map.Filled,
-                    Map.Unit.Unit,
+                path = mapHistory.Solver.Finder.GetPath(
+                    Map,
                     requestedLocation.Position);
             }
             catch { }
@@ -190,11 +188,5 @@ namespace ManualControl
         }
     }
 
-    public class Finder
-    {
-        public static string GetPath(bool[,] filled, Unit unit, UnitPosition unitState)
-        {
-            throw new NotImplementedException();
-        }
-    }
+   
 }

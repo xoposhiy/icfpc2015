@@ -45,9 +45,9 @@ namespace ManualControl
 
         }
 
-        public TetrisForm(Map map)
+        public TetrisForm(MainModel model)
         {
-            mapHistory.History = new History(map);
+            mapHistory = model;
             mapHistory.History.Updated += UpdateAll;
             grid = new Grid(mapHistory);
             this.KeyPreview = true;
@@ -93,10 +93,10 @@ namespace ManualControl
 
         private void Grid_MovementRequested1(UnitPosition obj)
         {
-            //if (mapHistory.Playing) return;
-            //var program = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            //mapHistory.History.Append(program, "Hand");
-            //mapHistory.Play();
+            if (mapHistory.Playing) return;
+            var program = mapHistory.Solver.Finder.GetPath(Map,obj).ToPhrase();
+            mapHistory.History.Append(program, "Hand");
+            mapHistory.Play();
         }
 
         private void Suggest_Click(object sender, EventArgs e)
@@ -110,19 +110,19 @@ namespace ManualControl
 
         private void RunBotIteration_Click(object sender, EventArgs e)
         {
-            //if (mapHistory.Playing) return;
-            ////var program = new NamiraOracle().MakeMove(Map);
-            //mapHistory.History.Append(program, "Iter"+IterationNumber);
-            //IterationNumber++;
-            //mapHistory.Play();
+            if (mapHistory.Playing) return;
+            var program = mapHistory.Solver.MakeMove(Map).ToPhrase();
+            mapHistory.History.Append(program, "Iter" + IterationNumber);
+            IterationNumber++;
+            mapHistory.Play();
         }
 
         private void RunBotGame_Click(object sender, EventArgs e)
         {
-            //if (mapHistory.Playing) return;
-            //var program = new NamiraOracle().PlayGame(Map);
-            //mapHistory.History.Append(program, "Game");
-            //mapHistory.Play();
+            if (mapHistory.Playing) return;
+            var program = mapHistory.Solver.Solve(Map).Commands;
+            mapHistory.History.Append(program, "Game");
+            mapHistory.Play();
         }
   
 

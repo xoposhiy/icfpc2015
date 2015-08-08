@@ -1,4 +1,5 @@
 ﻿using Lib.Finder;
+using Lib.Intelligence;
 using Lib.Models;
 using System;
 using System.Collections.Generic;
@@ -56,9 +57,7 @@ namespace ManualControl
             if (PlayingChanged != null) PlayingChanged();
         }
 
-
-        public PositionedUnit Suggestion { get; set; }
-
+        public Solver Solver { get; set; }
     }
 
     public class History
