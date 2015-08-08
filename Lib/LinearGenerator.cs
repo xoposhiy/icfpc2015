@@ -15,7 +15,7 @@ namespace Lib
         {
             var prev = next;
             next = next * 1103515245 + 12345;
-            return (int)(prev >> 16) % 32768;
+            return (int)((prev >> 16) % 32768);
         }
     }
 
