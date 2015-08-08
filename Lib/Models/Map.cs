@@ -129,6 +129,10 @@ namespace Lib.Models
                 ? DoMove(dir)
                 : LockUnit();
         }
+        public Map Move(char c)
+        {
+            return Move(c.ToDirection());
+        }
 
         private Map DoMove(Directions dir)
         {

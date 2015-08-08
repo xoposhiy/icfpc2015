@@ -82,7 +82,7 @@ namespace Lib.Finder
 
         public static Directions CharToDirection(char c)
         {
-            switch (c)
+            switch (char.ToUpperInvariant(c))
             {
                 case 'W':
                     return Directions.W;
@@ -97,7 +97,7 @@ namespace Lib.Finder
                 case 'R':
                     return Directions.CW;
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException(c.ToString());
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Lib.Models;
 using System.Linq;
@@ -22,6 +23,11 @@ namespace Lib.Intelligence
 
         public static string PlayGame(this IOracle oracle, Map map)
         {
+            return oracle.PlayExtended(map).Item1;
+        }
+
+        public static Tuple<string, Map> PlayExtended(this IOracle oracle, Map map)
+        {
             string result = "";
             while(!map.IsOver)
             {
@@ -29,15 +35,16 @@ namespace Lib.Intelligence
                 {
                     var str = oracle.MakeMove(map);
                     result += str;
-                    foreach (var e in str.Select(z => Finder.Finder.CharToDirection(z)))
-                        map = map.Move(e);
+                    map = str
+                        .Select(Finder.Finder.CharToDirection)
+                        .Aggregate(map, (m, dir) => m.Move(dir));
                 }
                 catch
                 { 
-                break;
+                    break;
                 }
             }
-            return result;
+            return Tuple.Create(result, map);
         }
 
     }
