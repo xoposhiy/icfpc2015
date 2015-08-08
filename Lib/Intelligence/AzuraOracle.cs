@@ -38,7 +38,7 @@ namespace Lib.Intelligence
                     }
                 }
             }
-            return suggestions;
+            return suggestions.OrderByDescending(z => z.Position.Point.Y); 
         }
     }
 }
