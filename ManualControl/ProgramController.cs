@@ -13,10 +13,12 @@ namespace ManualControl
     {
         Timer timer = new Timer();
         public Action Updated;
-        public Action Executed;
+        public Action Finished;
+        public Action Started;
         Stack<Map> mapHistory;
         string program;
         int ProgramPointer;
+        public bool Running;
 
         public ProgramController(Stack<Map> mapHistory)
         {
@@ -32,8 +34,9 @@ namespace ManualControl
             if (program == null) return;
             if (ProgramPointer >= program.Length)
             {
-                timer.Start();
-                if (Executed != null) Executed();
+                timer.Stop();
+                if (Finished != null) Finished();
+                Running = false;
                 return;
             }
             var c = program[ProgramPointer];
@@ -47,6 +50,8 @@ namespace ManualControl
         {
             this.program = program;
             ProgramPointer = 0;
+            Running = true;
+            if (Started != null) Started();
             timer.Start();
         }
 
