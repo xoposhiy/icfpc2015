@@ -9,12 +9,17 @@ namespace Lib
 	{
 		public static List<ProblemJson> LoadProblems()
 		{
-			return 
-				Directory.GetFiles(@"problems", "problem*.json")
-				         .Select(File.ReadAllText)
-				         .Select(JsonConvert.DeserializeObject<ProblemJson>)
-                         .OrderBy(p => p.id)
-				         .ToList();
+			return LoadProblems(Directory.GetFiles(@"problems", "problem*.json"))
+				.OrderBy(p => p.id)
+				.ToList();
+		}
+
+		public static List<ProblemJson> LoadProblems(IEnumerable<string> filenames)
+		{
+			return filenames
+				.Select(File.ReadAllText)
+				.Select(JsonConvert.DeserializeObject<ProblemJson>)
+				.ToList();
 		}
 	}
 }

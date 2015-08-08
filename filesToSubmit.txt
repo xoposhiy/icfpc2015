@@ -1,3 +1,4 @@
+bin\*
 Lib\*
 ManualControl\*
 packages\*
