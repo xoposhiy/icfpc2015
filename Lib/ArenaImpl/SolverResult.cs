@@ -2,8 +2,9 @@
 {
     public class SolverResult
     {
-        public SolverResult(int score, string commands)
+        public SolverResult(string name, int score, string commands)
         {
+            Name = name;
             Score = score;
             Commands = commands;
         }
@@ -13,6 +14,7 @@
             return $"Score: {Score}, Commands: {Commands}";
         }
 
+        public readonly string Name;
         public readonly int Score;
         public readonly string Commands;
     }

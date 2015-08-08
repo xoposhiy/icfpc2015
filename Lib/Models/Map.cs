@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
+using NUnit.Framework;
 
 namespace Lib.Models
 {
@@ -25,7 +26,7 @@ namespace Lib.Models
             if (nextUnits.IsEmpty) return null;
             var u = nextUnits.Peek();
             var topmostY = u.Members.Min(m => m.Y);
-            var pivotPos = (width - 2 - u.Members.Max(m => m.X + (m.Y + topmostY) % 2) -
+            var pivotPos = (width - 1 - u.Members.Max(m => m.X + (m.Y + topmostY) % 2) -
                             u.Members.Min(m => m.X - (m.Y + topmostY) % 2)) / 2;
             return new PositionedUnit(u, 0, new Point(pivotPos, -topmostY));
         }
@@ -67,7 +68,10 @@ namespace Lib.Models
 
             var newScores = new Scores(Scores.TotalScores + points + line_bonus, ls);
 
-            return new Map(Id, f, NextUnits.Pop(),newScores);
+            var newNextUnits = NextUnits.Pop();
+            if (newNextUnits.IsEmpty)
+                return new Map(Id, f, PositionedUnit.Null, newNextUnits, ImmutableHashSet<PositionedUnit>.Empty, Scores);
+            return new Map(Id, f, newNextUnits,newScores);
         }
 
         int RemoveFilledLines(bool[,] map)
@@ -168,6 +172,25 @@ namespace Lib.Models
         public static Map Move(this Map map, IEnumerable<Directions> ds)
         {
             return ds.Aggregate(map, (m, d) => m.Move(d));
+        }
+    }
+
+    [TestFixture]
+    public class PositionNewUnit
+    {
+        [Test]
+        public void One()
+        {
+            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] {new Point(-1, 0), new Point(0, 1)}, new Point(0, 0)));
+            var pos = Map.PositionNewUnit(4, units);
+            Assert.AreEqual(new Point(2, 0), pos.PivotLocation);
+        }
+        [Test]
+        public void Two()
+        {
+            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] { new Point(-1, 0), new Point(0, 1) }, new Point(0, 0)));
+            var pos = Map.PositionNewUnit(5, units);
+            Assert.AreEqual(new Point(2, 0), pos.PivotLocation);
         }
     }
 }

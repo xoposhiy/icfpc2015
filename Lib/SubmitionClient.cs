@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Lib
@@ -13,7 +10,6 @@ namespace Lib
 	{
 		private readonly int teamId;
 		private readonly string apiKey;
-
 		public static readonly SubmitionClient Default = new SubmitionClient(37, "0u0hbMTthhsUHWOZwAngrgZBZZM5J/OuXaexUvIsP0k=");
 
 		public SubmitionClient(int teamId, string apiKey)
@@ -22,11 +18,15 @@ namespace Lib
 			this.apiKey = apiKey;
 		}
 
-		public void PostSubmitions(params SubmitionJson[] submitions)
+		public void PostSubmissions(params SubmitionJson[] submitions)
+		{
+			PostSubmissions(JsonConvert.SerializeObject(submitions));
+		}
+
+		public void PostSubmissions(string payload)
 		{
 			UseClient(client =>
 			{
-				var payload = JsonConvert.SerializeObject(submitions);
 				var content = new StringContent(payload, Encoding.UTF8, "application/json");
 				var result = client.PostAsync("", content).Result;
 				var ans = result.Content.ReadAsStringAsync().Result;
@@ -36,7 +36,7 @@ namespace Lib
 			});
 		}
 
-		public SubmissionResultJson[] GetSubmitions()
+		public SubmissionResultJson[] GetSubmissions()
 		{
 			return UseClient(client =>
 			{

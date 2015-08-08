@@ -41,7 +41,7 @@ namespace Lib.Intelligence
        public SolverResult Solve(Map map)
        {
            var res = this.PlayExtended(map);
-           return new SolverResult(res.Item2.Scores.TotalScores, res.Item1); 
+           return new SolverResult("Namira", res.Item2.Scores.TotalScores, res.Item1); 
        }
     }
 }
