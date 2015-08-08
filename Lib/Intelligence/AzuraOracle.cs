@@ -24,15 +24,16 @@ namespace Lib.Intelligence
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
             var possible = this.SuggestAllFinalPositions(map);
+
             return possible.OrderByDescending(suggestion =>
             {
                 var count = 0;
-                for (int j = 0; j < map.Filled.GetLength(1); j++)
+                for (int j = 0; j < map.Filled.GetLength(0); j++)
                 {
-                    if(map.Filled[suggestion.State.position.X, j])count++;
+                    if(map.Filled[j, suggestion.State.position.X])count++;
                 }
                 return count;
-            });
+            }).ThenByDescending(z => z.State.position.Y);
         }
     }
 }
