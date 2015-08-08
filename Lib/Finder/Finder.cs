@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,17 +12,17 @@ namespace Lib.Finder
         {
             new[]
             {
-                new Movement {delta = new Point(-1, 0), operation = 'W'},
-                new Movement {delta = new Point(1, 0), operation = 'E'},
-                new Movement {delta = new Point(-1, 1), operation = 'S'},
-                new Movement {delta = new Point(0, 1), operation = 'D'}
+                new Movement {delta = new Point(-1, 0), operation = 'p'},
+                new Movement {delta = new Point(1, 0), operation = 'b'},
+                new Movement {delta = new Point(-1, 1), operation = 'a'},
+                new Movement {delta = new Point(0, 1), operation = 'l'}
             },
             new[]
             {
-                new Movement {delta = new Point(-1, 0), operation = 'W'},
-                new Movement {delta = new Point(1, 0), operation = 'E'},
-                new Movement {delta = new Point(0, 1), operation = 'S'},
-                new Movement {delta = new Point(1, 1), operation = 'D'}
+                new Movement {delta = new Point(-1, 0), operation = 'p'},
+                new Movement {delta = new Point(1, 0), operation = 'b'},
+                new Movement {delta = new Point(0, 1), operation = 'a'},
+                new Movement {delta = new Point(1, 1), operation = 'l'}
             }
         };
 
@@ -58,7 +57,7 @@ namespace Lib.Finder
                 var to = new UnitState {position = state.position, angle = angle};
                 if (!CanBePlaced(field, figure.FixAt(to)) || parents[to] != null)
                     continue;
-                parents[to] = new TransitionInfo {state = state, operation = delta == -1 ? 'L' : 'R'};
+                parents[to] = new TransitionInfo {state = state, operation = delta == -1 ? 'd' : 'k'};
                 DFS(to, field, figure, parents);
             }
         }
@@ -84,17 +83,17 @@ namespace Lib.Finder
         {
             switch (char.ToUpperInvariant(c))
             {
-                case 'W':
+                case 'p':
                     return Directions.W;
-                case 'E':
+                case 'b':
                     return Directions.E;
-                case 'S':
+                case 'a':
                     return Directions.SW;
-                case 'D':
+                case 'l':
                     return Directions.SE;
-                case 'L':
+                case 'd':
                     return Directions.CCW;
-                case 'R':
+                case 'k':
                     return Directions.CW;
                 default:
                     throw new ArgumentException(c.ToString());
@@ -106,23 +105,21 @@ namespace Lib.Finder
             switch (d)
             {
                 case Directions.W:
-                    return 'W';
+                    return 'p';
                 case Directions.E:
-                    return 'E';
+                    return 'b';
                 case Directions.SW:
-                    return 'S';
+                    return 'a';
                 case Directions.SE:
-                    return 'D';
+                    return 'l';
                 case Directions.CCW:
-                    return 'L';
+                    return 'd';
                 case Directions.CW:
-                    return 'R';
+                    return 'k';
                 default:
                     throw new ArgumentException();
             }
         }
-
-
 
         public static Directions[] StringToDirections(string path)
         {
