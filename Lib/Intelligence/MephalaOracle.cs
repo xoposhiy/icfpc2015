@@ -21,19 +21,20 @@ namespace Lib.Intelligence
          
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
-            var positions = finder.GetReachablePositions(map);
+            var finalMaps = finder.GetReachablePositions(map);
 
             var suggestions = new List<OracleSuggestion>();
-            foreach (var position in positions)
+            foreach (var finalMap in finalMaps)
             {
-                var positionedUnit = map.Unit.WithNewPosition(position);
+                var positionedUnit = finalMap.Unit;
+                var lockedMap = finalMap.LockUnit();
 
                 foreach (var dir in OracleServices.GetAllDirections())
                 {
-                    var nextPosition = positionedUnit.Move(dir);
-                    if (!map.IsValidPosition(nextPosition))
+                    if (!finalMap.IsValidPosition(positionedUnit.Move(dir)))
                     {
-                        suggestions.Add(new OracleSuggestion(position, dir, metrics(map, positionedUnit)));
+                        var m = metrics(lockedMap, positionedUnit);
+                        suggestions.Add(new OracleSuggestion(finalMap.Unit.Position, dir, m));
                         break;
                     }
                 }

@@ -8,8 +8,8 @@ namespace Lib.Finder
     public class DfsFinder : IFinder
     {
         private Map Map;
-        private Dictionary<UnitPosition, Tuple<UnitPosition, Directions>> Parents;
-        private Directions[] dirs = (Directions[])Enum.GetValues(typeof(Directions));
+        private Dictionary<UnitPosition, Tuple<Map, Directions>> Parents;
+        private readonly Directions[] dirs = (Directions[])Enum.GetValues(typeof(Directions));
 
         public IEnumerable<Directions> GetPath(Map map, UnitPosition target)
         {
@@ -18,17 +18,17 @@ namespace Lib.Finder
                        : RestoreDirections(target).Reverse();
         }
 
-        public IEnumerable<UnitPosition> GetReachablePositions(Map map)
+        public IEnumerable<Map> GetReachablePositions(Map map)
         {
             UpdateMap(map);
-            return Parents.Keys;
+            return Parents.Values.Select(t => t == null ? map : t.Item1.Move(t.Item2));
         }
 
         private void UpdateMap(Map map)
         {
             if (ReferenceEquals(Map, map)) return;
             Map = map;
-            Parents = new Dictionary<UnitPosition, Tuple<UnitPosition, Directions>>
+            Parents = new Dictionary<UnitPosition, Tuple<Map, Directions>>
             {
                 {map.Unit.Position, null}
             };
@@ -42,7 +42,7 @@ namespace Lib.Finder
                 var tuple = Parents[target];
                 if (tuple == null) yield break;
                 yield return tuple.Item2;
-                target = tuple.Item1;
+                target = tuple.Item1.Unit.Position;
             }
         }
 
@@ -57,7 +57,7 @@ namespace Lib.Finder
                 phrase = Phrases.AsDirections[phraseIndex];
             }
             var dir = phrase[charIndex];
-            DfsStep(map, dir, phraseIndex, charIndex);
+//            DfsStep(map, dir, phraseIndex, charIndex);
             foreach (var d in dirs)
             {
                 DfsStep(map, d, phraseIndex, charIndex);
@@ -70,7 +70,7 @@ namespace Lib.Finder
             var newMap = map.Move(d);
             var pos = newMap.Unit.Position;
             if (Parents.ContainsKey(pos)) return;
-            Parents.Add(pos, Tuple.Create(map.Unit.Position, d));
+            Parents.Add(pos, Tuple.Create(map, d));
             var phrase = Phrases.AsDirections[phraseIndex];
             if (charIndex < phrase.Length && phrase[charIndex] == d)
                 Dfs(newMap, phraseIndex, charIndex+1);
