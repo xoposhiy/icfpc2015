@@ -21,6 +21,8 @@ namespace ManualControl
 
         ProgramPlayer player;
         ProgramPlayerControl playerControl;
+        Button runBotGame, runBotIteration;
+       
         
         private bool showHelp;
 
@@ -28,14 +30,20 @@ namespace ManualControl
         {
             base.OnSizeChanged(e);
            grid.Size = grid.GetDesiredSize();
-            scores.Size = new Size(grid.Width, 30);
+            scores.Size = new Size(100, 30);
             grid.Location = new Point(0, 30);
 
             help.Size = new Size(ClientSize.Width-grid.Width, 100);
             help.Location = new Point(grid.Right, ClientSize.Height- help.Height);
 
-           playerControl.Size = new Size(help.Width, ClientSize.Height - help.Height);
+            playerControl.Size = new Size(help.Width, ClientSize.Height - help.Height);
             playerControl.Location = new Point(help.Left, 0);
+
+            runBotIteration.Location = new Point(scores.Right, 0);
+            runBotIteration.Size = new Size(100, scores.Height);
+
+            runBotGame.Location = new Point(runBotIteration.Right, 0);
+            runBotGame.Size = new Size(100, scores.Height);
         }
 
         
@@ -47,7 +55,10 @@ namespace ManualControl
             playerControl = new ProgramPlayerControl(player);
             grid = new Grid(mapHistory);
             this.KeyPreview = true;
-
+            runBotGame = new Button();
+            runBotIteration = new Button();
+            runBotIteration.Text = "Iter";
+            runBotGame.Text = "Game";
 
             scores = new Label();
             help = new Label();
@@ -62,6 +73,12 @@ namespace ManualControl
             Controls.Add(playerControl);
             Controls.Add(scores);
             Controls.Add(help);
+            Controls.Add(runBotGame);
+            Controls.Add(runBotIteration);
+
+
+            runBotGame.Click += RunBotGame_Click;
+            runBotIteration.Click += RunBotIteration_Click;
 
             player.LoadedUpdated += z => grid.MouseDisabled = z;
             player.MapUpdated += () => UpdateAll();
@@ -78,12 +95,28 @@ namespace ManualControl
         
         }
 
+        private void RunBotIteration_Click(object sender, EventArgs e)
+        {
+            if (player.Loaded) return;
+            var program = new NamiraOracle().MakeMove(Map);
+            player.InitializeProgram(program);
+            player.Play(false);
+        }
+
+        private void RunBotGame_Click(object sender, EventArgs e)
+        {
+            if (player.Loaded) return;
+            var program = new NamiraOracle().PlayGame(Map);
+            player.InitializeProgram(program);
+            player.Play(false);
+
+        }
         private void Grid_MovementRequested(UnitState obj)
         {
             if (player.Loaded) return;
             var program = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
             player.InitializeProgram(program);
-            player.Play();
+            player.Play(true);
         }
 
         protected override void OnLoad(EventArgs e)

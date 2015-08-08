@@ -42,11 +42,14 @@ namespace ManualControl
             if (LoadedUpdated!=null) LoadedUpdated(true);
         }
 
-        public void Play()
+        bool stopWhenFinished;
+
+        public void Play(bool stopWhenFinished=false)
         {
             if (!Loaded) throw new Exception("No program to run");
             timer.Start();
             Autoplay = true;
+            this.stopWhenFinished = stopWhenFinished;
             if (AutoplayUpdated != null) AutoplayUpdated(true);
         }
 
@@ -72,6 +75,8 @@ namespace ManualControl
             if (ProgramPointer >= Program.Length || mapHistory.Peek().IsOver)
             {
                 Pause();
+                if (stopWhenFinished)
+                    Stop();
                 return;
             }
             var c = Program[ProgramPointer];
