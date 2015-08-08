@@ -13,4 +13,4 @@ set targetZip=hack-the-loop.zip
 
 erase %targetZip%
 
-7za.exe a -ir@filesToSubmit.txt %targetZip%
+7za.exe a -ir@filesToSubmit.txt -xr@filesNotToSubmit.txt %targetZip%
