@@ -12,20 +12,31 @@ namespace Lib.Models
         private static readonly PointsComparer pointsComparer = new PointsComparer();
 
         public readonly int Period;
-
         public readonly Point[] Members;
         public readonly List<Point>[] Rotations;
+        private readonly int pivotOddity;
+
         public Unit(IEnumerable<Point> members, Point pivot)
         {
             Members = members.Select(c => c.Sub(pivot)).ToArray();
             Array.Sort(Members, pointsComparer);
             Period = GetPeriod();
+            pivotOddity = pivot.Y % 2;
 
             double cv = Math.PI / 3;
             Rotations = new List<Point>[6];
             Rotations[0] = Members.ToList();
             for (int i = 1; i < 6; i++)
                 Rotations[i] = Rotations[i - 1].Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
+        }
+
+        public Point GetFixingVector(int vectorOddity, int newPivotOddity)
+        {
+            if (pivotOddity == newPivotOddity || vectorOddity == 0)
+                return new Point(0, 0);
+            if (pivotOddity == 0 && newPivotOddity == 1)
+                return new Point(1, 0);
+            return new Point(-1, 0);
         }
 
         public bool IsSafePath(IEnumerable<Directions> path)
@@ -46,7 +57,7 @@ namespace Lib.Models
                 Array.Sort(rotated, pointsComparer);
                 bool ok = true;
                 for (int k = 0; k < Members.Length && ok; k++)
-                    if (Members[k].Sub(Members[0]) != rotated[k].Sub(rotated[0]))
+                    if (Members[k] != rotated[k])
                         ok = false;
                 if (ok)
                     return i;
@@ -57,7 +68,10 @@ namespace Lib.Models
         {
             var result = new Point[Members.Length];
             for (int i = 0; i < Members.Length; i++)
-                result[i] = unitState.position.Add(Members[i].Rotate(unitState.angle));
+            {
+                Point vector = Members[i].Rotate(unitState.angle);
+                result[i] = unitState.position.Add(vector).Add(GetFixingVector(vector.Y % 2, unitState.position.Y % 2));
+            }
             return result;
         }
 

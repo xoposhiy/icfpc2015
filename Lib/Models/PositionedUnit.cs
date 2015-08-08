@@ -56,10 +56,7 @@ namespace Lib.Models
             {
                 if (!RotationIndex.InRange(0, Unit.Rotations.Length - 1))
                     throw new Exception(RotationIndex.ToString());
-                if (PivotLocation.Y % 2 == 0)
-                    return Unit.Rotations[RotationIndex].Select(p => p.Add(PivotLocation));
-                else
-                    return Unit.Rotations[RotationIndex].Select(p => p.Add(PivotLocation).Add(new Point(p.Y % 2 == 0 ? 0 : 1, 0)));
+                return Unit.Rotations[RotationIndex].Select(p => p.Add(PivotLocation).Add(Unit.GetFixingVector(p.Y % 2, PivotLocation.Y % 2)));
             }
         }
 

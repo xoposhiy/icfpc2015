@@ -72,7 +72,7 @@
     <Compile Include="ArenaImpl\Arena.cs" />
     <Compile Include="ArenaImpl\ArenaMapResult.cs" />
     <Compile Include="ArenaImpl\ArenaModel.cs" />
-    <Compile Include="ArenaImpl\ArenaModelTest.cs" />
+    <Compile Include="ArenaImpl\ArenaTest.cs" />
     <Compile Include="ArenaImpl\ArenaProblem.cs" />
     <Compile Include="ArenaImpl\ISolver.cs" />
     <Compile Include="ArenaImpl\SolverResult.cs" />
