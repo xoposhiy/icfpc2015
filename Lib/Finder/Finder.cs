@@ -108,6 +108,8 @@ namespace Lib.Finder
 
         public static string GetPath(bool[,] field, Unit figure, UnitState target)
         {
+            target.angle %= figure.Period;
+
             var startState = new UnitState {position = figure.GetStartPosition(field.GetLength(0)), angle = 0};
             if (!CanBePlaced(field, figure.FixAt(startState)))
                 return null;
