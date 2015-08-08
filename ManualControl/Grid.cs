@@ -112,13 +112,9 @@ namespace ManualControl
             if (requestedLocation != null)
             {
                 IEnumerable<Directions> path = null;
-                try
-                {
-                    path = mapHistory.Solver.Finder.GetPath(
+                path = mapHistory.Solver.Finder.GetPath(
                     Map,
                     requestedLocation.Position);
-                }
-                catch { }
                 bool exist = path != null;
                 foreach (var member in requestedLocation.Members)
                 {
@@ -155,13 +151,9 @@ namespace ManualControl
 
             requestedLocation = new PositionedUnit(Map.Unit.Unit, new UnitPosition(location, angle));
             IEnumerable<Directions> path = null;
-            try
-            {
-                path = mapHistory.Solver.Finder.GetPath(
-                    Map,
-                    requestedLocation.Position);
-            }
-            catch { }
+            path = mapHistory.Solver.Finder.GetPath(
+                Map,
+                requestedLocation.Position);
             requestedLocationIsReachable = path != null;
             Invalidate();
         }

@@ -43,7 +43,7 @@ namespace play_icfp2015
 
 		private static string Solve(Map map)
 		{
-			var s2 = new Solver(new NullFinder(), new NamiraOracle()).Solve(map);
+			var s2 = new Solver(new DfsFinder(), new NamiraOracle()).Solve(map);
 			return s2.Commands;
 		}
 	}
