@@ -20,6 +20,7 @@ namespace ManualControl
         Label help;
         TextBox program;
         Button play;
+        Button stepBut;
 
         Button playBot;
 
@@ -43,6 +44,7 @@ namespace ManualControl
             program = new TextBox();
             play = new Button();
             playBot = new Button();
+            stepBut = new Button();
 
             Controls.Add(grid);
             Controls.Add(scores);
@@ -50,27 +52,46 @@ namespace ManualControl
             Controls.Add(program);
             Controls.Add(play);
             Controls.Add(playBot);
+            Controls.Add(stepBut);
 
             scores.Size = new Size(100, 30);
             grid.Location = new Point(0, 30);
             grid.Size = grid.GetDesiredSize();
             help.Size = new Size(150, 100);
             help.Location = new Point(grid.Right, grid.Bottom - help.Height);
-            ClientSize = new Size(help.Right, help.Bottom);
+            ClientSize = new Size(help.Right, Math.Max(help.Bottom,400));
+
+
+
             program.Size = new Size(150, 200);
             program.Multiline = true;
             program.Location = new Point(grid.Right, 0);
             play.Size = new Size(program.Width, 20);
             play.Location = new Point(program.Left, program.Bottom);
             play.Text = "Play";
+
+            stepBut.Size = play.Size;
+            stepBut.Location = new Point(play.Left, play.Bottom);
+            stepBut.Text = "STEP";
+            stepBut.Click += (s, a) =>
+            {
+                if (!controller.Running) controller.Run(program.Text, true);
+                controller.Step();
+                if (controller.ProgramPointer < program.Text.Length)
+                    program.Select(controller.ProgramPointer, 2);
+            };
+
+
             playBot.Click += PlayBot_Click;
             playBot.Text = "Play bot";
-            playBot.Location = new Point(play.Left, play.Bottom);
+            playBot.Location = new Point(stepBut.Left, stepBut.Bottom);
             playBot.Size = play.Size;
 
 
             grid.MovementRequested += Grid_MovementRequested;
-            play.Click += (s, a) => controller.Run(program.Text);
+            play.Click += 
+                (s, a) => 
+                controller.Run(program.Text,false);
             controller.Updated = UpdateAll;
             controller.Started += () => play.Enabled = false;
             controller.Finished += () => play.Enabled = true;
@@ -98,13 +119,13 @@ namespace ManualControl
             //var pr = new AzuraOracle().PlayGame(Map);
             controller.TimerInterval = 1;
             if (pr != null)
-                controller.Run(pr);
+                controller.Run(pr,false);
         }
 
         private void Grid_MovementRequested(UnitState obj)
         {
             var text = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            controller.Run(text);
+            controller.Run(text, false);
         }
         
 
