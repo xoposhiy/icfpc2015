@@ -1,20 +1,18 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using ApprovalTests.Reporters;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Lib")]
+[assembly: AssemblyTitle("play_icfp2015")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SKB Kontur")]
-[assembly: AssemblyProduct("Lib")]
-[assembly: AssemblyCopyright("Copyright © SKB Kontur 2015")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("play_icfp2015")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: UseReporter(typeof(DiffReporter))]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -22,7 +20,7 @@ using ApprovalTests.Reporters;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("05b3bf70-d30e-4730-972d-e27b5b1c47c7")]
+[assembly: Guid("95c6b92e-5e9a-4be6-a4e8-91c8cb3fb2c2")]
 
 // Version information for an assembly consists of the following four values:
 //

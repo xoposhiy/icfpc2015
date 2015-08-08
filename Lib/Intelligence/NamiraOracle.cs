@@ -8,7 +8,7 @@ using Lib.Models;
 
 namespace Lib.Intelligence
 {
-    class NamiraOracle : IOracle
+   public class NamiraOracle : IOracle
     {
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
@@ -29,7 +29,12 @@ namespace Lib.Intelligence
                 }
             }
 
-            return goodStates;
+            return goodStates.OrderByDescending(z => z.State.position.Y);
+        }
+
+        public override string ToString()
+        {
+            return "Namira";
         }
     }
 }

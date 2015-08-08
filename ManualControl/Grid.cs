@@ -143,5 +143,13 @@ namespace ManualControl
             
             this.Invalidate();
         }
+
+        public event Action<UnitState> MovementRequested;
+
+        protected override void OnDoubleClick(EventArgs e)
+        {
+            if (mousePositionedUnit != null)
+                MovementRequested(new UnitState { angle = mousePositionedUnit.RotationIndex, position = mousePositionedUnit.PivotLocation });
+        }
     }
 }

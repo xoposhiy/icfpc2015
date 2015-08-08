@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Lib.Models;
 using Lib.Finder;
+using Lib.Intelligence;
 
 namespace ManualControl
 {
@@ -19,6 +20,8 @@ namespace ManualControl
         Label help;
         TextBox program;
         Button play;
+
+        Button playBot;
 
         ProgramController controller;
 
@@ -39,12 +42,14 @@ namespace ManualControl
             help.ForeColor = Color.Yellow;
             program = new TextBox();
             play = new Button();
+            playBot = new Button();
 
             Controls.Add(grid);
             Controls.Add(scores);
             Controls.Add(help);
             Controls.Add(program);
             Controls.Add(play);
+            Controls.Add(playBot);
 
             scores.Size = new Size(100, 30);
             grid.Location = new Point(0, 30);
@@ -58,12 +63,20 @@ namespace ManualControl
             play.Size = new Size(program.Width, 20);
             play.Location = new Point(program.Left, program.Bottom);
             play.Text = "Play";
+            playBot.Click += PlayBot_Click;
+            playBot.Text = "Play bot";
+            playBot.Location = new Point(play.Left, play.Bottom);
+            playBot.Size = play.Size;
+
+
+            grid.MovementRequested += Grid_MovementRequested;
             play.Click += (s, a) => controller.Run(program.Text);
             controller.Updated = UpdateAll;
+            controller.Started += () => play.Enabled = false;
+            controller.Finished += () => play.Enabled = true;
 
 
-            program.Text= Finder.GetPath(Map.Filled, Map.Unit.Unit, new UnitState { angle = 0, position = new Point(5, 5) });
-
+        
 
 
 
@@ -79,7 +92,20 @@ namespace ManualControl
         
         }
 
+        private void PlayBot_Click(object sender, EventArgs e)
+        {
+            var pr=new NamiraOracle().PlayGame(Map);
+            controller.TimerInterval = 1;
+            if (pr != null)
+                controller.Run(pr);
+        }
 
+        private void Grid_MovementRequested(UnitState obj)
+        {
+            var text = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
+            controller.Run(text);
+        }
+        
 
         protected override void OnLoad(EventArgs e)
         {
@@ -98,6 +124,7 @@ namespace ManualControl
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            if (controller.Running) return;
            if (keymap.ContainsKey(e.KeyData) && MovementRequested != null)
                 mapHistory.Push(Map.Move(keymap[e.KeyData]));
             if (e.KeyData == Keys.Z && mapHistory.Count > 1)

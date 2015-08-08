@@ -101,6 +101,29 @@ namespace Lib.Finder
             }
         }
 
+        public static char DirectionToChar(Directions d)
+        {
+            switch (d)
+            {
+                case Directions.W:
+                    return 'W';
+                case Directions.E:
+                    return 'E';
+                case Directions.SW:
+                    return 'S';
+                case Directions.SE:
+                    return 'D';
+                case Directions.CCW:
+                    return 'L';
+                case Directions.CW:
+                    return 'R';
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+
+
         public static Directions[] StringToDirections(string path)
         {
             return path.Select(CharToDirection).ToArray();
