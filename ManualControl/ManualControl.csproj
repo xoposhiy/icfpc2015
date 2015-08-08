@@ -50,6 +50,12 @@
     <Compile Include="Form.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Grid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grid.Designer.cs">
+      <DependentUpon>Grid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Occupation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
