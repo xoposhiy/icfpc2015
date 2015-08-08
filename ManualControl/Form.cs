@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Lib.Models;
+using Lib.Finder;
 
 namespace ManualControl
 {
@@ -23,6 +24,8 @@ namespace ManualControl
 
         public TetrisForm(Map map)
         {
+            
+
             this.KeyPreview = true;
             this.mapHistory.Push(map);
             grid = new Grid(mapHistory);
@@ -56,6 +59,10 @@ namespace ManualControl
             play.Click += Play_Click;
 
 
+            program.Text= Finder.GetPath(Map.Filled, Map.Unit.Unit, new UnitState { angle = 0, position = new Point(5, 5) });
+
+
+
 
             keymap = new Dictionary<Keys, Directions>
             {
@@ -69,12 +76,29 @@ namespace ManualControl
         
         }
 
+
+        int ProgramPointer;
+        void MakeStep()
+        {
+            if (ProgramPointer >= program.Text.Length) return;
+            var c = program.Text[ProgramPointer];
+            var dir = Finder.CharToDirection(c);
+            mapHistory.Push(Map.Move(dir));
+            UpdateAll();
+            ProgramPointer++;
+        }
+
+
         private void Play_Click(object sender, EventArgs e)
         {
             var str = program.Text;
             var timer = new Timer();
             int ptr = 0;
+            timer.Interval = 10;
+            timer.Tick += (s, a) => MakeStep();
+            timer.Start();
         }
+        
 
         protected override void OnLoad(EventArgs e)
         {
@@ -82,6 +106,13 @@ namespace ManualControl
             Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}. Press 'H' for help!";
             DoubleBuffered = true;
 
+        }
+
+        void UpdateAll()
+        {
+            Invalidate();
+            grid.Invalidate();
+            scores.Text = Map.Scores.TotalScores.ToString();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -96,9 +127,7 @@ namespace ManualControl
                 showHelp = !showHelp;
             if (e.KeyData == Keys.Escape)
                 showHelp = false;
-            Invalidate();
-            grid.Invalidate();
-            scores.Text = Map.Scores.TotalScores.ToString();
+            UpdateAll();
         }
 
         
