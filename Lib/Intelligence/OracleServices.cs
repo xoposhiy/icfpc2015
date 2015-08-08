@@ -10,12 +10,12 @@ namespace Lib.Intelligence
 {
     public class OracleServices
     {
-        public static IEnumerable<UnitState> GetAllStates(Map map)
+        public static IEnumerable<UnitPosition> GetAllUnitPositions(Map map)
         {
             for (int x = 0; x < map.Width; x++)
                 for (int y = 0; y < map.Height; y++)
                     for (int rot = 0; rot < 6; rot++)
-                        yield return new UnitState { angle = rot, position = new System.Drawing.Point(x, y) };
+                        yield return new UnitPosition { Angle = rot, Point = new System.Drawing.Point(x, y) };
         }
 
         public static IEnumerable<Directions> GetAllDirections()

@@ -82,7 +82,7 @@ namespace ManualControl
         public void DrawHexagon(Graphics g, int x, int y, Pen pen, Brush brush, bool marked)
         {
             var p = Geometry.GetGeometricLocation(x, y);
-            DrawHexagonInGraphicCoordinates(g, (int)(Radius * p.X+Radius*Geometry.Width/2), (int)(Radius * p.Y + Radius*Geometry.Height/2), x, y, pen, brush, marked);
+            DrawHexagonInGraphicCoordinates(g, (int)(Radius * p.X + Radius * Geometry.Width / 2), (int)(Radius * p.Y + Radius * Geometry.Height / 2), x, y, pen, brush, marked);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -105,7 +105,7 @@ namespace ManualControl
                     var occupation = Map.Filled[x, y] ? Occupation.Occupied
                         : Map.Unit.Members.Any(m => m.Equals(p)) ? Occupation.Unit
                         : Occupation.Empty;
-                    DrawHexagon(g, x, y, penTypes[occupation], brushTypes[occupation], p.Equals(Map.Unit.PivotLocation));
+                    DrawHexagon(g, x, y, penTypes[occupation], brushTypes[occupation], p.Equals(Map.Unit.Position.Point));
                 }
             }
 
@@ -117,11 +117,7 @@ namespace ManualControl
                     path = Finder.GetPath(
                     Map.Filled,
                     Map.Unit.Unit,
-                    new UnitState
-                    {
-                        angle = requestedLocation.RotationIndex,
-                        position = requestedLocation.PivotLocation
-                    });
+                    requestedLocation.Position);
                 }
                 catch { }
                 bool exist = path != null;
@@ -139,28 +135,25 @@ namespace ManualControl
 
         void SetRequestedLocation(Point location, int angle)
         {
-            if (requestedLocation != null 
-                && requestedLocation.PivotLocation == location
-                && requestedLocation.RotationIndex == angle) return;
+            if (requestedLocation != null
+                && requestedLocation.Position.Point == location
+                && requestedLocation.Position.Angle == angle)
+                return;
 
-            requestedLocation = new PositionedUnit(Map.Unit.Unit, new UnitState { position = location, angle = angle });
+            requestedLocation = new PositionedUnit(Map.Unit.Unit, new UnitPosition(location, angle));
             string path = null;
-                try
-                {
-                    path = Finder.GetPath(
+            try
+            {
+                path = Finder.GetPath(
                     Map.Filled,
                     Map.Unit.Unit,
-                    new UnitState
-                    {
-                        angle = requestedLocation.RotationIndex,
-                        position = requestedLocation.PivotLocation
-                    });
-                }
-                catch { }
+                    requestedLocation.Position);
+            }
+            catch { }
             requestedLocationIsReachable = path != null;
             Invalidate();
         }
-        
+
 
 
         private Point GetLocation(MouseEventArgs e)
@@ -188,12 +181,20 @@ namespace ManualControl
             SetRequestedLocation(GetLocation(e), requestedAngle);
         }
 
-        public event Action<UnitState> MovementRequested;
+        public event Action<UnitPosition> MovementRequested;
 
         protected override void OnDoubleClick(EventArgs e)
         {
             if (requestedLocation != null)
-                MovementRequested(new UnitState { angle = requestedLocation.RotationIndex, position = requestedLocation.PivotLocation });
+                MovementRequested(requestedLocation.Position);
+        }
+    }
+
+    public class Finder
+    {
+        public static string GetPath(bool[,] filled, Unit unit, UnitPosition unitState)
+        {
+            throw new NotImplementedException();
         }
     }
 }

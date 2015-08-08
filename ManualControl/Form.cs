@@ -26,6 +26,7 @@ namespace ManualControl
         
 
         ProgramController controller;
+        private IFinder finder = new NullFinder();
 
         private bool showHelp;
 
@@ -126,17 +127,16 @@ namespace ManualControl
 
         private void PlayBot_Click(object sender, EventArgs e)
         {
-            //var pr=new NamiraOracle().PlayGame(Map);
-            var pr = new AzuraOracle().PlayGame(Map);
+            var pr = new Solver(new NullFinder(), new AzuraOracle()).ResultAsCommands(Map);
             controller.TimerInterval = 1;
             if (pr != null)
                 controller.Run(pr,false);
         }
 
-        private void Grid_MovementRequested(UnitState obj)
+        private void Grid_MovementRequested(UnitPosition finalPos)
         {
-            var text = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            controller.Run(text, false);
+            var text = finder.GetPath(Map, finalPos);
+            controller.Run(text.ToPhrase(), false);
         }
         
 

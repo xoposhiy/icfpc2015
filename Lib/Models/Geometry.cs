@@ -5,6 +5,8 @@ namespace Lib.Models
 {
     public static class Geometry
     {
+        public const float Eps = 1e-3f;
+
         public static readonly double Width;
         public static readonly double Height;
         public static readonly double YOffset;
