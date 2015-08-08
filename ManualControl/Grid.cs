@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Lib.Finder;
 using Lib.Models;
 
 namespace ManualControl
@@ -107,5 +108,37 @@ namespace ManualControl
             }
         }
 
+        private Point GetLocation(float pixelX, float pixelY)
+        {
+            var geometryPoint = new PointF()
+            {
+                X = (pixelX) / Radius,
+                Y = (pixelY) / Radius
+            };
+            return Geometry.GetMapLocation(geometryPoint.X, geometryPoint.Y);
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            var point = GetLocation(e.X - Radius* (float)Geometry.Width / 2, e.Y - Radius* (float)Geometry.Height / 2);
+            
+            DrawHexagon(this.CreateGraphics(), point.X, point.Y, new Pen(Color.DarkOrange, 3), new SolidBrush(Color.DarkOrange), false);
+        }
+        
+        Pen pen = new Pen(Color.Aqua);
+        SolidBrush brush = new SolidBrush(Color.Azure);
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            var point = GetLocation(e.X - Radius * (float)Geometry.Width / 2, e.Y - Radius * (float)Geometry.Height / 2);
+            var unit = new PositionedUnit(Map.Unit.Unit, Map.Unit.RotationIndex, point);
+
+            var graphics = this.CreateGraphics();
+            foreach (var member in unit.Unit.Members)
+            {
+                DrawHexagon(graphics, member.X + unit.PivotLocation.X, member.Y + unit.PivotLocation.Y, pen, brush, false);
+            }
+            this.Invalidate();
+        }
     }
 }
