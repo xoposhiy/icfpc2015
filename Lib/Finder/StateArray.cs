@@ -9,7 +9,7 @@ namespace Lib.Finder
             array = new T[width, height, period];
         }
 
-        public T this[State state]
+        public T this[UnitState state]
         {
             get
             {

@@ -2,7 +2,7 @@
 {
     class TransitionInfo
     {
-        public State state { get; set; }
+        public UnitState state { get; set; }
         public char operation { get; set; }
     }
 }

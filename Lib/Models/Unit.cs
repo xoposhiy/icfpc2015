@@ -52,11 +52,11 @@ namespace Lib.Models
             }
         }
 
-        public Point[] FixAt(State state)
+        public Point[] FixAt(UnitState unitState)
         {
             var result = new Point[Members.Length];
             for (int i = 0; i < Members.Length; i++)
-                result[i] = state.position.Add(Members[i].Rotate(state.angle));
+                result[i] = unitState.position.Add(Members[i].Rotate(unitState.angle));
             return result;
         }
 

@@ -39,29 +39,29 @@ namespace Lib.Finder
             return true;
         }
 
-        private static void DFS(State state, bool[,] field, Unit figure, StateArray<TransitionInfo> parents)
+        private static void DFS(UnitState state, bool[,] field, Unit figure, StateArray<TransitionInfo> parents)
         {
             foreach (var movement in movements[state.position.Y % 2])
             {
-                var to = new State {position = state.position.Add(movement.delta), angle = state.angle};
-                if (!CanBePlaced(field, figure.FixAt(state)) || parents[to] != null)
+                var to = new UnitState {position = state.position.Add(movement.delta), angle = state.angle};
+                if (!CanBePlaced(field, figure.FixAt(to)) || parents[to] != null)
                     continue;
                 parents[to] = new TransitionInfo {state = state, operation = movement.operation};
-                DFS(state, field, figure, parents);
+                DFS(to, field, figure, parents);
             }
 
             for (var delta = -1; delta <= 1; delta += 2)
             {
                 var angle = (state.angle + delta + figure.Period) % figure.Period;
-                var to = new State {position = state.position, angle = angle};
-                if (!CanBePlaced(field, figure.FixAt(state)) || parents[to] != null)
+                var to = new UnitState {position = state.position, angle = angle};
+                if (!CanBePlaced(field, figure.FixAt(to)) || parents[to] != null)
                     continue;
                 parents[to] = new TransitionInfo {state = state, operation = delta == -1 ? 'L' : 'R'};
-                DFS(state, field, figure, parents);
+                DFS(to, field, figure, parents);
             }
         }
 
-        private static string RestorePath(State state, StateArray<TransitionInfo> parents)
+        private static string RestorePath(UnitState state, StateArray<TransitionInfo> parents)
         {
             if (parents[state] == null)
                 return null;
@@ -78,9 +78,9 @@ namespace Lib.Finder
             return string.Join("", path.ToString().Reverse());
         }
 
-        public static string GetPath(bool[,] field, Unit figure, Point target)
+        public static string GetPath(bool[,] field, Unit figure, UnitState target)
         {
-            var startState = new State {position = figure.GetStartPosition(field.GetLength(0)), angle = 0};
+            var startState = new UnitState {position = figure.GetStartPosition(field.GetLength(0)), angle = 0};
             if (!CanBePlaced(field, figure.FixAt(startState)))
                 return null;
 
@@ -89,13 +89,7 @@ namespace Lib.Finder
 
             DFS(startState, field, figure, parents);
 
-            for (var i = 0; i < figure.Period; i++)
-            {
-                var path = RestorePath(new State {position = target, angle = i}, parents);
-                if (path != null)
-                    return path;
-            }
-            return null;
+            return RestorePath(target, parents);
         }
     }
 }

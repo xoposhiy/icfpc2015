@@ -12,7 +12,7 @@ namespace Lib.Finder
         {
             var field = new bool[5, 10];
             var figure = new Unit(new Point[] { new Point(1, 0), new Point(2, 0) }, new Point(1, 0));
-            var target = new Point(1, 9);
+            var target = new UnitState {position = new Point(1, 9), angle = 0};
             var x = Finder.GetPath(field, figure, target);
         }
     }

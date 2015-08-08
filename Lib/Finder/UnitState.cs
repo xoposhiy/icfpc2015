@@ -2,7 +2,7 @@
 
 namespace Lib.Finder
 {
-    public class State
+    public class UnitState
     {
         public Point position { get; set; }
         public int angle { get; set; }
