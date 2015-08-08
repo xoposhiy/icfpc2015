@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Lib;
+using Lib.Finder;
 using Lib.Intelligence;
 using Lib.Models;
 using Newtonsoft.Json;
@@ -42,7 +43,7 @@ namespace play_icfp2015
 
 		private static string Solve(Map map)
 		{
-			var s2 = new NamiraOracle().Solve(map);
+			var s2 = new Solver(new NullFinder(), new NamiraOracle()).Solve(map);
 			return s2.Commands;
 		}
 	}

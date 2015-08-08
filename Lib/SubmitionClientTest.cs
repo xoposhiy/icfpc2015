@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Lib.Finder;
 using Lib.Intelligence;
 using Lib.Models;
 using NUnit.Framework;
@@ -24,12 +25,27 @@ namespace Lib
             });
         }
 
-        [Test, Explicit]
+		[Test, Explicit]
+		public void SendSinglePhrase()
+		{
+			var submissions =
+				from p in Problems.LoadProblems()
+				select new SubmitionJson
+				{
+					problemId = p.id,
+					seed = 0,
+					solution = "bap",
+					tag = "SendSinglePhrase-" + DateTime.Now
+				};
+			client.PostSubmissions(submissions.ToArray());
+		}
+
+		[Test, Explicit]
         public void GetResults()
         {
             var res = client.GetSubmissions();
             Console.WriteLine(res.Length);
-            foreach (var submission in res.OrderByDescending(x => x.createdAt))
+            foreach (var submission in res.OrderByDescending(x => x.createdAt).Take(50))
                 Console.WriteLine(submission);
         }
 
@@ -55,7 +71,7 @@ namespace Lib
         {
             var map = p.ToMap(seed);
             var s1 = new PhrasesOnlySolver().Solve(map);
-            var s2 = new NamiraOracle().Solve(map);
+            var s2 = new Solver(new NullFinder(), new NamiraOracle()).Solve(map);
             var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
             return new SubmitionJson
             {

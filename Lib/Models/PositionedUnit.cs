@@ -1,37 +1,39 @@
-﻿using Lib.Finder;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using Lib.Finder;
 
 namespace Lib.Models
 {
     public class PositionedUnit
     {
         public static PositionedUnit Null = new PositionedUnit(new Unit(new List<Point>(), new Point(0, 0)), 0, new Point(int.MaxValue, int.MaxValue));
+        public readonly Unit Unit;
+        public readonly UnitPosition Position;
 
         public PositionedUnit(Unit unit, int rotationIndex, Point pivotLocation)
         {
+            //TODO pe
             Unit = unit;
-            RotationIndex = (rotationIndex + Unit.Period) % Unit.Period;
-            Debug.Assert(RotationIndex.InRange(0, Unit.Displacements.Length-1));
-            PivotLocation = pivotLocation;
+            Position = new UnitPosition(pivotLocation, (rotationIndex + Unit.Period) % Unit.Period);
         }
 
-        public PositionedUnit(Unit unit, UnitState state) : this(unit, state.angle, state.position)
-        { }
-
-        public PositionedUnit TranslateToState(UnitState state)
+        public PositionedUnit(Unit unit, UnitPosition position)
         {
-            return new PositionedUnit(Unit, state);
+            Unit = unit;
+            Position = position;
         }
-        
 
         protected bool Equals(PositionedUnit other)
         {
-            return RotationIndex == other.RotationIndex && PivotLocation.Equals(other.PivotLocation);
+            return Equals(Position, other.Position);
+        }
+
+        public PositionedUnit WithNewPosition(UnitPosition pos)
+        {   
+            return new PositionedUnit(Unit, pos);
         }
 
         public override bool Equals(object obj)
@@ -44,22 +46,16 @@ namespace Lib.Models
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                return (RotationIndex * 397) ^ PivotLocation.GetHashCode();
-            }
+            return (Position != null ? Position.GetHashCode() : 0);
         }
 
         public IEnumerable<Point> Members
         {
             get
             {
-                if (!RotationIndex.InRange(0, Unit.Displacements.Length - 1))
-                    throw new Exception(RotationIndex.ToString());
-                return
-                    Unit
-                    .Displacements[RotationIndex]
-                    .Select(p => p.Add(PivotLocation.ToGeometry()).ToMap());
+                return Unit
+                    .Displacements[Position.Angle]
+                    .Select(p => p.Add(Position.Point.ToGeometry()).ToMap());
             }
         }
 
@@ -68,16 +64,12 @@ namespace Lib.Models
             switch (direction)
             {
                 case Directions.CW:
-                    return new PositionedUnit(Unit, RotationIndex + 1, PivotLocation);
+                    return new PositionedUnit(Unit, Position.Angle+ 1, Position.Point);
                 case Directions.CCW:
-                    return new PositionedUnit(Unit, RotationIndex - 1, PivotLocation);
+                    return new PositionedUnit(Unit, Position.Angle - 1, Position.Point);
                 default:
-                    return new PositionedUnit(Unit, RotationIndex, PivotLocation.Move(direction));
+                    return new PositionedUnit(Unit, Position.Angle, Position.Point.Move(direction));
             }
         }
-
-        public readonly Unit Unit;
-        public readonly int RotationIndex;
-        public readonly Point PivotLocation;
     }
 }

@@ -76,7 +76,7 @@ namespace ManualControl
             if (allHistory.Count > CurrentPosition + 1) allHistory.RemoveRange(CurrentPosition + 1, allHistory.Count - CurrentPosition - 1);
             foreach (var e in str)
             {
-                AppendInternal(token, Finder.CharToDirection(e),e);
+                AppendInternal(token, e.ToDirection(),e);
             }
             if (Updated != null) Updated();
         }

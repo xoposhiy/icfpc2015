@@ -19,7 +19,6 @@ namespace ManualControl
         Label scores;
         Label help;
 
-        ProgramPlayerControl playerControl;
         Button suggest,runBotIteration, runBotGame;
        
         
@@ -34,9 +33,6 @@ namespace ManualControl
 
             help.Size = new Size(ClientSize.Width-grid.Width, 100);
             help.Location = new Point(grid.Right, ClientSize.Height- help.Height);
-
-            playerControl.Size = new Size(help.Width, ClientSize.Height - help.Height);
-            playerControl.Location = new Point(help.Left, 0);
 
            
 
@@ -53,7 +49,6 @@ namespace ManualControl
         {
             mapHistory.History = new History(map);
             mapHistory.History.Updated += UpdateAll;
-            playerControl = new ProgramPlayerControl(mapHistory);
             grid = new Grid(mapHistory);
             this.KeyPreview = true;
             runBotGame = new Button();
@@ -70,10 +65,9 @@ namespace ManualControl
             help.Font = new Font("Arial", 10);
             help.ForeColor = Color.Yellow;
 
-            grid.MovementRequested += Grid_MovementRequested;
+            grid.MovementRequested += Grid_MovementRequested1;
 
             Controls.Add(grid);
-            Controls.Add(playerControl);
             Controls.Add(scores);
             Controls.Add(help);
             Controls.Add(runBotGame);
@@ -97,6 +91,14 @@ namespace ManualControl
         
         }
 
+        private void Grid_MovementRequested1(UnitPosition obj)
+        {
+            //if (mapHistory.Playing) return;
+            //var program = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
+            //mapHistory.History.Append(program, "Hand");
+            //mapHistory.Play();
+        }
+
         private void Suggest_Click(object sender, EventArgs e)
         {
             if (mapHistory.Playing) return;
@@ -108,27 +110,21 @@ namespace ManualControl
 
         private void RunBotIteration_Click(object sender, EventArgs e)
         {
-            if (mapHistory.Playing) return;
-            var program = new NamiraOracle().MakeMove(Map);
-            mapHistory.History.Append(program, "Iter"+IterationNumber);
-            IterationNumber++;
-            mapHistory.Play();
+            //if (mapHistory.Playing) return;
+            ////var program = new NamiraOracle().MakeMove(Map);
+            //mapHistory.History.Append(program, "Iter"+IterationNumber);
+            //IterationNumber++;
+            //mapHistory.Play();
         }
 
         private void RunBotGame_Click(object sender, EventArgs e)
         {
-            if (mapHistory.Playing) return;
-            var program = new NamiraOracle().PlayGame(Map);
-            mapHistory.History.Append(program, "Game");
-            mapHistory.Play();
+            //if (mapHistory.Playing) return;
+            //var program = new NamiraOracle().PlayGame(Map);
+            //mapHistory.History.Append(program, "Game");
+            //mapHistory.Play();
         }
-        private void Grid_MovementRequested(UnitState obj)
-        {
-            if (mapHistory.Playing) return;
-            var program = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            mapHistory.History.Append(program, "Hand");
-            mapHistory.Play();
-        }
+  
 
         protected override void OnLoad(EventArgs e)
         {
