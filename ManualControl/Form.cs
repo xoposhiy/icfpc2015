@@ -16,6 +16,8 @@ namespace ManualControl
         Grid grid;
         Label scores;
         Label help;
+        TextBox program;
+        Button play;
 
         private bool showHelp;
 
@@ -30,10 +32,14 @@ namespace ManualControl
             help.BackColor = Color.Black;
             help.Font = new Font("Arial", 10);
             help.ForeColor = Color.Yellow;
+            program = new TextBox();
+            play = new Button();
 
             Controls.Add(grid);
             Controls.Add(scores);
             Controls.Add(help);
+            Controls.Add(program);
+            Controls.Add(play);
 
             scores.Size = new Size(100, 30);
             grid.Location = new Point(0, 30);
@@ -41,6 +47,14 @@ namespace ManualControl
             help.Size = new Size(150, 100);
             help.Location = new Point(grid.Right, grid.Bottom - help.Height);
             ClientSize = new Size(help.Right, help.Bottom);
+            program.Size = new Size(150, 200);
+            program.Multiline = true;
+            program.Location = new Point(grid.Right, 0);
+            play.Size = new Size(program.Width, 20);
+            play.Location = new Point(program.Left, program.Bottom);
+            play.Text = "Play";
+            play.Click += Play_Click;
+
 
 
             keymap = new Dictionary<Keys, Directions>
@@ -53,6 +67,13 @@ namespace ManualControl
                 [Keys.P] = Directions.E
             };
         
+        }
+
+        private void Play_Click(object sender, EventArgs e)
+        {
+            var str = program.Text;
+            var timer = new Timer();
+            int ptr = 0;
         }
 
         protected override void OnLoad(EventArgs e)
