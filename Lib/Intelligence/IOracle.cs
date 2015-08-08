@@ -12,4 +12,6 @@ namespace Lib.Intelligence
     {
         IEnumerable<OracleSuggestion> GetSuggestions(Map map);
     }
+
+
 }

@@ -4,23 +4,20 @@ using Lib.Models;
 
 namespace Lib.Intelligence
 {
-    //UNDER CONSTRUCTION
-    /*
+
     public static class OracleExtensions
     {
-        public static IEnumerable<OracleSuggestion> Play(this IOracle oracle, Map map, Unit figure)
+        public static string MakeMove(this IOracle oracle, Map map)
         {
-            while (!map.IsOver)
+            foreach(var e in oracle.GetSuggestions(map))
             {
-                foreach (var suggestion in oracle.GetSuggestions(map))
-                {
-                    var path = Finder.Finder.GetPath(map.Filled, figure, suggestion.State);
-                    if (path == null)
-                        continue;
-
-                }
+                var result = Finder.Finder.GetPath(map.Filled, map.Unit.Unit, e.State);
+                if (result == null) continue;
+                result += Finder.Finder.DirectionToChar(e.LockingDirection);
+                return result;
             }
+            return null;
         }
     }
-    */
+    
 }
