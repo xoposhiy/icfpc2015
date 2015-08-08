@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandProcessor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,7 +61,11 @@
     </Compile>
     <Compile Include="Occupation.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProgramPlayer.cs" />
     <Compile Include="ProgramController.cs" />
+    <Compile Include="ProgramPlayerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

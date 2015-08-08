@@ -18,99 +18,53 @@ namespace ManualControl
         Grid grid;
         Label scores;
         Label help;
-        TextBox program;
-        Button play;
-        Button stepBut;
-        Button back;
-        Button playBot;
+
+        ProgramPlayer player;
+        ProgramPlayerControl playerControl;
         
-
-        ProgramController controller;
-
         private bool showHelp;
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+           grid.Size = grid.GetDesiredSize();
+            scores.Size = new Size(grid.Width, 30);
+            grid.Location = new Point(0, 30);
+
+            help.Size = new Size(ClientSize.Width-grid.Width, 100);
+            help.Location = new Point(grid.Right, ClientSize.Height- help.Height);
+
+           playerControl.Size = new Size(help.Width, ClientSize.Height - help.Height);
+            playerControl.Location = new Point(help.Left, 0);
+        }
+
+        
 
         public TetrisForm(Map map)
         {
-            controller = new ProgramController(mapHistory);
-
-            this.KeyPreview = true;
             this.mapHistory.Push(map);
+            player = new ProgramPlayer(mapHistory);
+            playerControl = new ProgramPlayerControl(player);
             grid = new Grid(mapHistory);
+            this.KeyPreview = true;
+
+
             scores = new Label();
             help = new Label();
             help.Text = "UIOP - movement\r\nQW - rotate\r\nZ - undo\r\nL - lock";
             help.BackColor = Color.Black;
             help.Font = new Font("Arial", 10);
             help.ForeColor = Color.Yellow;
-            program = new TextBox();
-            play = new Button();
-            playBot = new Button();
-            stepBut = new Button();
-            back = new Button();
-            program.Font = new Font("Consolas",12);
-
-            Controls.Add(grid);
-            Controls.Add(scores);
-            Controls.Add(help);
-            Controls.Add(program);
-            Controls.Add(play);
-            Controls.Add(playBot);
-            Controls.Add(stepBut);
-            Controls.Add(back);
-
-            scores.Size = new Size(100, 30);
-            grid.Location = new Point(0, 30);
-            grid.Size = grid.GetDesiredSize();
-            help.Size = new Size(150, 100);
-            help.Location = new Point(grid.Right, grid.Bottom - help.Height);
-            ClientSize = new Size(help.Right, Math.Max(help.Bottom, 400));
-
-
-
-            program.Size = new Size(150, 200);
-            program.Multiline = true;
-            program.Location = new Point(grid.Right, 0);
-            play.Size = new Size(program.Width, 20);
-            play.Location = new Point(program.Left, program.Bottom);
-            play.Text = "Play";
-
-            stepBut.Size = play.Size;
-            stepBut.Location = new Point(play.Left, play.Bottom);
-            stepBut.Text = "STEP";
-            stepBut.Click += (s, a) =>
-            {
-                if (!controller.Running) controller.Run(program.Text, true);
-                controller.Step();
-            };
-
-            back.Size = play.Size;
-            back.Location = new Point(play.Left, stepBut.Bottom);
-            back.Text = "BACK";
-            back.Click += (s, a) =>
-              {
-                  controller.Back();
-              };
-
-
-
-            playBot.Click += PlayBot_Click;
-            playBot.Text = "Play bot";
-            playBot.Location = new Point(back.Left, back.Bottom + 30);
-            playBot.Size = play.Size;
-
 
             grid.MovementRequested += Grid_MovementRequested;
-            play.Click +=
-                (s, a) =>
-                controller.Run(program.Text, false);
-            controller.Updated = UpdateAll;
-            controller.Started += () => { play.Enabled = false; program.Enabled = false; };
-            controller.Finished += () => { play.Enabled = true; program.Enabled = true; program.Text = controller.Program; };
 
+            Controls.Add(grid);
+            Controls.Add(playerControl);
+            Controls.Add(scores);
+            Controls.Add(help);
 
-        
-
-
+            player.LoadedUpdated += z => grid.MouseDisabled = z;
+            player.MapUpdated += () => UpdateAll();
 
             keymap = new Dictionary<Keys, Directions>
             {
@@ -124,28 +78,20 @@ namespace ManualControl
         
         }
 
-        private void PlayBot_Click(object sender, EventArgs e)
-        {
-            //var pr=new NamiraOracle().PlayGame(Map);
-            var pr = new AzuraOracle().PlayGame(Map);
-            controller.TimerInterval = 1;
-            if (pr != null)
-                controller.Run(pr,false);
-        }
-
         private void Grid_MovementRequested(UnitState obj)
         {
-            var text = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            controller.Run(text, false);
+            if (player.Loaded) return;
+            var program = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
+            player.InitializeProgram(program);
+            player.Play();
         }
-        
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}. Press 'H' for help!";
             DoubleBuffered = true;
-
+            WindowState = FormWindowState.Maximized;
         }
 
         void UpdateAll()
@@ -153,19 +99,13 @@ namespace ManualControl
             Invalidate();
             grid.Invalidate();
             scores.Text = Map.Scores.TotalScores.ToString();
-
-            if (controller.Running && controller.ProgramPointer<controller.Program.Length-1)
-            {
-                var before = controller.Program.Substring(0, controller.ProgramPointer);
-                var after = controller.Program.Substring(controller.ProgramPointer+1);
-                program.Text = before + "_" + controller.Program[controller.ProgramPointer] + "_" + after;
-            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (program.Focused) return;
-            if (controller.Running) return;
+            if (playerControl.KeyboardOccupied) return;
+            if (player.Loaded) return;
+
            if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
                 mapHistory.Push(Map.Move(keymap[e.KeyData]));
             if (e.KeyData == Keys.Z && mapHistory.Count > 1)
@@ -178,8 +118,5 @@ namespace ManualControl
                 showHelp = false;
             UpdateAll();
         }
-
-        
-       
     }
 }
