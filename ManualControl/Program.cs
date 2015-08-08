@@ -15,8 +15,6 @@ namespace ManualControl
             var form = new TetrisForm(map);
             form.MovementRequested = dir => { map.Unit.Move(dir); };
             Application.Run(form);
-
-
         }
     }
 }
