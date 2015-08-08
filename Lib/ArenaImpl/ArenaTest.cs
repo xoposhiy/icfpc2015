@@ -1,5 +1,6 @@
 using System.IO;
 using ApprovalTests;
+using Lib.Finder;
 using Lib.Intelligence;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -14,10 +15,10 @@ namespace Lib.ArenaImpl
         {
             var arena = new Arena();
 //            var solver = new PhrasesOnlySolver();
-            var solver = new NamiraOracle();
-//            var solver = new AzuraOracle();
+//            var solver = new NamiraOracle();
+            var solver = new Solver(new NullFinder(), new AzuraOracle());
             var res = arena.RunAllProblems(solver);
-            File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
+//            File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
             Approvals.Verify(res);
         }
     }

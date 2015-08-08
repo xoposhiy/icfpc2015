@@ -10,11 +10,11 @@ namespace Lib.Intelligence
 {
     public class OracleSuggestion
     {
-        public readonly UnitState State;
+        public readonly UnitPosition Position;
         public readonly Directions LockingDirection;
-        public OracleSuggestion(UnitState state, Directions lockingDirection)
+        public OracleSuggestion(UnitPosition position, Directions lockingDirection)
         {
-            State = state;
+            Position = position;
             LockingDirection = lockingDirection;
         }
         

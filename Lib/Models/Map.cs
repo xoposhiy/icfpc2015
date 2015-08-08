@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
@@ -13,34 +12,27 @@ namespace Lib.Models
         public readonly int Height;
         public readonly int Width;
         public readonly int Id;
-        public readonly ImmutableHashSet<PositionedUnit> UsedPositions;
         public readonly Scores Scores;
+        public bool[,] Filled { get; }
+        public readonly ImmutableHashSet<PositionedUnit> UsedPositions;
+
+        public PositionedUnit Unit { get; }
 
         public Map(int id, bool[,] filled, ImmutableStack<Unit> nextUnits, Scores scores)
-            : this(id, filled, PositionNewUnit(filled.GetLength(0), nextUnits), nextUnits, ImmutableHashSet<PositionedUnit>.Empty, scores)
+            : this(id, filled,
+                  PositionNewUnit(filled.GetLength(0), nextUnits),
+                  nextUnits.TryPop(), scores)
         {
         }
 
-        public static PositionedUnit PositionNewUnit(int width, ImmutableStack<Unit> nextUnits)
+        private Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, Scores scores)
+            : this(id, filled,
+                  unit,
+                  nextUnits, ImmutableHashSet<PositionedUnit>.Empty.Add(unit), scores)
         {
-            if (nextUnits.IsEmpty) return null;
-            var u = nextUnits.Peek();
-            var topmostY = u.Members.Min(m => m.Y);
-            var pos = new PositionedUnit(u, 0, new Point(-10, -topmostY));
-            int leftMargin;
-            int rightMargin;
-            while (true)
-            {
-                leftMargin = pos.Members.Min(m => m.X);
-                rightMargin = width - 1 - pos.Members.Max(m => m.X);
-                if (leftMargin == rightMargin) break;
-                if (rightMargin == leftMargin+1) break;
-                pos = pos.Move(Directions.E);
-            }
-            return pos;
         }
 
-        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
+        private Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
         {
             Id = id;
             NextUnits = nextUnits;
@@ -52,11 +44,20 @@ namespace Lib.Models
             Scores = scores;
         }
 
+        public static PositionedUnit PositionNewUnit(int width, ImmutableStack<Unit> nextUnits)
+        {
+            if (nextUnits.IsEmpty) return PositionedUnit.Null;
+            var u = nextUnits.Peek();
+            var topmostY = u.Displacements[0].Min(m => m.ToMap().Y);
+            var pos = new PositionedUnit(u, 0, new Point(0, -topmostY));
+            var leftMargin = pos.Members.Min(m => m.X);
+            var rightMargin = width - 1 - pos.Members.Max(m => m.X);
+            var newX = (rightMargin - leftMargin) / 2;
+            return new PositionedUnit(u, 0, new Point(newX, -topmostY));
+        }
+
         public bool IsOver => ReferenceEquals(Unit, PositionedUnit.Null);
 
-        public bool[,] Filled { get; }
-
-        public PositionedUnit Unit { get; }
 
         public Map LockUnit()
         {
@@ -66,33 +67,31 @@ namespace Lib.Models
                 f[cell.X, cell.Y] = true;
 
             var ls_old = Scores.ClearedLinesCountAtThisMap;
-            var ls =RemoveFilledLines(f);
+            var ls = RemoveFilledLines(f);
             var size = Unit.Members.Count();
 
             var points = size + 100 * (1 + ls) * ls / 2;
             var line_bonus = 0;
             if (ls_old > 1)
-                line_bonus = (int)Math.Floor((double)((ls_old - 1) * points / 10));
-            
+                line_bonus = (int)Math.Floor((ls_old - 1) * points / 10f);
 
             var newScores = new Scores(Scores.TotalScores + points + line_bonus, ls);
 
-            var newNextUnits = NextUnits.Pop();
-            if (newNextUnits.IsEmpty)
-                return new Map(Id, f, PositionedUnit.Null, newNextUnits, ImmutableHashSet<PositionedUnit>.Empty, Scores);
-            return new Map(Id, f, newNextUnits,newScores);
+            return new Map(Id, f, NextUnits, newScores);
         }
 
-        int RemoveFilledLines(bool[,] map)
+        private int RemoveFilledLines(bool[,] map)
         {
             var removedLines = 0;
             var width = map.GetLength(0);
             var height = map.GetLength(1);
-            for (int y=height-1;y>=0;y--)
+            for (int y = height - 1; y >= 0; y--)
             {
                 if (removedLines > 0)
+                {
                     for (int x = 0; x < width; x++)
                         map[x, y] = y >= removedLines && map[x, y - removedLines];
+                }
                 if (Enumerable.Range(0, width).All(x => map[x, y]))
                 {
                     removedLines++;
@@ -105,16 +104,13 @@ namespace Lib.Models
         public bool IsSafeMovement(Directions direction)
         {
             var nextUnit = Unit.Move(direction);
-            if (IsCatastrophicState(nextUnit))
-                return false;
-            return nextUnit.Members.All(IsValid);
+            return !IsCatastrophicState(nextUnit) && IsValidPosition(nextUnit);
         }
 
-        public bool IsLockingState(PositionedUnit unit)
+        public bool IsValidPosition(PositionedUnit unit)
         {
-            return unit.Members.Any(z=>!IsValid(z));
+            return unit.Members.All(IsValid);
         }
-
 
         public bool IsCatastrophicState(PositionedUnit unit)
         {
@@ -131,17 +127,18 @@ namespace Lib.Models
         private bool IsValid(Point p)
         {
             return p.X.InRange(0, Width - 1)
-                && p.Y.InRange(0, Height - 1)
-                && !Filled[p.X, p.Y];
+                   && p.Y.InRange(0, Height - 1)
+                   && !Filled[p.X, p.Y];
         }
 
         public Map Move(Directions dir)
         {
             if (IsCatastrophicMove(dir)) return Die();
             return IsSafeMovement(dir)
-                ? DoMove(dir)
-                : LockUnit();
+                       ? DoMove(dir)
+                       : LockUnit();
         }
+
         public Map Move(char c)
         {
             return Move(c.ToDirection());
@@ -159,31 +156,6 @@ namespace Lib.Models
         }
     }
 
-    public static class MapExtensions
-    {
-        public static IEnumerable<Directions> ToDirections(this string s)
-        {
-            return s.ToLowerInvariant()
-                .Where(c => !"\t\n\r".Contains(c))
-                .Select(ToDirection);
-        }
-        public static Directions ToDirection(this char c)
-        {
-            c = char.ToLowerInvariant(c);
-            if ("p'!.03".Contains(c)) return Directions.W;
-            if ("bcefy2".Contains(c)) return Directions.E;
-            if ("aghij4".Contains(c)) return Directions.SW;
-            if ("lmno 5".Contains(c)) return Directions.SE;
-            if ("dqrvz1".Contains(c)) return Directions.CW;
-            if ("kstuwx".Contains(c)) return Directions.CCW;
-            throw new Exception(c.ToString());
-        }
-        public static Map Move(this Map map, IEnumerable<Directions> ds)
-        {
-            return ds.Aggregate(map, (m, d) => m.Move(d));
-        }
-    }
-
     [TestFixture]
     public class PositionNewUnit
     {
@@ -192,14 +164,15 @@ namespace Lib.Models
         {
             var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] {new Point(-1, 0), new Point(0, 1)}, new Point(0, 0)));
             var pos = Map.PositionNewUnit(4, units);
-            Assert.AreEqual(new Point(2, 0), pos.PivotLocation);
+            Assert.AreEqual(new Point(2, 0), pos.Position.Point);
         }
+        
         [Test]
         public void Two()
         {
-            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] { new Point(-1, 0), new Point(0, 1) }, new Point(0, 0)));
+            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] {new Point(-1, 0), new Point(0, 1)}, new Point(0, 0)));
             var pos = Map.PositionNewUnit(5, units);
-            Assert.AreEqual(new Point(2, 0), pos.PivotLocation);
+            Assert.AreEqual(new Point(2, 0), pos.Position.Point);
         }
     }
 }

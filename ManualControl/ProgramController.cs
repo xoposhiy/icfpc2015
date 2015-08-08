@@ -68,7 +68,6 @@ namespace ManualControl
             if (Started != null) Started();
             if (!step) timer.Start();
         }
-
         
 
 

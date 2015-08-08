@@ -4,36 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lib.ArenaImpl;
+using Lib.Finder;
 using Lib.Models;
 
 namespace Lib.Intelligence
 {
-    public class AzuraOracle : IOracle, ISolver
+    public class AzuraOracle : IOracle
     {
         public override string ToString()
         {
             return "Azura";
         }
 
-        public SolverResult Solve(Map map)
-        {
-            var res = this.PlayExtended(map);
-            return new SolverResult(ToString(), res.Item2.Scores.TotalScores, res.Item1);
-        }
-
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
-            var possible = this.SuggestAllFinalPositions(map);
+            var possible = map.SuggestAllFinalPositions();
 
             return possible.OrderByDescending(suggestion =>
             {
                 var count = 0;
                 for (int j = 0; j < map.Filled.GetLength(0); j++)
                 {
-                    if(map.Filled[j, suggestion.State.position.X])count++;
+                    if(map.Filled[j, suggestion.Position.Point.X])count++;
                 }
                 return count;
-            }).ThenByDescending(z => z.State.position.Y);
+            }).ThenByDescending(z => z.Position.Point.Y);
         }
     }
 }

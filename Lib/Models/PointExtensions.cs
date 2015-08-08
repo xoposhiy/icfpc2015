@@ -47,7 +47,7 @@ namespace Lib.Models
 
         public static PointF ToGeometry(this Point point)
         {
-            return Geometry.GetGeometricLocation(point.X,point.Y);
+            return Geometry.GetGeometricLocation(point.X, point.Y);
         }
 
     }
