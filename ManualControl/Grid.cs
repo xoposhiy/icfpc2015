@@ -109,7 +109,8 @@ namespace ManualControl
                 }
             }
 
-            if (requestedLocation != null)
+
+            if (requestedLocation != null && !MouseDisabled)
             {
                 string path = null;
                 try
@@ -133,12 +134,14 @@ namespace ManualControl
         }
 
 
+        public bool MouseDisabled{ get; set; }
         PositionedUnit requestedLocation;
         bool requestedLocationIsReachable;
         int requestedAngle;
 
         void SetRequestedLocation(Point location, int angle)
         {
+            if (MouseDisabled) return;
             if (requestedLocation != null 
                 && requestedLocation.PivotLocation == location
                 && requestedLocation.RotationIndex == angle) return;
@@ -177,6 +180,7 @@ namespace ManualControl
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
+            if (MouseDisabled) return;
             requestedAngle = e.Delta < 0 ? requestedAngle + 1 : requestedAngle - 1;
             requestedAngle = requestedAngle % 6;
             SetRequestedLocation(GetLocation(e), requestedAngle);
@@ -185,6 +189,7 @@ namespace ManualControl
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            if (MouseDisabled) return;
             SetRequestedLocation(GetLocation(e), requestedAngle);
         }
 
@@ -192,6 +197,7 @@ namespace ManualControl
 
         protected override void OnDoubleClick(EventArgs e)
         {
+            if (MouseDisabled) return;
             if (requestedLocation != null)
                 MovementRequested(new UnitState { angle = requestedLocation.RotationIndex, position = requestedLocation.PivotLocation });
         }

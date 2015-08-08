@@ -26,9 +26,18 @@ namespace Lib.Models
             if (nextUnits.IsEmpty) return null;
             var u = nextUnits.Peek();
             var topmostY = u.Members.Min(m => m.Y);
-            var pivotPos = (width - 1 - u.Members.Max(m => m.X + (m.Y + topmostY) % 2) -
-                            u.Members.Min(m => m.X - (m.Y + topmostY) % 2)) / 2;
-            return new PositionedUnit(u, 0, new Point(pivotPos, -topmostY));
+            var pos = new PositionedUnit(u, 0, new Point(-10, -topmostY));
+            int leftMargin;
+            int rightMargin;
+            while (true)
+            {
+                leftMargin = pos.Members.Min(m => m.X);
+                rightMargin = width - 1 - pos.Members.Max(m => m.X);
+                if (leftMargin == rightMargin) break;
+                if (rightMargin == leftMargin+1) break;
+                pos = pos.Move(Directions.E);
+            }
+            return pos;
         }
 
         public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
