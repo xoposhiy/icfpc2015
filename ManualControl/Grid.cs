@@ -22,7 +22,6 @@ namespace ManualControl
         public int LabelXOffset;
         public int LabetYOffset;
 
-        PositionedUnit mousePositionedUnit;
 
         public Size GetDesiredSize()
         {
@@ -47,7 +46,7 @@ namespace ManualControl
                 [Occupation.Unit] = Brushes.LawnGreen,
             };
             DoubleBuffered = true;
-            mousePositionedUnit = Map.Unit;
+            requestedLocation = null;
         }
 
         public void DrawHexagonInGraphicCoordinates(Graphics g, int gx, int gy, int kx, int ky, Pen pen, Brush brush, bool marked)
@@ -110,25 +109,64 @@ namespace ManualControl
                 }
             }
 
-            if (mousePositionedUnit != null)
+            if (requestedLocation != null)
             {
-                var path = Finder.GetPath(
+                string path = null;
+                try
+                {
+                    path = Finder.GetPath(
                     Map.Filled,
                     Map.Unit.Unit,
                     new UnitState
                     {
-                        angle = mousePositionedUnit.RotationIndex,
-                        position = mousePositionedUnit.PivotLocation
+                        angle = requestedLocation.RotationIndex,
+                        position = requestedLocation.PivotLocation
                     });
+                }
+                catch { }
                 bool exist = path != null;
-                foreach (var member in mousePositionedUnit.Members)
+                foreach (var member in requestedLocation.Members)
                 {
                     DrawHexagon(e.Graphics, member.X, member.Y, Pens.Black, exist ? Brushes.Aqua : Brushes.MistyRose, false);
                 }
             }
         }
-        private Point GetLocation(float pixelX, float pixelY)
+
+
+        PositionedUnit requestedLocation;
+        bool requestedLocationIsReachable;
+        int requestedAngle;
+
+        void SetRequestedLocation(Point location, int angle)
         {
+            if (requestedLocation != null 
+                && requestedLocation.PivotLocation == location
+                && requestedLocation.RotationIndex == angle) return;
+
+            requestedLocation = new PositionedUnit(Map.Unit.Unit, new UnitState { position = location, angle = angle });
+            string path = null;
+                try
+                {
+                    path = Finder.GetPath(
+                    Map.Filled,
+                    Map.Unit.Unit,
+                    new UnitState
+                    {
+                        angle = requestedLocation.RotationIndex,
+                        position = requestedLocation.PivotLocation
+                    });
+                }
+                catch { }
+            requestedLocationIsReachable = path != null;
+            Invalidate();
+        }
+        
+
+
+        private Point GetLocation(MouseEventArgs e)
+        {
+            float pixelX = e.X - Radius * (float)Geometry.Width / 2;
+            float pixelY = e.Y - Radius * (float)Geometry.Height / 2;
             var geometryPoint = new PointF()
             {
                 X = (pixelX) / Radius,
@@ -139,25 +177,23 @@ namespace ManualControl
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            mousePositionedUnit = mousePositionedUnit.Move(Directions.CW);
-            this.Invalidate();
+            requestedAngle = e.Delta < 0 ? requestedAngle + 1 : requestedAngle - 1;
+            requestedAngle = requestedAngle % 6;
+            SetRequestedLocation(GetLocation(e), requestedAngle);
         }
 
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            var point = GetLocation(e.X - Radius * (float)Geometry.Width / 2, e.Y - Radius * (float)Geometry.Height / 2);
-            mousePositionedUnit = new PositionedUnit(Map.Unit.Unit, mousePositionedUnit.RotationIndex, point);
-            
-            this.Invalidate();
+            SetRequestedLocation(GetLocation(e), requestedAngle);
         }
 
         public event Action<UnitState> MovementRequested;
 
         protected override void OnDoubleClick(EventArgs e)
         {
-            if (mousePositionedUnit != null)
-                MovementRequested(new UnitState { angle = mousePositionedUnit.RotationIndex, position = mousePositionedUnit.PivotLocation });
+            if (requestedLocation != null)
+                MovementRequested(new UnitState { angle = requestedLocation.RotationIndex, position = requestedLocation.PivotLocation });
         }
     }
 }
