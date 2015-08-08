@@ -77,6 +77,10 @@
     <Compile Include="Finder\StateArray.cs" />
     <Compile Include="Finder\TestFinder.cs" />
     <Compile Include="Finder\TransitionInfo.cs" />
+    <Compile Include="Intelligence\IOracle.cs" />
+    <Compile Include="Intelligence\NamiraOracle.cs" />
+    <Compile Include="Intelligence\OracleServices.cs" />
+    <Compile Include="Intelligence\OracleSuggestion.cs" />
     <Compile Include="LinearGenerator.cs" />
     <Compile Include="Models\CommonExtensions.cs" />
     <Compile Include="Models\Directions.cs" />

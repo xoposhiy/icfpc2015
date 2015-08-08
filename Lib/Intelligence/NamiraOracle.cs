@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Lib.Finder;
+using Lib.Models;
+
+namespace Lib.Intelligence
+{
+    class NamiraOracle : IOracle
+    {
+        public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
+        {
+            var goodStates = new List<OracleSuggestion>();
+
+            foreach(var state in OracleServices.GetAllStates(map))
+            {
+                var positionedUnit = map.Unit.TranslateToState(state);
+                if (map.IsLockingState(positionedUnit)) continue;
+
+                foreach (var dir in OracleServices.GetAllDirections())
+                {
+                    var nextPosition = positionedUnit.Move(dir);
+                    if (map.IsLockingState(nextPosition))
+                    {
+                        goodStates.Add(new OracleSuggestion(state, dir));
+                    }
+                }
+            }
+
+            return goodStates;
+        }
+    }
+}
