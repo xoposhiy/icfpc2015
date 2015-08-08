@@ -18,6 +18,7 @@ namespace ManualControl
         Grid grid;
         Label scores;
         Label help;
+        ProgramPlayerControl player;
         
 
         Button suggest,runBotIteration, runBotGame;
@@ -35,6 +36,8 @@ namespace ManualControl
             help.Size = new Size(ClientSize.Width-grid.Width, 100);
             help.Location = new Point(grid.Right, ClientSize.Height- help.Height);
 
+            player.Location = new Point(grid.Right, 0);
+            player.Size = new Size(help.Width, ClientSize.Height - help.Height);
 
             suggest.Location = new Point(scores.Right, 0);
             suggest.Size = new Size(100, scores.Height);
@@ -58,6 +61,7 @@ namespace ManualControl
             runBotGame = new Button();
             runBotIteration = new Button();
             suggest = new Button();
+            player = new ProgramPlayerControl(mapHistory);
             runBotIteration.Text = "Iter";
             runBotGame.Text = "Game";
             suggest.Text = "Oracle";
@@ -77,6 +81,7 @@ namespace ManualControl
             Controls.Add(runBotGame);
             Controls.Add(runBotIteration);
             Controls.Add(suggest);
+            Controls.Add(player);
 
 
             runBotGame.Click += RunBotGame_Click;
