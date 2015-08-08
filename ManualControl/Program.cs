@@ -11,7 +11,7 @@ namespace ManualControl
         public static void Main()
         {
             //RunTest(); return;
-            var map = Problems.LoadProblems()[13].ToMap(0);
+            var map = Problems.LoadProblems()[1].ToMap(0);
             var form = new TetrisForm(map);
             form.MovementRequested = dir => { map.Unit.Move(dir); };
             Application.Run(form);

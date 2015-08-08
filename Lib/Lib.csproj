@@ -84,6 +84,7 @@
     <Compile Include="Finder\StateArray.cs" />
     <Compile Include="Finder\TestFinder.cs" />
     <Compile Include="Finder\TransitionInfo.cs" />
+    <Compile Include="Intelligence\AzuraOracle.cs" />
     <Compile Include="Intelligence\IOracle.cs" />
     <Compile Include="Intelligence\NamiraOracle.cs" />
     <Compile Include="Intelligence\OracleExtensions.cs" />
