@@ -37,7 +37,7 @@ namespace Lib
                 .Select(i => us[g.Next() % us.Count])
                 .Reverse()
                 .Aggregate(ImmutableStack<Unit>.Empty, (stack, unit) => stack.Push(unit));
-            return new Map(id, f, unitsSeq);
+            return new Map(id, f, unitsSeq, new Scores(0,0));
         }
     }
 

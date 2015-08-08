@@ -15,7 +15,7 @@ namespace ManualControl
         private readonly int MapWidth;
         private readonly int MapHeight;
         private readonly int XMargin = 30;
-        private readonly int YMargin = 30;
+        private readonly int YMargin = 60;
         private readonly Dictionary<Occupation, Pen> penTypes;
         private readonly Dictionary<Occupation, Brush> brushTypes;
         public Action<Directions> MovementRequested;
@@ -123,6 +123,14 @@ namespace ManualControl
         {
             var g = e.Graphics;
             g.Clear(Map.IsOver ? Color.LightCoral : Color.White);
+
+            g.DrawString(
+                Map.Scores.TotalScores.ToString(),
+                new Font("Arial", 15),
+                Brushes.Black,
+                new Point(0, 0)
+                );
+
             for (var x = 0; x < MapWidth; x++)
             {
                 for (var y = 0; y < MapHeight; y++)
