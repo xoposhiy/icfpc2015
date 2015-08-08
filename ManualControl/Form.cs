@@ -20,11 +20,13 @@ namespace ManualControl
         TextBox program;
         Button play;
 
+        ProgramController controller;
+
         private bool showHelp;
 
         public TetrisForm(Map map)
         {
-            
+            controller = new ProgramController(mapHistory);
 
             this.KeyPreview = true;
             this.mapHistory.Push(map);
@@ -56,7 +58,8 @@ namespace ManualControl
             play.Size = new Size(program.Width, 20);
             play.Location = new Point(program.Left, program.Bottom);
             play.Text = "Play";
-            play.Click += Play_Click;
+            play.Click += (s, a) => controller.Run(program.Text);
+            controller.Updated = UpdateAll;
 
 
             program.Text= Finder.GetPath(Map.Filled, Map.Unit.Unit, new UnitState { angle = 0, position = new Point(5, 5) });
@@ -77,28 +80,6 @@ namespace ManualControl
         }
 
 
-        int ProgramPointer;
-        void MakeStep()
-        {
-            if (ProgramPointer >= program.Text.Length) return;
-            var c = program.Text[ProgramPointer];
-            var dir = Finder.CharToDirection(c);
-            mapHistory.Push(Map.Move(dir));
-            UpdateAll();
-            ProgramPointer++;
-        }
-
-
-        private void Play_Click(object sender, EventArgs e)
-        {
-            var str = program.Text;
-            var timer = new Timer();
-            int ptr = 0;
-            timer.Interval = 10;
-            timer.Tick += (s, a) => MakeStep();
-            timer.Start();
-        }
-        
 
         protected override void OnLoad(EventArgs e)
         {
