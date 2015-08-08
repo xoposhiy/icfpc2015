@@ -1,3 +1,5 @@
+call build.cmd
+
 for /D %%d in (*) DO (
 	pushd "%%d"
 	if exist bin (
@@ -8,8 +10,6 @@ for /D %%d in (*) DO (
 	)
 	popd
 )
-
-call build.cmd
 
 set targetZip=hack-the-loop.zip
 erase %targetZip%
