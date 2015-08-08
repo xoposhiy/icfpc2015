@@ -110,13 +110,23 @@ namespace ManualControl
                 }
             }
 
-            if (mousePositionedUnit!= null)
-            foreach (var member in mousePositionedUnit.Members)
+            if (mousePositionedUnit != null)
             {
-                DrawHexagon(e.Graphics, member.X, member.Y, pen, brush, false);
+                var path = Finder.GetPath(
+                    Map.Filled,
+                    Map.Unit.Unit,
+                    new UnitState
+                    {
+                        angle = mousePositionedUnit.RotationIndex,
+                        position = mousePositionedUnit.PivotLocation
+                    });
+                bool exist = path != null;
+                foreach (var member in mousePositionedUnit.Members)
+                {
+                    DrawHexagon(e.Graphics, member.X, member.Y, Pens.Black, exist ? Brushes.Aqua : Brushes.MistyRose, false);
+                }
             }
         }
-
         private Point GetLocation(float pixelX, float pixelY)
         {
             var geometryPoint = new PointF()
@@ -133,8 +143,6 @@ namespace ManualControl
             this.Invalidate();
         }
 
-        Pen pen = new Pen(Color.Aqua);
-        SolidBrush brush = new SolidBrush(Color.Azure);
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
