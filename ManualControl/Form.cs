@@ -11,107 +11,82 @@ namespace ManualControl
 {
     internal class TetrisForm : Form
     {
-        private readonly Stack<Map> mapHistory = new Stack<Map>();
-        public Map Map => mapHistory.Peek();
+        private readonly MainModel mapHistory = new MainModel();
+        public Map Map => mapHistory.History.CurrentMap;
         private readonly Dictionary<Keys, Directions> keymap;
         public Action<Directions> MovementRequested;
         Grid grid;
         Label scores;
         Label help;
-        TextBox program;
-        Button play;
-        Button stepBut;
-        Button back;
-        Button playBot;
+        ProgramPlayerControl player;
         
 
-        ProgramController controller;
-        private IFinder finder = new NullFinder();
-
+        Button suggest,runBotIteration, runBotGame;
+       
+        
         private bool showHelp;
 
-        public TetrisForm(Map map)
+        protected override void OnSizeChanged(EventArgs e)
         {
-            controller = new ProgramController(mapHistory);
+            base.OnSizeChanged(e);
+            grid.Size = grid.GetDesiredSize();
+            scores.Size = new Size(100, 30);
+            grid.Location = new Point(0, 30);
 
-            this.KeyPreview = true;
-            this.mapHistory.Push(map);
+            help.Size = new Size(ClientSize.Width-grid.Width, 100);
+            help.Location = new Point(grid.Right, ClientSize.Height- help.Height);
+
+            player.Location = new Point(grid.Right, 0);
+            player.Size = new Size(help.Width, ClientSize.Height - help.Height);
+
+            suggest.Location = new Point(scores.Right, 0);
+            suggest.Size = new Size(100, scores.Height);
+           
+
+            runBotIteration.Location = new Point(suggest.Right, 0);
+            runBotIteration.Size = suggest.Size;
+            runBotGame.Location = new Point(runBotIteration.Right, 0);
+            runBotGame.Size = suggest.Size;
+
+
+        }
+
+        public TetrisForm(MainModel model)
+        {
+            mapHistory = model;
+            mapHistory.History.Updated += UpdateAll;
+            mapHistory.Suggestions.Updated += () => suggest.Text = "Oracle " + mapHistory.Suggestions.Position;
             grid = new Grid(mapHistory);
+            this.KeyPreview = true;
+            runBotGame = new Button();
+            runBotIteration = new Button();
+            suggest = new Button();
+            player = new ProgramPlayerControl(mapHistory);
+            runBotIteration.Text = "Iter";
+            runBotGame.Text = "Game";
+            suggest.Text = "Oracle";
+
             scores = new Label();
             help = new Label();
             help.Text = "UIOP - movement\r\nQW - rotate\r\nZ - undo\r\nL - lock";
             help.BackColor = Color.Black;
             help.Font = new Font("Arial", 10);
             help.ForeColor = Color.Yellow;
-            program = new TextBox();
-            play = new Button();
-            playBot = new Button();
-            stepBut = new Button();
-            back = new Button();
-            program.Font = new Font("Consolas",12);
+
+            grid.MovementRequested += Grid_MovementRequested1;
 
             Controls.Add(grid);
             Controls.Add(scores);
             Controls.Add(help);
-            Controls.Add(program);
-            Controls.Add(play);
-            Controls.Add(playBot);
-            Controls.Add(stepBut);
-            Controls.Add(back);
-
-            scores.Size = new Size(100, 30);
-            grid.Location = new Point(0, 30);
-            grid.Size = grid.GetDesiredSize();
-            help.Size = new Size(150, 100);
-            help.Location = new Point(grid.Right, grid.Bottom - help.Height);
-            ClientSize = new Size(help.Right, Math.Max(help.Bottom, 400));
+            Controls.Add(runBotGame);
+            Controls.Add(runBotIteration);
+            Controls.Add(suggest);
+            Controls.Add(player);
 
 
-
-            program.Size = new Size(150, 200);
-            program.Multiline = true;
-            program.Location = new Point(grid.Right, 0);
-            play.Size = new Size(program.Width, 20);
-            play.Location = new Point(program.Left, program.Bottom);
-            play.Text = "Play";
-
-            stepBut.Size = play.Size;
-            stepBut.Location = new Point(play.Left, play.Bottom);
-            stepBut.Text = "STEP";
-            stepBut.Click += (s, a) =>
-            {
-                if (!controller.Running) controller.Run(program.Text, true);
-                controller.Step();
-            };
-
-            back.Size = play.Size;
-            back.Location = new Point(play.Left, stepBut.Bottom);
-            back.Text = "BACK";
-            back.Click += (s, a) =>
-              {
-                  controller.Back();
-              };
-
-
-
-            playBot.Click += PlayBot_Click;
-            playBot.Text = "Play bot";
-            playBot.Location = new Point(back.Left, back.Bottom + 30);
-            playBot.Size = play.Size;
-
-
-            grid.MovementRequested += Grid_MovementRequested;
-            play.Click +=
-                (s, a) =>
-                controller.Run(program.Text, false);
-            controller.Updated = UpdateAll;
-            controller.Started += () => { play.Enabled = false; program.Enabled = false; };
-            controller.Finished += () => { play.Enabled = true; program.Enabled = true; program.Text = controller.Program; };
-
-
-        
-
-
+            runBotGame.Click += RunBotGame_Click;
+            runBotIteration.Click += RunBotIteration_Click;
+            suggest.Click += Suggest_Click;
 
             keymap = new Dictionary<Keys, Directions>
             {
@@ -125,27 +100,59 @@ namespace ManualControl
         
         }
 
-        private void PlayBot_Click(object sender, EventArgs e)
+        private void Grid_MovementRequested1(UnitPosition obj)
         {
-            var pr = new Solver(new NullFinder(), new AzuraOracle()).ResultAsCommands(Map);
-            controller.TimerInterval = 1;
-            if (pr != null)
-                controller.Run(pr,false);
+            if (mapHistory.Playing) return;
+            var path = mapHistory.Solver.Finder.GetPath(Map,obj);
+            if (path == null)
+            {
+                MessageBox.Show("Сам туда иди!");
+                return;
+            }
+            var program = path.ToPhrase();
+            mapHistory.History.Append(program, "Hand");
+            mapHistory.Play();
         }
 
-        private void Grid_MovementRequested(UnitPosition finalPos)
+        private void Suggest_Click(object sender, EventArgs e)
         {
-            var text = finder.GetPath(Map, finalPos);
-            controller.Run(text.ToPhrase(), false);
+            if (mapHistory.Playing) return;
+            if (mapHistory.Suggestions.GetCurrentSuggestion()==null
+                || mapHistory.Suggestions.Unit!=Map.Unit.Unit
+                || !mapHistory.Suggestions.Next())
+                { 
+                var suggestion = mapHistory.Solver.Oracle.GetSuggestions(Map);
+                mapHistory.Suggestions.Load(suggestion, Map.Unit.Unit);
+                }
+            UpdateAll();
         }
-        
+
+        int IterationNumber;
+
+        private void RunBotIteration_Click(object sender, EventArgs e)
+        {
+            if (mapHistory.Playing) return;
+            var program = mapHistory.Solver.MakeMove(Map).ToPhrase();
+            mapHistory.History.Append(program, "Iter" + IterationNumber);
+            IterationNumber++;
+            mapHistory.Play();
+        }
+
+        private void RunBotGame_Click(object sender, EventArgs e)
+        {
+            if (mapHistory.Playing) return;
+            var program = mapHistory.Solver.Solve(Map).Commands;
+            mapHistory.History.Append(program, "Game");
+            mapHistory.Play();
+        }
+  
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}. Press 'H' for help!";
             DoubleBuffered = true;
-
+            WindowState = FormWindowState.Maximized;
         }
 
         void UpdateAll()
@@ -153,33 +160,19 @@ namespace ManualControl
             Invalidate();
             grid.Invalidate();
             scores.Text = Map.Scores.TotalScores.ToString();
-
-            if (controller.Running && controller.ProgramPointer<controller.Program.Length-1)
-            {
-                var before = controller.Program.Substring(0, controller.ProgramPointer);
-                var after = controller.Program.Substring(controller.ProgramPointer+1);
-                program.Text = before + "_" + controller.Program[controller.ProgramPointer] + "_" + after;
-            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (program.Focused) return;
-            if (controller.Running) return;
-           if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
-                mapHistory.Push(Map.Move(keymap[e.KeyData]));
-            if (e.KeyData == Keys.Z && mapHistory.Count > 1)
-                mapHistory.Pop();
-            if (e.KeyData == Keys.L && Map.Unit != null)
-                mapHistory.Push(Map.LockUnit());
-            if (e.KeyData == Keys.H)
-                showHelp = !showHelp;
-            if (e.KeyData == Keys.Escape)
-                showHelp = false;
-            UpdateAll();
-        }
+            if (mapHistory.Playing) return;
 
-        
-       
+            if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
+            {
+                mapHistory.History.Append("Kbd", keymap[e.KeyData], e.KeyCode.ToString().ToUpper()[0]);
+                mapHistory.History.Forward();
+            }
+            if (e.KeyData == Keys.Z && mapHistory.History.CurrentPosition > 0)
+                mapHistory.History.Backward();
+        }
     }
 }

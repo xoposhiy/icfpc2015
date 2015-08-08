@@ -57,10 +57,19 @@
     <Compile Include="Grid.Designer.cs">
       <DependentUpon>Grid.cs</DependentUpon>
     </Compile>
+    <Compile Include="History.cs" />
+    <Compile Include="HistoryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainModel.cs" />
     <Compile Include="Occupation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramController.cs" />
+    <Compile Include="ProgramPlayerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SuggestionsData.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

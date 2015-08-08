@@ -15,10 +15,10 @@ namespace ManualControl
     public partial class Grid : UserControl
     {
         public int Radius = 20;
-        public Map Map => mapHistory.Peek();
+        public Map Map => mapHistory.History.CurrentMap;
         private readonly Dictionary<Occupation, Pen> penTypes;
         private readonly Dictionary<Occupation, Brush> brushTypes;
-        private readonly Stack<Map> mapHistory;
+        private readonly MainModel mapHistory;
         public int LabelXOffset;
         public int LabetYOffset;
 
@@ -30,7 +30,7 @@ namespace ManualControl
             (int)(Geometry.YOffset * Radius * Map.Height + Geometry.Height * Radius));
         }
 
-        public Grid(Stack<Map> mapHistory)
+        public Grid(MainModel mapHistory)
         {
             this.mapHistory = mapHistory;
             penTypes = new Dictionary<Occupation, Pen>
@@ -111,21 +111,30 @@ namespace ManualControl
 
             if (requestedLocation != null)
             {
-                string path = null;
-                try
-                {
-                    path = Finder.GetPath(
-                    Map.Filled,
-                    Map.Unit.Unit,
+                IEnumerable<Directions> path = null;
+                path = mapHistory.Solver.Finder.GetPath(
+                    Map,
                     requestedLocation.Position);
-                }
-                catch { }
                 bool exist = path != null;
                 foreach (var member in requestedLocation.Members)
                 {
                     DrawHexagon(e.Graphics, member.X, member.Y, Pens.Black, exist ? Brushes.Aqua : Brushes.MistyRose, false);
                 }
             }
+
+            if (mapHistory.Suggestions != null)
+            {
+                var s = mapHistory.Suggestions.GetCurrentSuggestion();
+                if (s!= null)
+                {
+                    var sugg = new PositionedUnit(mapHistory.Suggestions.Unit, s.Position);
+                    foreach(var member in sugg.Members)
+                    {
+                        DrawHexagon(e.Graphics, member.X, member.Y, Pens.Black, Brushes.Yellow, false);
+                    }
+                }
+            }
+
         }
 
 
@@ -141,15 +150,10 @@ namespace ManualControl
                 return;
 
             requestedLocation = new PositionedUnit(Map.Unit.Unit, new UnitPosition(location, angle));
-            string path = null;
-            try
-            {
-                path = Finder.GetPath(
-                    Map.Filled,
-                    Map.Unit.Unit,
-                    requestedLocation.Position);
-            }
-            catch { }
+            IEnumerable<Directions> path = null;
+            path = mapHistory.Solver.Finder.GetPath(
+                Map,
+                requestedLocation.Position);
             requestedLocationIsReachable = path != null;
             Invalidate();
         }
@@ -190,11 +194,5 @@ namespace ManualControl
         }
     }
 
-    public class Finder
-    {
-        public static string GetPath(bool[,] filled, Unit unit, UnitPosition unitState)
-        {
-            throw new NotImplementedException();
-        }
-    }
+   
 }

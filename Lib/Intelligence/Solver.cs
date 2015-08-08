@@ -10,22 +10,22 @@ namespace Lib.Intelligence
 {
     public class Solver : ISolver
     {
-        private IFinder finder;
-        private IOracle oracle;
+        public readonly IFinder Finder;
+        public readonly IOracle Oracle;
         private readonly string name;
 
         public Solver(IFinder finder, IOracle oracle)
         {
-            this.finder = finder;
-            this.oracle = oracle;
+            this.Finder = finder;
+            this.Oracle = oracle;
             name = oracle.GetType().Name + "-" + finder.GetType().Name;
         }
 
         public IEnumerable<Directions> MakeMove(Map map)
         {
-            foreach (var e in oracle.GetSuggestions(map))
+            foreach (var e in Oracle.GetSuggestions(map))
             {
-                Directions[] result = finder.GetPath(map, e.Position);
+                Directions[] result = Finder.GetPath(map, e.Position);
                 if (result == null) continue;
                 return result.Concat(new[] { e.LockingDirection });
             }

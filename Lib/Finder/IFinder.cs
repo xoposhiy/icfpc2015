@@ -1,4 +1,5 @@
 ﻿using Lib.Models;
+using System.Linq;
 
 namespace Lib.Finder
 {
@@ -11,7 +12,7 @@ namespace Lib.Finder
     {
         public Directions[] GetPath(Map map, UnitPosition target)
         {
-            return null;
+            return "lllllllllllll".ToDirections().ToArray();
         }
     }
 }

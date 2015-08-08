@@ -16,9 +16,9 @@ namespace Lib.ArenaImpl
             var arena = new Arena();
 //            var solver = new PhrasesOnlySolver();
 //            var solver = new NamiraOracle();
-            var solver = new Solver(new NullFinder(), new AzuraOracle());
+            var solver = new Solver(new DfsFinder(), new NamiraOracle());
             var res = arena.RunAllProblems(solver);
-//            File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
+            File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
             Approvals.Verify(res);
         }
     }
