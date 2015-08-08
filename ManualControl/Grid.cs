@@ -98,6 +98,7 @@ namespace ManualControl
                 new Point(0, 0)
                 );
 
+
             for (var x = 0; x < Map.Width; x++)
             {
                 for (var y = 0; y < Map.Height; y++)
@@ -122,6 +123,11 @@ namespace ManualControl
                     DrawHexagon(e.Graphics, member.X, member.Y, Pens.Black, exist ? Brushes.Aqua : Brushes.MistyRose, false);
                 }
             }
+
+
+            foreach (var v in mapHistory.Suggestions.OraclePresense)
+                DrawHexagon(e.Graphics, v.X, v.Y, Pens.Black, Brushes.Lime, false);
+
 
             if (mapHistory.Suggestions != null)
             {
