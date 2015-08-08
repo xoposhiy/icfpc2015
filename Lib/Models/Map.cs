@@ -67,7 +67,10 @@ namespace Lib.Models
 
             var newScores = new Scores(Scores.TotalScores + points + line_bonus, ls);
 
-            return new Map(Id, f, NextUnits.Pop(),newScores);
+            var newNextUnits = NextUnits.Pop();
+            if (newNextUnits.IsEmpty)
+                return new Map(Id, f, PositionedUnit.Null, newNextUnits, ImmutableHashSet<PositionedUnit>.Empty, Scores);
+            return new Map(Id, f, newNextUnits,newScores);
         }
 
         int RemoveFilledLines(bool[,] map)

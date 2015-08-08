@@ -31,18 +31,11 @@ namespace Lib.Intelligence
             string result = "";
             while(!map.IsOver)
             {
-                try
-                {
-                    var str = oracle.MakeMove(map);
-                    result += str;
-                    map = str
-                        .Select(Finder.Finder.CharToDirection)
-                        .Aggregate(map, (m, dir) => m.Move(dir));
-                }
-                catch
-                { 
-                    break;
-                }
+                var str = oracle.MakeMove(map);
+                result += str;
+                map = str
+                    .Select(Finder.Finder.CharToDirection)
+                    .Aggregate(map, (m, dir) => m.Move(dir));
             }
             return Tuple.Create(result, map);
         }
