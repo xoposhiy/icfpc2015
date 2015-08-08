@@ -14,9 +14,9 @@ namespace ManualControl
         public static void Main()
         {
             //RunTest(); return;
-            var map = Problems.LoadProblems()[3].ToMap(0);
+            var map = Problems.LoadProblems()[2].ToMap(0);
             var model = new MainModel();
-            model.Solver = new Lib.Intelligence.Solver(new DfsFinder(), new MephalaOracle(new DfsFinder(), (m, unit) => { return unit.Position.Point.Y; } ));
+            model.Solver = new Lib.Intelligence.Solver(new DfsFinder(), new MephalaOracle(new DfsFinder(), Metrics.ShouldNotCreateSimpleHoles));
             model.History = new History(map);
             var form = new TetrisForm(model);
             form.MovementRequested = dir => { map.Unit.Move(dir); };
