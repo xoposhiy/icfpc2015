@@ -15,7 +15,7 @@ namespace Lib.Models
 
             double cv = Math.PI / 3;
             Rotations = new List<Point>[6];
-            Rotations[0] = members.Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
+            Rotations[0] = Members.Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
             for (int i = 1; i < 6; i++)
                 Rotations[i] = Rotations[i - 1].Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
         }
