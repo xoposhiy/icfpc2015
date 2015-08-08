@@ -1,3 +1,5 @@
+call build.cmd
+
 for /D %%d in (*) DO (
 	pushd "%%d"
 	if exist bin (
@@ -10,7 +12,5 @@ for /D %%d in (*) DO (
 )
 
 set targetZip=hack-the-loop.zip
-
 erase %targetZip%
-
 7za.exe a -ir@filesToSubmit.txt -xr@filesNotToSubmit.txt %targetZip%
