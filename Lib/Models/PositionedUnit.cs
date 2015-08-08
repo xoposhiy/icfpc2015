@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -12,8 +13,30 @@ namespace Lib.Models
         public PositionedUnit(Unit unit, int rotationIndex, Point pivotLocation)
         {
             Unit = unit;
-            RotationIndex = rotationIndex;
+            RotationIndex = (rotationIndex + Unit.Period) % Unit.Period;
+            Debug.Assert(RotationIndex.InRange(0, Unit.Period - 1));
             PivotLocation = pivotLocation;
+        }
+
+        protected bool Equals(PositionedUnit other)
+        {
+            return RotationIndex == other.RotationIndex && PivotLocation.Equals(other.PivotLocation);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((PositionedUnit)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (RotationIndex * 397) ^ PivotLocation.GetHashCode();
+            }
         }
 
         public IEnumerable<Point> Members
@@ -32,9 +55,9 @@ namespace Lib.Models
             switch (direction)
             {
                 case Directions.CW:
-                    return new PositionedUnit(Unit, (RotationIndex + 1) % 6, PivotLocation);
+                    return new PositionedUnit(Unit, RotationIndex + 1, PivotLocation);
                 case Directions.CCW:
-                    return new PositionedUnit(Unit, (RotationIndex + 5) % 6, PivotLocation);
+                    return new PositionedUnit(Unit, RotationIndex - 1, PivotLocation);
                 default:
                     return new PositionedUnit(Unit, RotationIndex, PivotLocation.Move(direction));
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
 
@@ -11,9 +10,10 @@ namespace Lib.Models
         public readonly int Height;
         public readonly int Width;
         public readonly int Id;
+        public readonly ImmutableHashSet<PositionedUnit> UsedPositions;
 
         public Map(int id, bool[,] filled, ImmutableStack<Unit> nextUnits)
-            : this(id, filled, PositionNewUnit(filled.GetLength(0), nextUnits), nextUnits)
+            : this(id, filled, PositionNewUnit(filled.GetLength(0), nextUnits), nextUnits, ImmutableHashSet<PositionedUnit>.Empty)
         {
         }
 
@@ -26,7 +26,7 @@ namespace Lib.Models
             return new PositionedUnit(u, 0, new Point(pivotPos, -topmostY));
         }
 
-        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits)
+        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions)
         {
             Id = id;
             NextUnits = nextUnits;
@@ -34,13 +34,14 @@ namespace Lib.Models
             Height = filled.GetLength(1);
             Filled = filled;
             Unit = unit.Members.All(IsValid) ? unit : PositionedUnit.Null;
+            UsedPositions = usedPositions.Add(Unit);
         }
 
-        public bool IsOver => Unit == PositionedUnit.Null;
+        public bool IsOver => ReferenceEquals(Unit, PositionedUnit.Null);
 
-        public bool[,] Filled { get; private set; }
+        public bool[,] Filled { get; }
 
-        public PositionedUnit Unit { get; private set; }
+        public PositionedUnit Unit { get; }
 
         public Map LockUnit()
         {
@@ -54,7 +55,17 @@ namespace Lib.Models
         public bool IsSafeMovement(Directions direction)
         {
             var nextUnit = Unit.Move(direction);
+            ImmutableHashSet<PositionedUnit> usedPositions = ImmutableHashSet<PositionedUnit>.Empty;
+            if (usedPositions.Contains(nextUnit))
+                return false;
             return nextUnit.Members.All(IsValid);
+        }
+
+        public bool IsCatastrophicMove(Directions d)
+        {
+            if (IsOver) return true;
+            var nextUnit = Unit.Move(d);
+            return UsedPositions.Contains(nextUnit);
         }
 
         private bool IsValid(Point p)
@@ -66,10 +77,21 @@ namespace Lib.Models
 
         public Map Move(Directions dir)
         {
-            if (IsOver) return this;
+            if (IsCatastrophicMove(dir)) return Die();
             return IsSafeMovement(dir)
-                ? new Map(Id, Filled, Unit.Move(dir), NextUnits)
+                ? DoMove(dir)
                 : LockUnit();
+        }
+
+        private Map DoMove(Directions dir)
+        {
+            var nextUnit = Unit.Move(dir);
+            return new Map(Id, Filled, nextUnit, NextUnits, UsedPositions.Add(nextUnit));
+        }
+
+        private Map Die()
+        {
+            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty);
         }
     }
 }
