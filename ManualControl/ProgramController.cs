@@ -17,7 +17,7 @@ namespace ManualControl
         public Action Started;
         Stack<Map> mapHistory;
         public int TimerInterval {  get { return timer.Interval; } set { timer.Interval = value; } }
-        string program;
+        public string Program { get; private set; }
         public int ProgramPointer { get; private set; }
         public bool Running;
 
@@ -30,18 +30,29 @@ namespace ManualControl
         }
 
 
+        public void Back()
+        {
+            if (ProgramPointer>0)
+            {
+                ProgramPointer--;
+                mapHistory.Pop();
+                Updated();
+            }
+        }
+
+
         public void Step()
         {
-            if (program == null) return;
-            if (ProgramPointer >= program.Length)
+            if (Program == null) return;
+            if (ProgramPointer >= Program.Length)
             {
                 timer.Stop();
                 if (Finished != null) Finished();
                 Running = false;
-                program = null;
+                Program = null;
                 return;
             }
-            var c = program[ProgramPointer];
+            var c = Program[ProgramPointer];
             var dir = c.ToDirection();
             mapHistory.Push(mapHistory.Peek().Move(dir));
             if (Updated != null) Updated();
@@ -50,7 +61,7 @@ namespace ManualControl
 
         public void Run(string program, bool step)
         {
-            this.program = program;
+            this.Program = program;
             ProgramPointer = 0;
             Running = true;
             if (Started != null) Started();
