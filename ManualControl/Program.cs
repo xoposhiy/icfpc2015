@@ -14,7 +14,7 @@ namespace ManualControl
         public static void Main()
         {
             //RunTest(); return;
-            var map = Problems.LoadProblems()[2].ToMap(0);
+            var map = Problems.LoadProblems()[10].ToMap(0);
             var model = new MainModel();
             var dfsFinder = new DfsFinder();
 //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());

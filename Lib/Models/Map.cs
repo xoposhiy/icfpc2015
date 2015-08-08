@@ -14,6 +14,7 @@ namespace Lib.Models
         public readonly int Id;
         public readonly Scores Scores;
         public bool[,] Filled { get; }
+        public readonly ImmutableHashSet<PositionedUnit> UsedPositions;
 
         public PositionedUnit Unit { get; }
 
@@ -24,7 +25,14 @@ namespace Lib.Models
         {
         }
 
-        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, Scores scores)
+        private Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, Scores scores)
+            : this(id, filled,
+                  unit,
+                  nextUnits, ImmutableHashSet<PositionedUnit>.Empty.Add(unit), scores)
+        {
+        }
+
+        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
         {
             Id = id;
             NextUnits = nextUnits;
@@ -32,6 +40,7 @@ namespace Lib.Models
             Height = filled.GetLength(1);
             Filled = filled;
             Unit = unit.Members.All(IsValid) ? unit : PositionedUnit.Null;
+            UsedPositions = usedPositions.Add(Unit);
             Scores = scores;
         }
 
@@ -94,12 +103,25 @@ namespace Lib.Models
 
         public bool IsSafeMovement(Directions direction)
         {
-            return IsValidPosition(Unit.Move(direction));
+            var nextUnit = Unit.Move(direction);
+            return !IsCatastrophicState(nextUnit) && IsValidPosition(nextUnit);
         }
 
         public bool IsValidPosition(PositionedUnit unit)
         {
             return unit.Members.All(IsValid);
+        }
+
+        public bool IsCatastrophicState(PositionedUnit unit)
+        {
+            return UsedPositions.Contains(unit);
+        }
+
+        public bool IsCatastrophicMove(Directions d)
+        {
+            if (IsOver) return true;
+            var nextUnit = Unit.Move(d);
+            return IsCatastrophicState(nextUnit);
         }
 
         private bool IsValid(Point p)
@@ -111,6 +133,7 @@ namespace Lib.Models
 
         public Map Move(Directions dir)
         {
+            if (IsCatastrophicMove(dir)) return Die();
             return IsSafeMovement(dir)
                        ? DoMove(dir)
                        : LockUnit();
@@ -124,7 +147,12 @@ namespace Lib.Models
         private Map DoMove(Directions dir)
         {
             var nextUnit = Unit.Move(dir);
-            return new Map(Id, Filled, nextUnit, NextUnits, new Scores(Scores.TotalScores, 0));
+            return new Map(Id, Filled, nextUnit, NextUnits, UsedPositions.Add(nextUnit), new Scores(Scores.TotalScores, 0));
+        }
+
+        private Map Die()
+        {
+            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, new Scores(0, 0));
         }
     }
 
@@ -134,15 +162,15 @@ namespace Lib.Models
         [Test]
         public void One()
         {
-            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] {new Point(-1, 0), new Point(0, 1)}, new Point(0, 0)));
+            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] { new Point(-1, 0), new Point(0, 1) }, new Point(0, 0)));
             var pos = Map.PositionNewUnit(4, units);
             Assert.AreEqual(new Point(2, 0), pos.Position.Point);
         }
-        
+
         [Test]
         public void Two()
         {
-            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] {new Point(-1, 0), new Point(0, 1)}, new Point(0, 0)));
+            var units = ImmutableStack<Unit>.Empty.Push(new Unit(new[] { new Point(-1, 0), new Point(0, 1) }, new Point(0, 0)));
             var pos = Map.PositionNewUnit(5, units);
             Assert.AreEqual(new Point(2, 0), pos.Position.Point);
         }

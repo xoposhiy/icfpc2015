@@ -14,7 +14,7 @@ namespace Lib.ArenaImpl
         [Test]
         public void EvaluateEdgeSolver()
         {
-            EvaluateSolver(EdgeSolver(), 3);
+            EvaluateSolver(EdgeSolver());
         }
 
         private static void EvaluateSolver(Solver solver, int count = int.MaxValue)
