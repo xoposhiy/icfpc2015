@@ -134,7 +134,7 @@ namespace ManualControl
         private void Grid_MovementRequested(UnitState obj)
         {
             var text = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            controller.Run(text,false);
+            controller.Run(text, false);
         }
         
 
