@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
 using Lib.Finder;
@@ -62,16 +63,8 @@ namespace Lib.Models
 
         public Point GetStartPosition(int width)
         {
-            int minX = int.MaxValue, maxX = int.MinValue;
-            int minY = int.MaxValue;
-            for (int i = 0; i < Members.Length; i++)
-            {
-                minX = Math.Min(minX, Members[i].X);
-                maxX = Math.Max(maxX, Members[i].X);
-                minY = Math.Min(minY, Members[i].Y);
-            }
-            int prefixX = (width - (maxX - minX + 1)) / 2;
-            return new Point(prefixX, -minY);
+            var x = Map.PositionNewUnit(width, ImmutableStack.Create(this));
+            return x.PivotLocation;
         }
     }
 }
