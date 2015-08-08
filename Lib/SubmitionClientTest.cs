@@ -24,12 +24,27 @@ namespace Lib
             });
         }
 
-        [Test, Explicit]
+		[Test, Explicit]
+		public void SendSinglePhrase()
+		{
+			var submissions =
+				from p in Problems.LoadProblems()
+				select new SubmitionJson
+				{
+					problemId = p.id,
+					seed = 0,
+					solution = "bap",
+					tag = "SendSinglePhrase-" + DateTime.Now
+				};
+			client.PostSubmissions(submissions.ToArray());
+		}
+
+		[Test, Explicit]
         public void GetResults()
         {
             var res = client.GetSubmissions();
             Console.WriteLine(res.Length);
-            foreach (var submission in res.OrderByDescending(x => x.createdAt))
+            foreach (var submission in res.OrderByDescending(x => x.createdAt).Take(50))
                 Console.WriteLine(submission);
         }
 
