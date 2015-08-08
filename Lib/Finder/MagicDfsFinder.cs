@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Lib.Models;
@@ -11,23 +9,41 @@ namespace Lib.Finder
     {
         private readonly IFinder dfsFinder = new DfsFinder();
 
-        private static Tuple<Point, int> GetDeltaByPhrase(IEnumerable<Directions> directions, int period)
+        private static UnitPosition GetMidPositionByPhrase(UnitPosition target, IEnumerable<Directions> directions, int period)
         {
-            int dx = 0, dy = 0, da = 0;
-            foreach (var dir in directions)
+            int x = target.Point.X;
+            int y = target.Point.Y;
+            int a = target.Angle;
+
+            foreach (var dir in directions.Reverse())
             {
-                if (dir == Directions.W || dir == Directions.SW)
-                    dx--;
-                if (dir == Directions.E || dir == Directions.SE)
-                    dx++;
-                if (dir == Directions.SW || dir == Directions.SE)
-                    dy++;
-                if (dir == Directions.CW)
-                    da = (da + 1) % period;
-                if (dir == Directions.CCW)
-                    da = (da - 1 + period) % period;
+                switch (dir)
+                {
+                    case Directions.W:
+                        x++;
+                        break;
+                    case Directions.SW:
+                        if (y % 2 == 1)
+                            x++;
+                        y--;
+                        break;
+                    case Directions.E:
+                        x--;
+                        break;
+                    case Directions.SE:
+                        if (y % 2 == 0)
+                            x--;
+                        y--;
+                        break;
+                    case Directions.CCW:
+                        a = (a + 1) % period;
+                        break;
+                    case Directions.CW:
+                        a = (a - 1 + period) % period;
+                        break;
+                }
             }
-            return Tuple.Create(new Point(dx, dy), da);
+            return new UnitPosition(new Point(x, y), a);
         }
 
         private bool IsGoodPath(Map map, IEnumerable<Directions> path)
@@ -47,12 +63,9 @@ namespace Lib.Finder
             {
                 var directions = phrase.ToDirections().ToArray();
                 int period = map.Unit.Unit.Period;
-                var delta = GetDeltaByPhrase(directions, period);
-                var newPoint = target.Point.Sub(delta.Item1);
-                var newAngle = (target.Angle - delta.Item2 + period) % period;
-                var midPosition = new UnitPosition(newPoint, newAngle);
+                var midPosition = GetMidPositionByPhrase(target, directions, period);
                 var midPositionedUnit = new PositionedUnit(map.Unit.Unit, midPosition);
-                var midMap = new Map(map.Id, map.Filled, midPositionedUnit, map.NextUnits, ImmutableHashSet<PositionedUnit>.Empty, map.Scores);
+                var midMap = new Map(map.Id, map.Filled, midPositionedUnit, map.NextUnits, map.UsedPositions, map.Scores);
 
                 if (!IsGoodPath(midMap, directions))
                     continue;
