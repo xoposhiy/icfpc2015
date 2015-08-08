@@ -20,7 +20,7 @@ namespace ManualControl
         Label help;
 
         ProgramPlayerControl playerControl;
-        Button runBotGame, runBotIteration;
+        Button suggest,runBotIteration, runBotGame;
        
         
         private bool showHelp;
@@ -38,14 +38,16 @@ namespace ManualControl
             playerControl.Size = new Size(help.Width, ClientSize.Height - help.Height);
             playerControl.Location = new Point(help.Left, 0);
 
+           
+
             runBotIteration.Location = new Point(scores.Right, 0);
             runBotIteration.Size = new Size(100, scores.Height);
 
             runBotGame.Location = new Point(runBotIteration.Right, 0);
             runBotGame.Size = new Size(100, scores.Height);
-        }
 
-        
+
+        }
 
         public TetrisForm(Map map)
         {
@@ -56,8 +58,10 @@ namespace ManualControl
             this.KeyPreview = true;
             runBotGame = new Button();
             runBotIteration = new Button();
+            suggest = new Button();
             runBotIteration.Text = "Iter";
             runBotGame.Text = "Game";
+            suggest.Text = "Oracle";
 
             scores = new Label();
             help = new Label();
@@ -74,10 +78,12 @@ namespace ManualControl
             Controls.Add(help);
             Controls.Add(runBotGame);
             Controls.Add(runBotIteration);
+            Controls.Add(suggest);
 
 
             runBotGame.Click += RunBotGame_Click;
             runBotIteration.Click += RunBotIteration_Click;
+            suggest.Click += Suggest_Click;
 
             keymap = new Dictionary<Keys, Directions>
             {
@@ -89,6 +95,13 @@ namespace ManualControl
                 [Keys.P] = Directions.E
             };
         
+        }
+
+        private void Suggest_Click(object sender, EventArgs e)
+        {
+            if (mapHistory.Playing) return;
+            var suggestion = new NamiraOracle().GetSuggestions(Map);
+            
         }
 
         int IterationNumber;

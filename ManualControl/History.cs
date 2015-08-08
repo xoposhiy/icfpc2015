@@ -57,6 +57,8 @@ namespace ManualControl
         }
 
 
+        public PositionedUnit Suggestion { get; set; }
+
     }
 
     public class History
