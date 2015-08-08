@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
 
@@ -11,9 +12,10 @@ namespace Lib.Models
         public readonly int Width;
         public readonly int Id;
         public readonly ImmutableHashSet<PositionedUnit> UsedPositions;
+        public readonly Scores Scores;
 
-        public Map(int id, bool[,] filled, ImmutableStack<Unit> nextUnits)
-            : this(id, filled, PositionNewUnit(filled.GetLength(0), nextUnits), nextUnits, ImmutableHashSet<PositionedUnit>.Empty)
+        public Map(int id, bool[,] filled, ImmutableStack<Unit> nextUnits, Scores scores)
+            : this(id, filled, PositionNewUnit(filled.GetLength(0), nextUnits), nextUnits, ImmutableHashSet<PositionedUnit>.Empty, scores)
         {
         }
 
@@ -26,7 +28,7 @@ namespace Lib.Models
             return new PositionedUnit(u, 0, new Point(pivotPos, -topmostY));
         }
 
-        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions)
+        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
         {
             Id = id;
             NextUnits = nextUnits;
@@ -35,6 +37,7 @@ namespace Lib.Models
             Filled = filled;
             Unit = unit.Members.All(IsValid) ? unit : PositionedUnit.Null;
             UsedPositions = usedPositions.Add(Unit);
+            Scores = scores;
         }
 
         public bool IsOver => ReferenceEquals(Unit, PositionedUnit.Null);
@@ -49,11 +52,23 @@ namespace Lib.Models
             bool[,] f = (bool[,])Filled.Clone();
             foreach (var cell in Unit.Members)
                 f[cell.X, cell.Y] = true;
-            RemoveFilledLines(f);
-            return new Map(Id, f, NextUnits.Pop());
+
+            var ls_old = Scores.ClearedLinesCountAtThisMap;
+            var ls =RemoveFilledLines(f);
+            var size = Unit.Members.Count();
+
+            var points = size + 100 * (1 + ls) * ls / 2;
+            var line_bonus = 0;
+            if (ls_old > 1)
+                line_bonus = (int)Math.Floor((double)((ls_old - 1) * points / 10));
+            
+
+            var newScores = new Scores(Scores.TotalScores + points + line_bonus, ls);
+
+            return new Map(Id, f, NextUnits.Pop(),newScores);
         }
 
-        void RemoveFilledLines(bool[,] map)
+        int RemoveFilledLines(bool[,] map)
         {
             var removedLines = 0;
             var width = map.GetLength(0);
@@ -70,6 +85,7 @@ namespace Lib.Models
                     continue;
                 }
             }
+            return removedLines;
         }
 
         public bool IsSafeMovement(Directions direction)
@@ -106,12 +122,12 @@ namespace Lib.Models
         private Map DoMove(Directions dir)
         {
             var nextUnit = Unit.Move(dir);
-            return new Map(Id, Filled, nextUnit, NextUnits, UsedPositions.Add(nextUnit));
+            return new Map(Id, Filled, nextUnit, NextUnits, UsedPositions.Add(nextUnit), Scores);
         }
 
         private Map Die()
         {
-            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty);
+            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, Scores);
         }
     }
 }
