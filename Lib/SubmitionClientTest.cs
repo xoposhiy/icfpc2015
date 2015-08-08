@@ -71,7 +71,7 @@ namespace Lib
         {
             var map = p.ToMap(seed);
             var s1 = new PhrasesOnlySolver().Solve(map);
-            var s2 = new Solver(new NullFinder(), new NamiraOracle()).Solve(map);
+            var s2 = new Solver(new DfsFinder(), new NamiraOracle()).Solve(map);
             var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
             return new SubmitionJson
             {

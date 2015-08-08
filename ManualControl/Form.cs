@@ -103,7 +103,13 @@ namespace ManualControl
         private void Grid_MovementRequested1(UnitPosition obj)
         {
             if (mapHistory.Playing) return;
-            var program = mapHistory.Solver.Finder.GetPath(Map,obj).ToPhrase();
+            var path = mapHistory.Solver.Finder.GetPath(Map,obj);
+            if (path == null)
+            {
+                MessageBox.Show("Сам туда иди!");
+                return;
+            }
+            var program = path.ToPhrase();
             mapHistory.History.Append(program, "Hand");
             mapHistory.Play();
         }
