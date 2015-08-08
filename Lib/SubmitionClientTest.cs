@@ -61,7 +61,7 @@ namespace Lib
         public void SendAllProblems()
         {
             var submissions =
-                from p in Problems.LoadProblems()
+                from p in Problems.LoadProblems().Take(3)
                 from seed in p.sourceSeeds
                 select Solve(p,seed);
             client.PostSubmissions(submissions.ToArray());
@@ -77,7 +77,7 @@ namespace Lib
             {
                 problemId = p.id,
                 seed = seed,
-                solution = bestRes.Commands,
+                solution = bestRes.Commands.ToOriginalPhrase(),
                 tag = bestRes.Name + "-" + DateTime.Now
             };
         }

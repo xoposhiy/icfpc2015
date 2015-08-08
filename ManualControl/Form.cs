@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Lib;
 using Lib.Models;
 using Lib.Finder;
 using Lib.Intelligence;
@@ -109,7 +110,7 @@ namespace ManualControl
                 MessageBox.Show("Сам туда иди!");
                 return;
             }
-            var program = path.ToPhrase();
+            var program = path.ToPhrase().ToOriginalPhrase();
             mapHistory.History.Append(program, "Hand");
             mapHistory.Play();
         }
@@ -132,7 +133,7 @@ namespace ManualControl
         private void RunBotIteration_Click(object sender, EventArgs e)
         {
             if (mapHistory.Playing) return;
-            var program = mapHistory.Solver.MakeMove(Map).ToPhrase();
+            var program = mapHistory.Solver.MakeMove(Map).ToPhrase().ToOriginalPhrase();
             mapHistory.History.Append(program, "Iter" + IterationNumber);
             IterationNumber++;
             mapHistory.Play();
