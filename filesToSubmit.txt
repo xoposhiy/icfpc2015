@@ -1,8 +1,10 @@
 Lib\*
+ManualControl\*
 packages\*
 play_icfp2015\*
 *.sln
 *.xsd
 *.DotSettings
+nuget.exe
 build.cmd
 readme.md
