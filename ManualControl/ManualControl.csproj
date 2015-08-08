@@ -60,6 +60,10 @@
     <Compile Include="Grid.Designer.cs">
       <DependentUpon>Grid.cs</DependentUpon>
     </Compile>
+    <Compile Include="History.cs" />
+    <Compile Include="HistoryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Occupation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramPlayer.cs" />

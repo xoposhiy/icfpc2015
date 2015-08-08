@@ -10,56 +10,67 @@ namespace ManualControl
 {
     class ProgramPlayerControl : UserControl
     {
-        ProgramPlayer player;
+        MainModel mapHistory;
 
-        TextBox program;
-        Button start,play, pause, step, back, stop;
+        HistoryControl program;
+        Button play, pause, step, back;
         Button[] buttons;
+        Timer timer;
 
-        public ProgramPlayerControl(ProgramPlayer player)
+        public ProgramPlayerControl(MainModel mapHistory)
         {
-            this.player = player;
-            program = new TextBox();
+            this.mapHistory = mapHistory;
+            program = new HistoryControl(mapHistory.History);
             Controls.Add(program);
+            timer = new Timer();
+            timer.Interval = 10;
+            timer.Tick += Timer_Tick;
 
-            program.Multiline = true;
-            start = new Button();
             play = new Button();
             pause = new Button();
             step = new Button();
             back = new Button();
-            stop = new Button();
-            buttons = new[] { start, play, pause, step, back, stop };
+
+            Controls.Add(program);
+
+            buttons = new[] {  play, pause, step, back};
             foreach (var e in buttons)
                 Controls.Add(e);
 
-            var names = new[] {"Start", "▶", "▌▌", "▶▌", "▌◀", "◼" };
+            var names = new[] {"▶", "▌▌", "▶▌", "▌◀" };
             for (int i = 0; i < buttons.Length; i++)
                 buttons[i].Text = names[i];
 
-            player.AutoplayUpdated = z=> EnabledChanged();
-            player.LoadedUpdated += z => EnabledChanged();
-            player.LoadedUpdated += z => { if (z) program.Text = player.Program; };
 
-            play.Click += (s, a) => player.Play();
-            pause.Click += (s, a) => player.Pause();
-            step.Click += (s, a) => player.Step();
-            back.Click += (s, a) => player.Back();
-            stop.Click += (s, a) => player.Stop();
-            start.Click += (s, a) =>
-              {
-                  player.InitializeProgram(program.Text);
-              };
+            mapHistory.PlayingChanged += EnabledChanged;
+            play.Click += (s, a) => { timer.Start(); mapHistory.Playing = true; };
+            pause.Click += (s, a) => Pause();
+            step.Click += (s, a) => { mapHistory.History.Forward(); };
+            back.Click += (s, a) =>
+            {
+                mapHistory.History.Backward();
+            };
+            EnabledChanged();
+            
+        }
+
+        void Pause()
+        {
+            timer.Stop(); mapHistory.Playing = false;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            mapHistory.History.Forward();
+            if (mapHistory.History.Ended) Pause();
         }
 
         void EnabledChanged()
         {
-            start.Enabled = !player.Loaded;
-            play.Enabled = !player.Autoplay && player.Loaded;
-            pause.Enabled = player.Autoplay && player.Loaded;
-            step.Enabled = !player.Autoplay && player.Loaded;
-            back.Enabled = !player.Autoplay && player.Loaded;
-            stop.Enabled = player.Loaded;
+            play.Enabled = !mapHistory.Playing;
+            step.Enabled = !mapHistory.Playing;
+            back.Enabled = !mapHistory.Playing;
+            pause.Enabled = mapHistory.Playing;
         }
 
         protected override void OnLoad(EventArgs e)

@@ -11,15 +11,14 @@ namespace ManualControl
 {
     internal class TetrisForm : Form
     {
-        private readonly Stack<Map> mapHistory = new Stack<Map>();
-        public Map Map => mapHistory.Peek();
+        private readonly MainModel mapHistory = new MainModel();
+        public Map Map => mapHistory.History.CurrentMap;
         private readonly Dictionary<Keys, Directions> keymap;
         public Action<Directions> MovementRequested;
         Grid grid;
         Label scores;
         Label help;
 
-        ProgramPlayer player;
         ProgramPlayerControl playerControl;
         Button runBotGame, runBotIteration;
        
@@ -29,7 +28,7 @@ namespace ManualControl
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-           grid.Size = grid.GetDesiredSize();
+            grid.Size = grid.GetDesiredSize();
             scores.Size = new Size(100, 30);
             grid.Location = new Point(0, 30);
 
@@ -50,9 +49,9 @@ namespace ManualControl
 
         public TetrisForm(Map map)
         {
-            this.mapHistory.Push(map);
-            player = new ProgramPlayer(mapHistory);
-            playerControl = new ProgramPlayerControl(player);
+            mapHistory.History = new History(map);
+            mapHistory.History.Updated += UpdateAll;
+            playerControl = new ProgramPlayerControl(mapHistory);
             grid = new Grid(mapHistory);
             this.KeyPreview = true;
             runBotGame = new Button();
@@ -80,9 +79,6 @@ namespace ManualControl
             runBotGame.Click += RunBotGame_Click;
             runBotIteration.Click += RunBotIteration_Click;
 
-            player.LoadedUpdated += z => grid.MouseDisabled = z;
-            player.MapUpdated += () => UpdateAll();
-
             keymap = new Dictionary<Keys, Directions>
             {
                 [Keys.Q] = Directions.CCW,
@@ -95,28 +91,28 @@ namespace ManualControl
         
         }
 
+        int IterationNumber;
+
         private void RunBotIteration_Click(object sender, EventArgs e)
         {
-            if (player.Loaded) return;
+            if (mapHistory.Playing) return;
             var program = new NamiraOracle().MakeMove(Map);
-            player.InitializeProgram(program);
-            player.Play(false);
+            mapHistory.History.Append(program, "Iter"+IterationNumber);
+            IterationNumber++;
         }
 
         private void RunBotGame_Click(object sender, EventArgs e)
         {
-            if (player.Loaded) return;
+            if (mapHistory.Playing) return;
             var program = new NamiraOracle().PlayGame(Map);
-            player.InitializeProgram(program);
-            player.Play(false);
+            mapHistory.History.Append(program, "Game");
 
         }
         private void Grid_MovementRequested(UnitState obj)
         {
-            if (player.Loaded) return;
+            if (mapHistory.Playing) return;
             var program = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            player.InitializeProgram(program);
-            player.Play(true);
+            mapHistory.History.Append(program, "Game");
         }
 
         protected override void OnLoad(EventArgs e)
@@ -136,20 +132,12 @@ namespace ManualControl
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (playerControl.KeyboardOccupied) return;
-            if (player.Loaded) return;
+            if (mapHistory.Playing) return;
 
-           if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
-                mapHistory.Push(Map.Move(keymap[e.KeyData]));
-            if (e.KeyData == Keys.Z && mapHistory.Count > 1)
-                mapHistory.Pop();
-            if (e.KeyData == Keys.L && Map.Unit != null)
-                mapHistory.Push(Map.LockUnit());
-            if (e.KeyData == Keys.H)
-                showHelp = !showHelp;
-            if (e.KeyData == Keys.Escape)
-                showHelp = false;
-            UpdateAll();
+            if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
+                mapHistory.History.Append("Kbd", keymap[e.KeyData], e.KeyCode.ToString().ToUpper()[0]);
+            if (e.KeyData == Keys.Z && mapHistory.History.CurrentPosition > 0)
+                mapHistory.History.Backward();
         }
     }
 }

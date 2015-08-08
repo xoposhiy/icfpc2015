@@ -15,10 +15,10 @@ namespace ManualControl
     public partial class Grid : UserControl
     {
         public int Radius = 20;
-        public Map Map => mapHistory.Peek();
+        public Map Map => mapHistory.History.CurrentMap;
         private readonly Dictionary<Occupation, Pen> penTypes;
         private readonly Dictionary<Occupation, Brush> brushTypes;
-        private readonly Stack<Map> mapHistory;
+        private readonly MainModel mapHistory;
         public int LabelXOffset;
         public int LabetYOffset;
 
@@ -30,7 +30,7 @@ namespace ManualControl
             (int)(Geometry.YOffset * Radius * Map.Height + Geometry.Height * Radius));
         }
 
-        public Grid(Stack<Map> mapHistory)
+        public Grid(MainModel mapHistory)
         {
             this.mapHistory = mapHistory;
             penTypes = new Dictionary<Occupation, Pen>
