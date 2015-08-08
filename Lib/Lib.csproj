@@ -109,7 +109,6 @@
     <Compile Include="ProblemJson.cs" />
     <Compile Include="Problems.cs" />
     <Compile Include="ProblemScore.cs" />
-    <Compile Include="PhrasesOnlySolver.cs" />
     <Compile Include="ProblemsTest.cs" />
     <Compile Include="SubmissionHelpers_Test.cs" />
     <Compile Include="SubmissionResultJson.cs" />

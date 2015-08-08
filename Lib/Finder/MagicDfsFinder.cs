@@ -65,7 +65,7 @@ namespace Lib.Finder
                 int period = map.Unit.Unit.Period;
                 var midPosition = GetMidPositionByPhrase(target, directions, period);
                 var midPositionedUnit = new PositionedUnit(map.Unit.Unit, midPosition);
-                var midMap = new Map(map.Id, map.Filled, midPositionedUnit, map.NextUnits, map.UsedPositions, map.Scores);
+                var midMap = new Map(map.Id, map.Filled, midPositionedUnit, map.NextUnits, map.Scores);
 
                 if (!IsGoodPath(midMap, directions))
                     continue;

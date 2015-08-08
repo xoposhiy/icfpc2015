@@ -12,7 +12,7 @@ namespace ManualControl
 {
     internal class TetrisForm : Form
     {
-        private readonly MainModel mapHistory = new MainModel();
+        private readonly MainModel mapHistory;
         public Map Map => mapHistory.History.CurrentMap;
         private readonly Dictionary<Keys, Directions> keymap;
         public Action<Directions> MovementRequested;
@@ -25,8 +25,6 @@ namespace ManualControl
         Button suggest,runBotIteration, runBotGame;
        
         
-        private bool showHelp;
-
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
@@ -69,7 +67,7 @@ namespace ManualControl
 
             scores = new Label();
             help = new Label();
-            help.Text = "UIOP - movement\r\nQW - rotate\r\nZ - undo\r\nL - lock";
+            help.Text = "UIOP - movement\r\nQW - rotate\r\nZ - undo\r\n";
             help.BackColor = Color.Black;
             help.Font = new Font("Arial", 10);
             help.ForeColor = Color.Yellow;
@@ -151,7 +149,7 @@ namespace ManualControl
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}. Press 'H' for help!";
+            Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}.";
             DoubleBuffered = true;
             WindowState = FormWindowState.Maximized;
         }
@@ -174,6 +172,8 @@ namespace ManualControl
             }
             if (e.KeyData == Keys.Z && mapHistory.History.CurrentPosition > 0)
                 mapHistory.History.Backward();
+            if (e.KeyData == Keys.Escape)
+                mapHistory.Suggestions.Clear();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Lib.Intelligence
         public readonly IOracle Oracle;
         private readonly string name;
 
+        public string Name => name;
         public Solver(IFinder finder, IOracle oracle)
         {
             this.Finder = finder;

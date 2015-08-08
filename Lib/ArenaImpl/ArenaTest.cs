@@ -12,14 +12,24 @@ namespace Lib.ArenaImpl
     public class ArenaTest
     {
         [Test]
-        public void Test()
+        public void EvaluateEdgeSolver()
         {
-            var arena = new Arena(Problems.LoadProblems().Take(5).ToArray());
-            var finder = new DfsFinder();
-            var solver = new Solver(finder, new MephalaOracle(finder, Metrics.ShouldNotCreateSimpleHoles));
+            EvaluateSolver(EdgeSolver(), 3);
+        }
+
+        private static void EvaluateSolver(Solver solver, int count = int.MaxValue)
+        {
+            var arena = new Arena(Problems.LoadProblems().Take(count).ToArray());
             var res = arena.RunAllProblems(solver);
             File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
             Approvals.Verify(res);
+        }
+
+        private static Solver EdgeSolver()
+        {
+            var finder = new MagicDfsFinder();
+            var solver = new Solver(finder, new MephalaOracle(finder, Metrics.ShouldNotCreateSimpleHoles));
+            return solver;
         }
     }
 }

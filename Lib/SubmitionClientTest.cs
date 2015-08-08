@@ -61,18 +61,28 @@ namespace Lib
         public void SendAllProblems()
         {
             var submissions =
-                from p in Problems.LoadProblems().Take(3)
+                from p in Problems.LoadProblems()
                 from seed in p.sourceSeeds
                 select Solve(p,seed);
-            client.PostSubmissions(submissions.ToArray());
+	        foreach (var submitionJson in submissions.Select(Log))
+	        {
+	            client.PostSubmissions(submitionJson);
+	        }
+        }
+
+        private SubmitionJson Log(SubmitionJson submission)
+        {
+            Console.WriteLine(submission.problemId + " " + submission.seed);
+            return submission;
         }
 
         private static SubmitionJson Solve(ProblemJson p, int seed)
         {
             var map = p.ToMap(seed);
-            var s1 = new PhrasesOnlySolver().Solve(map);
-            var s2 = new Solver(new DfsFinder(), new AzuraOracle()).Solve(map);
-            var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
+            var finder = new MagicDfsFinder();
+            var bestRes = new Solver(finder, new MephalaOracle(finder, Metrics.ShouldNotCreateSimpleHoles)).Solve(map);
+//            var s2 = new Solver(finder, new AzuraOracle()).Solve(map);
+//            var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
             return new SubmitionJson
             {
                 problemId = p.id,

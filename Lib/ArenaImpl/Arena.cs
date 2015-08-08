@@ -16,7 +16,7 @@ namespace Lib.ArenaImpl
             this.Problems = problems.Select(p => new ArenaProblem
             {
                 Problem = p,
-                MapResults = p.sourceSeeds.Select(seed => new ArenaMapResult {Seed = seed}).ToArray()
+                MapResults = p.sourceSeeds.Select(seed => new ArenaMapResult { Seed = seed }).ToArray()
             }).ToArray();
         }
 
@@ -26,12 +26,12 @@ namespace Lib.ArenaImpl
             {
                 RunProblem(arenaProblem, solver);
             }
-            return new ArenaModel {Problems = Problems};
+            return new ArenaModel { Problems = Problems, SolverName = solver.Name };
         }
 
         public ArenaModel RunProblem(ArenaProblem problem, ISolver solver)
         {
-            for(int i=0; i<problem.Problem.sourceSeeds.Count; i++)
+            for (int i = 0; i < problem.Problem.sourceSeeds.Count; i++)
             {
                 Run(problem, i, solver);
             }

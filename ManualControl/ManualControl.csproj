@@ -64,7 +64,6 @@
     <Compile Include="MainModel.cs" />
     <Compile Include="Occupation.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProgramController.cs" />
     <Compile Include="ProgramPlayerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
