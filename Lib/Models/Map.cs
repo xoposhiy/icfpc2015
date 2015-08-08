@@ -138,7 +138,7 @@ namespace Lib.Models
 
         private Map Die()
         {
-            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, Scores);
+            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, new Scores(0, 0));
         }
     }
 
@@ -152,6 +152,7 @@ namespace Lib.Models
         }
         public static Directions ToDirection(this char c)
         {
+            c = char.ToLowerInvariant(c);
             if ("p'!.03".Contains(c)) return Directions.W;
             if ("bcefy2".Contains(c)) return Directions.E;
             if ("aghij4".Contains(c)) return Directions.SW;

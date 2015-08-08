@@ -1,4 +1,5 @@
 ﻿using Lib.Finder;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace Lib.Models
         {
             Unit = unit;
             RotationIndex = (rotationIndex + Unit.Period) % Unit.Period;
-            Debug.Assert(RotationIndex.InRange(0, Unit.Period - 1));
+            Debug.Assert(RotationIndex.InRange(0, Unit.Rotations.Length-1));
             PivotLocation = pivotLocation;
         }
 
@@ -53,6 +54,8 @@ namespace Lib.Models
         {
             get
             {
+                if (!RotationIndex.InRange(0, Unit.Rotations.Length - 1))
+                    throw new Exception(RotationIndex.ToString());
                 if (PivotLocation.Y % 2 == 0)
                     return Unit.Rotations[RotationIndex].Select(p => p.Add(PivotLocation));
                 else
