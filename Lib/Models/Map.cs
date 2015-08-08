@@ -49,7 +49,27 @@ namespace Lib.Models
             bool[,] f = (bool[,])Filled.Clone();
             foreach (var cell in Unit.Members)
                 f[cell.X, cell.Y] = true;
+            RemoveFilledLines(f);
             return new Map(Id, f, NextUnits.Pop());
+        }
+
+        void RemoveFilledLines(bool[,] map)
+        {
+            var removedLines = 0;
+            var width = map.GetLength(0);
+            var height = map.GetLength(1);
+            for (int y=height-1;y>=0;y--)
+            {
+                if (removedLines > 0)
+                    for (int x = 0; x < width; x++)
+                        map[x, y] = y >= removedLines ? map[x, y - removedLines] : false;
+                if (Enumerable.Range(0, width).All(x => map[x, y]))
+                {
+                    removedLines++;
+                    y++;
+                    continue;
+                }
+            }
         }
 
         public bool IsSafeMovement(Directions direction)
