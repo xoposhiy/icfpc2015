@@ -25,7 +25,7 @@ namespace Lib.Intelligence
         {
             foreach (var e in Oracle.GetSuggestions(map))
             {
-                Directions[] result = Finder.GetPath(map, e.Position);
+                var result = Finder.GetPath(map, e.Position);
                 if (result == null) continue;
                 return result.Concat(new[] { e.LockingDirection });
             }

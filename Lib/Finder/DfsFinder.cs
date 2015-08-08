@@ -12,16 +12,22 @@ namespace Lib.Finder
         private Map Map;
         private Dictionary<UnitPosition, Tuple<UnitPosition, Directions>> Parents;
 
-        public Directions[] GetPath(Map map, UnitPosition target)
+        public IEnumerable<Directions> GetPath(Map map, UnitPosition target)
         {
-            if (!ReferenceEquals(Map, map))
-                UpdateMap(map);
+            UpdateMap(map);
             return !Parents.ContainsKey(target) ? null
-                       : RestoreDirections(target).Reverse().ToArray();
+                       : RestoreDirections(target).Reverse();
+        }
+
+        public IEnumerable<UnitPosition> GetReachablePositions(Map map)
+        {
+            UpdateMap(map);
+            return Parents.Keys;
         }
 
         private void UpdateMap(Map map)
         {
+            if (ReferenceEquals(Map, map)) return;
             Map = map;
             Parents = new Dictionary<UnitPosition, Tuple<UnitPosition, Directions>>
             {
