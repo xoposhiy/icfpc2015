@@ -16,7 +16,7 @@ namespace Lib.Models
         {
             Unit = unit;
             RotationIndex = (rotationIndex + Unit.Period) % Unit.Period;
-            Debug.Assert(RotationIndex.InRange(0, Unit.Rotations.Length-1));
+            Debug.Assert(RotationIndex.InRange(0, Unit.Displacements.Length-1));
             PivotLocation = pivotLocation;
         }
 
@@ -54,9 +54,12 @@ namespace Lib.Models
         {
             get
             {
-                if (!RotationIndex.InRange(0, Unit.Rotations.Length - 1))
+                if (!RotationIndex.InRange(0, Unit.Displacements.Length - 1))
                     throw new Exception(RotationIndex.ToString());
-                return Unit.Rotations[RotationIndex].Select(p => p.Add(PivotLocation).Add(Unit.GetFixingVector(p.Y % 2, PivotLocation.Y % 2)));
+                return
+                    Unit
+                    .Displacements[RotationIndex]
+                    .Select(p => p.Add(PivotLocation.ToGeometry()).ToMap());
             }
         }
 

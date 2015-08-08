@@ -44,5 +44,11 @@ namespace Lib.Models
             var rotated = geometryLocation.Rotate(geometryCenter, angle);
             return Geometry.GetMapLocation(rotated.X, rotated.Y);
         }
+
+        public static PointF ToGeometry(this Point point)
+        {
+            return Geometry.GetGeometricLocation(point.X,point.Y);
+        }
+
     }
 }

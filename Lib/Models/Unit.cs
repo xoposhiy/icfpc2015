@@ -12,22 +12,30 @@ namespace Lib.Models
         private static readonly PointsComparer pointsComparer = new PointsComparer();
 
         public readonly int Period;
-        public readonly Point[] Members;
-        public readonly List<Point>[] Rotations;
         private readonly int pivotOddity;
+
+        public readonly List<PointF>[] Displacements;
+        public readonly Point[] Members;
+
 
         public Unit(IEnumerable<Point> members, Point pivot)
         {
+            var pivotF = Geometry.GetGeometricLocation(pivot.X, pivot.Y);
+            
             Members = members.Select(c => c.Sub(pivot)).ToArray();
             Array.Sort(Members, pointsComparer);
             Period = GetPeriod();
             pivotOddity = pivot.Y % 2;
 
             double cv = Math.PI / 3;
-            Rotations = new List<Point>[6];
-            Rotations[0] = Members.ToList();
+            Displacements = new List<PointF>[6];
+            Displacements[0] = members.Select(z => Geometry.GetGeometricLocation(z.X, z.Y).Sub(pivotF)).ToList();
             for (int i = 1; i < 6; i++)
-                Rotations[i] = Rotations[i - 1].Select(z => z.Rotate(new Point(0, 0), cv)).ToList();
+            {
+                Displacements[i] = Displacements[i - 1]
+                    .Select(z => z.Rotate(new Point(0, 0), cv))
+                    .ToList();
+            }
         }
 
         public Point GetFixingVector(int vectorOddity, int newPivotOddity)
