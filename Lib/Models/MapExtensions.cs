@@ -86,24 +86,16 @@ namespace Lib.Models
             return true;
         }
 
+        public static bool Contains(this Map map, Point point)
+        {
+            return point.X.InRange(0, map.Width - 1) && point.Y.InRange(0, map.Height - 1);
+        }
+
         public static bool IsSimpleHole(this Map map, Point point)
         {
-            if (map.Filled[point.X, point.Y]) return false;
-
-            for (int x = -1; x <= 1; x++)
-            {
-                for (int y = -1; y <= 1; y++)
-                {
-                    if (x == 0 && y == 0) continue;
-                    var p = point + new Size(x, y);
-                    if(p.X.InRange(0, map.Width - 1)
-                           && p.Y.InRange(0, map.Height - 1)
-                           && !map.Filled[p.X, p.Y]) return false;
-                    
-                }
-            }
-            
-            return true;
+            return 
+                !map.Filled[point.X, point.Y] 
+                && point.HexaNeighbours().Where(map.Contains).All(n => map.Filled[n.X, n.Y]);
         }
     }
 

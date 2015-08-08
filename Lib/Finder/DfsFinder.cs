@@ -57,7 +57,7 @@ namespace Lib.Finder
                 phrase = Phrases.AsDirections[phraseIndex];
             }
             var dir = phrase[charIndex];
-//            DfsStep(map, dir, phraseIndex, charIndex);
+            DfsStep(map, dir, phraseIndex, charIndex);
             foreach (var d in dirs)
             {
                 DfsStep(map, d, phraseIndex, charIndex);
