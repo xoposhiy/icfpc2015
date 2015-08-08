@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lib.ArenaImpl;
 using Lib.Finder;
 using Lib.Models;
 
 namespace Lib.Intelligence
 {
-   public class NamiraOracle : IOracle
+   public class NamiraOracle : IOracle, ISolver
     {
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
@@ -36,5 +37,11 @@ namespace Lib.Intelligence
         {
             return "Namira";
         }
+
+       public SolverResult Solve(Map map)
+       {
+           var res = this.PlayExtended(map);
+           return new SolverResult(res.Item2.Scores.TotalScores, res.Item1); 
+       }
     }
 }

@@ -41,7 +41,7 @@ namespace ManualControl
                 return;
             }
             var c = program[ProgramPointer];
-            var dir = Finder.CharToDirection(c);
+            var dir = c.ToDirection();
             mapHistory.Push(mapHistory.Peek().Move(dir));
             if (Updated != null) Updated();
             ProgramPointer++;
