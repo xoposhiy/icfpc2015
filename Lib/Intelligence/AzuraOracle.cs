@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lib.ArenaImpl;
 using Lib.Finder;
 using Lib.Models;
+using NUnit.Framework.Constraints;
 
 namespace Lib.Intelligence
 {
@@ -18,17 +19,25 @@ namespace Lib.Intelligence
 
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
-            var possible = map.SuggestAllFinalPositions();
+            var allUnitPositions = OracleServices.GetAllUnitPositions(map);
 
-            return possible.OrderByDescending(suggestion =>
+            var suggestions = new List<OracleSuggestion>();
+            foreach (var position in allUnitPositions)
             {
-                var count = 0;
-                for (int j = 0; j < map.Filled.GetLength(0); j++)
+                var positionedUnit = map.Unit.WithNewPosition(position);
+                if (!map.IsValidPosition(positionedUnit)) continue;
+                if(map.IsEmptyPosition(positionedUnit)) continue;
+
+                foreach (var dir in OracleServices.GetAllDirections())
                 {
-                    if(map.Filled[j, suggestion.Position.Point.X])count++;
+                    var nextPosition = positionedUnit.Move(dir);
+                    if (!map.IsValidPosition(nextPosition))
+                    {
+                        suggestions.Add(new OracleSuggestion(position, dir));
+                    }
                 }
-                return count;
-            }).ThenByDescending(z => z.Position.Point.Y);
+            }
+            return suggestions;
         }
     }
 }

@@ -12,12 +12,14 @@ namespace Lib.Models
         public static PositionedUnit Null = new PositionedUnit(new Unit(new List<Point>(), new Point(0, 0)), 0, new Point(int.MaxValue, int.MaxValue));
         public readonly Unit Unit;
         public readonly UnitPosition Position;
+        public Rectangle Rectangle;
 
         public PositionedUnit(Unit unit, int rotationIndex, Point pivotLocation)
         {
             //TODO pe
             Unit = unit;
             Position = new UnitPosition(pivotLocation, (rotationIndex + Unit.Period) % Unit.Period);
+            Rectangle = GetRectangle();
         }
 
         public PositionedUnit(Unit unit, UnitPosition position)
@@ -57,6 +59,25 @@ namespace Lib.Models
                     .Displacements[Position.Angle]
                     .Select(p => p.Add(Position.Point.ToGeometry()).ToMap());
             }
+        }
+
+        private Rectangle GetRectangle()
+        {
+            var minX = Int32.MaxValue;
+            var minY = Int32.MaxValue;
+
+            var maxX = Int32.MinValue;
+            var maxY = Int32.MinValue;
+
+            foreach (var member in Members)
+            {
+                minX = Math.Min(minX, member.X);
+                minY = Math.Min(minY, member.Y);
+                maxX = Math.Max(maxX, member.X);
+                maxY = Math.Max(maxY, member.Y);
+            }
+
+            return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
 
         public PositionedUnit Move(Directions direction)

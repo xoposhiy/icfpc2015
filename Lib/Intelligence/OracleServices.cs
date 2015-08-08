@@ -14,7 +14,7 @@ namespace Lib.Intelligence
         {
             for (int x = 0; x < map.Width; x++)
                 for (int y = 0; y < map.Height; y++)
-                    for (int rot = 0; rot < 6; rot++)
+                    for (int rot = 0; rot < map.Unit.Unit.Period; rot++)
                         yield return new UnitPosition { Angle = rot, Point = new System.Drawing.Point(x, y) };
         }
 
