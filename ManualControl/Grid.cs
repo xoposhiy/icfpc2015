@@ -23,11 +23,12 @@ namespace ManualControl
         public int LabetYOffset;
 
 
-        public Size GetDesiredSize()
+
+        protected override void OnSizeChanged(EventArgs e)
         {
-            return new Size(
-            (int)(Geometry.Width * Radius * (Map.Width + 1)),
-            (int)(Geometry.YOffset * Radius * Map.Height + Geometry.Height * Radius));
+            Radius = (int)Math.Min(
+                Width / (Map.Width * Geometry.Width),
+                Height / (Map.Height * Geometry.YOffset));
         }
 
         public Grid(MainModel mapHistory)
@@ -175,7 +176,7 @@ namespace ManualControl
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             requestedAngle = e.Delta < 0 ? requestedAngle + 1 : requestedAngle - 1;
-            requestedAngle = requestedAngle % 6;
+            requestedAngle = requestedAngle % Map.Unit.Unit.Period;
             SetRequestedLocation(GetLocation(e), requestedAngle);
         }
 
