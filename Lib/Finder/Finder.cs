@@ -39,7 +39,7 @@ namespace Lib.Finder
             return true;
         }
 
-        private static void DFS(State state, bool[,] field, FinderUnit figure, StateArray<TransitionInfo> parents)
+        private static void DFS(State state, bool[,] field, Unit figure, StateArray<TransitionInfo> parents)
         {
             foreach (var movement in movements[state.position.Y % 2])
             {
@@ -52,7 +52,7 @@ namespace Lib.Finder
 
             for (var delta = -1; delta <= 1; delta += 2)
             {
-                var angle = (state.angle + delta + figure.period) % figure.period;
+                var angle = (state.angle + delta + figure.Period) % figure.Period;
                 var to = new State {position = state.position, angle = angle};
                 if (!CanBePlaced(field, figure.FixAt(state)) || parents[to] != null)
                     continue;
@@ -78,18 +78,18 @@ namespace Lib.Finder
             return string.Join("", path.ToString().Reverse());
         }
 
-        public static string GetPath(bool[,] field, FinderUnit figure, Point target)
+        public static string GetPath(bool[,] field, Unit figure, Point target)
         {
             var startState = new State {position = figure.GetStartPosition(field.GetLength(0)), angle = 0};
             if (!CanBePlaced(field, figure.FixAt(startState)))
                 return null;
 
-            var parents = new StateArray<TransitionInfo>(field.GetLength(0), field.GetLength(1), figure.period);
+            var parents = new StateArray<TransitionInfo>(field.GetLength(0), field.GetLength(1), figure.Period);
             parents[startState] = new TransitionInfo {state = startState, operation = '0'};
 
             DFS(startState, field, figure, parents);
 
-            for (var i = 0; i < figure.period; i++)
+            for (var i = 0; i < figure.Period; i++)
             {
                 var path = RestorePath(new State {position = target, angle = i}, parents);
                 if (path != null)

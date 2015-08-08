@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Lib.Models;
 using NUnit.Framework;
 
 namespace Lib.Finder
@@ -10,7 +11,7 @@ namespace Lib.Finder
         public void Test()
         {
             var field = new bool[5, 10];
-            var figure = new FinderUnit(new Point[] { new Point(1, 0), new Point(2, 0) }, new Point(1, 0));
+            var figure = new Unit(new Point[] { new Point(1, 0), new Point(2, 0) }, new Point(1, 0));
             var target = new Point(1, 9);
             var x = Finder.GetPath(field, figure, target);
         }
