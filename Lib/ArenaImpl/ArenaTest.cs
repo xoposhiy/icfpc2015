@@ -14,9 +14,7 @@ namespace Lib.ArenaImpl
         [Test]
         public void Test()
         {
-            var arena = new Arena(Problems.LoadProblems().Take(5).ToArray());
-//            var solver = new PhrasesOnlySolver();
-//            var solver = new NamiraOracle();
+            var arena = new Arena(Problems.LoadProblems().ToArray());
             var solver = new Solver(new DfsFinder(), new NamiraOracle());
             var res = arena.RunAllProblems(solver);
             File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
