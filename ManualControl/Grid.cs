@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Lib.Finder;
 using Lib.Models;
 
 namespace ManualControl
@@ -20,6 +21,7 @@ namespace ManualControl
         private readonly Stack<Map> mapHistory;
         public int LabelXOffset;
         public int LabetYOffset;
+        PositionedUnit mousePositionedUnit;
 
         public Size GetDesiredSize()
         {
@@ -105,7 +107,41 @@ namespace ManualControl
                     DrawHexagon(g, x, y, penTypes[occupation], brushTypes[occupation], p.Equals(Map.Unit.PivotLocation));
                 }
             }
+
+            if (mousePositionedUnit!= null)
+            foreach (var member in mousePositionedUnit.Unit.Members)
+            {
+                DrawHexagon(e.Graphics, member.X + mousePositionedUnit.PivotLocation.X, member.Y + mousePositionedUnit.PivotLocation.Y, pen, brush, false);
+            }
         }
 
+        private Point GetLocation(float pixelX, float pixelY)
+        {
+            var geometryPoint = new PointF()
+            {
+                X = (pixelX) / Radius,
+                Y = (pixelY) / Radius
+            };
+            return Geometry.GetMapLocation(geometryPoint.X, geometryPoint.Y);
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            var point = GetLocation(e.X - Radius* (float)Geometry.Width / 2, e.Y - Radius* (float)Geometry.Height / 2);
+            
+            DrawHexagon(this.CreateGraphics(), point.X, point.Y, new Pen(Color.DarkOrange, 3), new SolidBrush(Color.DarkOrange), false);
+        }
+        
+        Pen pen = new Pen(Color.Aqua);
+        SolidBrush brush = new SolidBrush(Color.Azure);
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            var point = GetLocation(e.X - Radius * (float)Geometry.Width / 2, e.Y - Radius * (float)Geometry.Height / 2);
+            mousePositionedUnit = new PositionedUnit(Map.Unit.Unit, Map.Unit.RotationIndex, point);
+
+            
+            this.Invalidate();
+        }
     }
 }
