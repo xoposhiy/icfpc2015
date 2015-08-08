@@ -8,6 +8,6 @@ namespace Lib.Finder
     {
         IEnumerable<Directions> GetPath(Map map, UnitPosition target);
 
-        IEnumerable<UnitPosition> GetReachablePositions(Map map);
+        IEnumerable<Map> GetReachablePositions(Map map);
     }
 }

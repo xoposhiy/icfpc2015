@@ -16,7 +16,8 @@ namespace ManualControl
             //RunTest(); return;
             var map = Problems.LoadProblems()[2].ToMap(0);
             var model = new MainModel();
-            model.Solver = new Lib.Intelligence.Solver(new DfsFinder(), new MephalaOracle(new DfsFinder(), Metrics.ShouldNotCreateSimpleHoles));
+            var dfsFinder = new DfsFinder();
+            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new MephalaOracle(dfsFinder, Metrics.ShouldNotCreateSimpleHoles));
             model.History = new History(map);
             var form = new TetrisForm(model);
             form.MovementRequested = dir => { map.Unit.Move(dir); };

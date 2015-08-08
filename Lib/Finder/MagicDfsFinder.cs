@@ -80,7 +80,7 @@ namespace Lib.Finder
             return dfsFinder.GetPath(map, target);
         }
 
-        public IEnumerable<UnitPosition> GetReachablePositions(Map map)
+        public IEnumerable<Map> GetReachablePositions(Map map)
         {
             return dfsFinder.GetReachablePositions(map);
         }

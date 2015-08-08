@@ -147,7 +147,7 @@ namespace Lib.Models
         private Map DoMove(Directions dir)
         {
             var nextUnit = Unit.Move(dir);
-            return new Map(Id, Filled, nextUnit, NextUnits, UsedPositions.Add(nextUnit), Scores);
+            return new Map(Id, Filled, nextUnit, NextUnits, UsedPositions.Add(nextUnit), new Scores(Scores.TotalScores, 0));
         }
 
         private Map Die()

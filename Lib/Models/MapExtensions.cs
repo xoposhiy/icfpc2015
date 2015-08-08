@@ -90,13 +90,15 @@ namespace Lib.Models
         {
             if (map.Filled[point.X, point.Y]) return false;
 
-            for (int i = -1; i <= 1; i++)
+            for (int x = -1; x <= 1; x++)
             {
-                for (int j = -1; j <= 1; j++)
+                for (int y = -1; y <= 1; y++)
                 {
-                    if((point.X - i).InRange(0, map.Width - 1)
-                           && (point.Y - j).InRange(0, map.Height - 1)
-                           && !map.Filled[point.X - i, point.Y - i]) return false;
+                    if (x == 0 && y == 0) continue;
+                    var p = point + new Size(x, y);
+                    if(p.X.InRange(0, map.Width - 1)
+                           && p.Y.InRange(0, map.Height - 1)
+                           && !map.Filled[p.X, p.Y]) return false;
                     
                 }
             }
