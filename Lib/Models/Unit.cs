@@ -70,7 +70,7 @@ namespace Lib.Models
                 maxX = Math.Max(maxX, Members[i].X);
                 minY = Math.Min(minY, Members[i].Y);
             }
-            int prefixX = ((width - 1 - maxX) + minX) / 2;
+            int prefixX = (width - (maxX - minX + 1)) / 2;
             return new Point(prefixX, -minY);
         }
     }
