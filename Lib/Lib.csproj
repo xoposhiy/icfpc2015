@@ -77,6 +77,7 @@
     <Compile Include="ArenaImpl\ISolver.cs" />
     <Compile Include="ArenaImpl\SolverResult.cs" />
     <Compile Include="CellJson.cs" />
+    <Compile Include="Finder\DfsFinder.cs" />
     <Compile Include="Finder\IFinder.cs" />
     <Compile Include="Intelligence\AzuraOracle.cs" />
     <Compile Include="Intelligence\IOracle.cs" />
