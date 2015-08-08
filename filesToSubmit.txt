@@ -1,0 +1,8 @@
+Lib\*
+packages\*
+play_icfp2015\*
+*.sln
+*.xsd
+*.DotSettings
+build.cmd
+readme.md
