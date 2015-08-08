@@ -42,6 +42,6 @@ namespace ManualControl
 
         public Solver Solver { get; set; }
 
-        public SuggestionsModel Suggestions { get; set; }
+        public readonly SuggestionsModel Suggestions = new SuggestionsModel();
     }
 }

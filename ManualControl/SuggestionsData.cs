@@ -10,9 +10,36 @@ namespace ManualControl
 {
     public class SuggestionsModel
     {
-        public List<OracleSuggestion> Suggestions = new List<OracleSuggestion>();
-        public int Position;
-        public Unit Unit;
+        public List<OracleSuggestion> Suggestions
+        {
+            get; private set;
+        }
+
+        public int Position
+        {
+            get; private set;
+        }
+
+        public Unit Unit
+        {
+            get; private set;
+        }
+
+        public void Load(IEnumerable<OracleSuggestion> suggestions, Unit unit)
+        {
+            Position = 0;
+            Unit = unit;
+            Suggestions = suggestions.ToList();
+            OnUpdated();
+        }
+
+        public bool Next()
+        {
+            Position++;
+            OnUpdated();
+            return Position < Suggestions.Count;
+        }
+
 
         public OracleSuggestion GetCurrentSuggestion()
         {
@@ -21,5 +48,11 @@ namespace ManualControl
             return Suggestions[Position];
         }
 
+        public event Action Updated;
+
+        void OnUpdated()
+        {
+            if (Updated != null) Updated();
+        }
     }
 }

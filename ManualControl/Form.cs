@@ -18,6 +18,7 @@ namespace ManualControl
         Grid grid;
         Label scores;
         Label help;
+        
 
         Button suggest,runBotIteration, runBotGame;
        
@@ -51,6 +52,7 @@ namespace ManualControl
         {
             mapHistory = model;
             mapHistory.History.Updated += UpdateAll;
+            mapHistory.Suggestions.Updated += () => suggest.Text = "Oracle " + mapHistory.Suggestions.Position;
             grid = new Grid(mapHistory);
             this.KeyPreview = true;
             runBotGame = new Button();
@@ -104,20 +106,13 @@ namespace ManualControl
         private void Suggest_Click(object sender, EventArgs e)
         {
             if (mapHistory.Playing) return;
-            if (mapHistory.Suggestions==null 
-                || mapHistory.Suggestions.GetCurrentSuggestion()==null
+            if (mapHistory.Suggestions.GetCurrentSuggestion()==null
                 || mapHistory.Suggestions.Unit!=Map.Unit.Unit
-                )
+                || !mapHistory.Suggestions.Next())
                 { 
-                     var suggestion = mapHistory.Solver.Oracle.GetSuggestions(Map);
-                mapHistory.Suggestions = new SuggestionsModel
-                {
-                    Position = -1,
-                    Suggestions = suggestion.ToList(),
-                    Unit = Map.Unit.Unit
-                };
-            }
-            mapHistory.Suggestions.Position++;
+                var suggestion = mapHistory.Solver.Oracle.GetSuggestions(Map);
+                mapHistory.Suggestions.Load(suggestion, Map.Unit.Unit);
+                }
             UpdateAll();
         }
 
