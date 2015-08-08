@@ -32,16 +32,9 @@ namespace Lib.Models
             return new Point(left.X - right.X, left.Y - right.Y);
         }
 
-        public static Point Rotate(this Point p)
+        public static Point Rotate(this Point p, int angle = 1)
         {
-            return Geometry.RotateMapLocationCCW60AroundZero(p);
-        }
-
-        public static Point Rotate(this Point point, int angle)
-        {
-            for (var i = 0; i < angle; i++)
-                point = point.Rotate();
-            return point;
+            return p.Rotate(new Point(0, 0), angle * (Math.PI / 3));
         }
 
         public static Point Rotate(this Point point, Point center, double angle)

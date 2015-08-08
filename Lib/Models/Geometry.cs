@@ -39,6 +39,7 @@ namespace Lib.Models
             return (x - 1) / 2;
         }
 
+        /*
         public static Point RotateMapLocationCW60AroundZero(Point point)
         {
             var k = point.X - floor2(point.Y);
@@ -54,5 +55,6 @@ namespace Lib.Models
             var l = point.Y;
             return new Point(k / 2 + l, -k);
         }
+        */
     }
 }

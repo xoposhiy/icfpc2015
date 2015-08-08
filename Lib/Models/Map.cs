@@ -20,12 +20,13 @@ namespace Lib.Models
         {
         }
 
-        private static PositionedUnit PositionNewUnit(int width, ImmutableStack<Unit> nextUnits)
+        public static PositionedUnit PositionNewUnit(int width, ImmutableStack<Unit> nextUnits)
         {
             if (nextUnits.IsEmpty) return null;
             var u = nextUnits.Peek();
             var topmostY = u.Members.Min(m => m.Y);
-            var pivotPos = (width - 2 - u.Members.Max(m => m.X) - u.Members.Min(m => m.X)) / 2;
+            var pivotPos = (width - 2 - u.Members.Max(m => m.X + (m.Y + topmostY) % 2) -
+                            u.Members.Min(m => m.X - (m.Y + topmostY) % 2)) / 2;
             return new PositionedUnit(u, 0, new Point(pivotPos, -topmostY));
         }
 

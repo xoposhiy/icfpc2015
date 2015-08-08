@@ -80,7 +80,7 @@ namespace Lib.Finder
             return string.Join("", path.ToString().Reverse());
         }
 
-        private static Directions CharToDirection(char c)
+        public static Directions CharToDirection(char c)
         {
             switch (c)
             {
@@ -101,13 +101,15 @@ namespace Lib.Finder
             }
         }
 
-        private static Directions[] StringToDirections(string path)
+        public static Directions[] StringToDirections(string path)
         {
             return path.Select(CharToDirection).ToArray();
         }
 
-        public static Directions[] GetPath(bool[,] field, Unit figure, UnitState target)
+        public static string GetPath(bool[,] field, Unit figure, UnitState target)
         {
+            target.angle %= figure.Period;
+
             var startState = new UnitState {position = figure.GetStartPosition(field.GetLength(0)), angle = 0};
             if (!CanBePlaced(field, figure.FixAt(startState)))
                 return null;
@@ -117,7 +119,7 @@ namespace Lib.Finder
 
             DFS(startState, field, figure, parents);
 
-            return StringToDirections(RestorePath(target, parents));
+            return RestorePath(target, parents);
         }
     }
 }
