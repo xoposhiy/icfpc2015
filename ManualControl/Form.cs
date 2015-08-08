@@ -21,8 +21,9 @@ namespace ManualControl
         TextBox program;
         Button play;
         Button stepBut;
-
+        Button back;
         Button playBot;
+        
 
         ProgramController controller;
 
@@ -45,6 +46,7 @@ namespace ManualControl
             play = new Button();
             playBot = new Button();
             stepBut = new Button();
+            back = new Button();
 
             Controls.Add(grid);
             Controls.Add(scores);
@@ -53,13 +55,14 @@ namespace ManualControl
             Controls.Add(play);
             Controls.Add(playBot);
             Controls.Add(stepBut);
+            Controls.Add(back);
 
             scores.Size = new Size(100, 30);
             grid.Location = new Point(0, 30);
             grid.Size = grid.GetDesiredSize();
             help.Size = new Size(150, 100);
             help.Location = new Point(grid.Right, grid.Bottom - help.Height);
-            ClientSize = new Size(help.Right, Math.Max(help.Bottom,400));
+            ClientSize = new Size(help.Right, Math.Max(help.Bottom, 400));
 
 
 
@@ -77,24 +80,31 @@ namespace ManualControl
             {
                 if (!controller.Running) controller.Run(program.Text, true);
                 controller.Step();
-                if (controller.ProgramPointer < program.Text.Length)
-                    program.Select(controller.ProgramPointer, 2);
             };
+
+            back.Size = play.Size;
+            back.Location = new Point(play.Left, stepBut.Bottom);
+            back.Text = "BACK";
+            back.Click += (s, a) =>
+              {
+                  controller.Back();
+              };
+
 
 
             playBot.Click += PlayBot_Click;
             playBot.Text = "Play bot";
-            playBot.Location = new Point(stepBut.Left, stepBut.Bottom);
+            playBot.Location = new Point(back.Left, back.Bottom + 30);
             playBot.Size = play.Size;
 
 
             grid.MovementRequested += Grid_MovementRequested;
-            play.Click += 
-                (s, a) => 
-                controller.Run(program.Text,false);
+            play.Click +=
+                (s, a) =>
+                controller.Run(program.Text, false);
             controller.Updated = UpdateAll;
-            controller.Started += () => play.Enabled = false;
-            controller.Finished += () => play.Enabled = true;
+            controller.Started += () => { play.Enabled = false; program.Enabled = false; };
+            controller.Finished += () => { play.Enabled = true; program.Enabled = true; program.Text = controller.Program; };
 
 
         
@@ -141,6 +151,13 @@ namespace ManualControl
             Invalidate();
             grid.Invalidate();
             scores.Text = Map.Scores.TotalScores.ToString();
+
+            if (controller.Running && controller.ProgramPointer>0 && controller.ProgramPointer<controller.Program.Length-1)
+            {
+                var before = controller.Program.Substring(0, controller.ProgramPointer);
+                var after = controller.Program.Substring(controller.ProgramPointer+1);
+                program.Text = before + "_" + controller.Program[controller.ProgramPointer] + "_" + after;
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
