@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ManualControl
 {
@@ -28,8 +29,34 @@ namespace ManualControl
         public History History;
 
         bool playing;
-        public bool Playing {  get { return playing; } set { playing = value;  if (PlayingChanged != null) PlayingChanged();} }
         public event Action PlayingChanged;
+
+        Timer timer;
+
+        public bool Playing { get; private set; }
+
+        public MainModel()
+        {
+            timer = new Timer();
+            timer.Interval = 10;
+            timer.Tick += (s, a) => { History.Forward(); if (History.Ended) Pause(); };
+        }
+
+        public void Play()
+        {
+            timer.Start();
+            Playing = true;
+            if (PlayingChanged != null) PlayingChanged();
+        }
+
+        public void Pause()
+        {
+            timer.Stop();
+            Playing = false;
+            if (PlayingChanged != null) PlayingChanged();
+        }
+
+
     }
 
     public class History

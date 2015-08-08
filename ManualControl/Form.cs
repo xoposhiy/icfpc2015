@@ -99,6 +99,7 @@ namespace ManualControl
             var program = new NamiraOracle().MakeMove(Map);
             mapHistory.History.Append(program, "Iter"+IterationNumber);
             IterationNumber++;
+            mapHistory.Play();
         }
 
         private void RunBotGame_Click(object sender, EventArgs e)
@@ -106,13 +107,14 @@ namespace ManualControl
             if (mapHistory.Playing) return;
             var program = new NamiraOracle().PlayGame(Map);
             mapHistory.History.Append(program, "Game");
-
+            mapHistory.Play();
         }
         private void Grid_MovementRequested(UnitState obj)
         {
             if (mapHistory.Playing) return;
             var program = Finder.GetPath(Map.Filled, Map.Unit.Unit, obj);
-            mapHistory.History.Append(program, "Game");
+            mapHistory.History.Append(program, "Hand");
+            mapHistory.Play();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -135,7 +137,10 @@ namespace ManualControl
             if (mapHistory.Playing) return;
 
             if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
+            {
                 mapHistory.History.Append("Kbd", keymap[e.KeyData], e.KeyCode.ToString().ToUpper()[0]);
+                mapHistory.History.Forward();
+            }
             if (e.KeyData == Keys.Z && mapHistory.History.CurrentPosition > 0)
                 mapHistory.History.Backward();
         }
