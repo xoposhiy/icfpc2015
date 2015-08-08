@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
@@ -128,6 +129,30 @@ namespace Lib.Models
         private Map Die()
         {
             return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, Scores);
+        }
+    }
+
+    public static class MapExtensions
+    {
+        public static IEnumerable<Directions> ToDirections(this string s)
+        {
+            return s.ToLowerInvariant()
+                .Where(c => !"\t\n\r".Contains(c))
+                .Select(ToDirection);
+        }
+        public static Directions ToDirection(this char c)
+        {
+            if ("p'!.03".Contains(c)) return Directions.W;
+            if ("bcefy2".Contains(c)) return Directions.E;
+            if ("aghij4".Contains(c)) return Directions.SW;
+            if ("lmno 5".Contains(c)) return Directions.SE;
+            if ("dqrvz1".Contains(c)) return Directions.CW;
+            if ("kstuwx".Contains(c)) return Directions.CCW;
+            throw new Exception(c.ToString());
+        }
+        public static Map Move(this Map map, IEnumerable<Directions> ds)
+        {
+            return ds.Aggregate(map, (m, d) => m.Move(d));
         }
     }
 }

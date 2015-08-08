@@ -35,14 +35,14 @@ namespace Lib
 		public void SendAllProblems()
 		{
 			var submissions =
-				from p in Problems.LoadProblems()
+				from p in Problems.LoadProblems().Take(2)
 				from seed in p.sourceSeeds
 				select new SubmitionJson
 				{
 					problemId = p.id,
 					seed = seed,
 					tag = "SubmissionClientTest.SendAllProblems-" + DateTime.Now,
-					solution = string.Join("", Phrases.all)
+					solution = PhrasesOnlySolver.Solve(p.ToMap(seed))
                     };
 			client.PostSubmitions(submissions.ToArray());
 		}
