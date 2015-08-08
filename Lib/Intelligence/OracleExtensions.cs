@@ -40,6 +40,26 @@ namespace Lib.Intelligence
             return result;
         }
 
+        public static List<OracleSuggestion> SuggestAllFinalPositions(this IOracle oracle, Map map)
+        {
+            var goodStates = new List<OracleSuggestion>();
+
+            foreach (var state in OracleServices.GetAllStates(map))
+            {
+                var positionedUnit = map.Unit.TranslateToState(state);
+                if (map.IsLockingState(positionedUnit)) continue;
+
+                foreach (var dir in OracleServices.GetAllDirections())
+                {
+                    var nextPosition = positionedUnit.Move(dir);
+                    if (map.IsLockingState(nextPosition))
+                    {
+                        goodStates.Add(new OracleSuggestion(state, dir));
+                    }
+                }
+            }
+            return goodStates;
+        }
     }
     
 }
