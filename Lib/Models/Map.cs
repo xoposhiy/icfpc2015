@@ -93,17 +93,27 @@ namespace Lib.Models
         public bool IsSafeMovement(Directions direction)
         {
             var nextUnit = Unit.Move(direction);
-            ImmutableHashSet<PositionedUnit> usedPositions = ImmutableHashSet<PositionedUnit>.Empty;
-            if (usedPositions.Contains(nextUnit))
+            if (IsCatastrophicState(nextUnit))
                 return false;
             return nextUnit.Members.All(IsValid);
+        }
+
+        public bool IsLockingState(PositionedUnit unit)
+        {
+            return unit.Members.Any(z=>!IsValid(z));
+        }
+
+
+        public bool IsCatastrophicState(PositionedUnit unit)
+        {
+            return UsedPositions.Contains(unit);
         }
 
         public bool IsCatastrophicMove(Directions d)
         {
             if (IsOver) return true;
             var nextUnit = Unit.Move(d);
-            return UsedPositions.Contains(nextUnit);
+            return IsCatastrophicState(nextUnit);
         }
 
         private bool IsValid(Point p)

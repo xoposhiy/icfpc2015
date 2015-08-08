@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Lib.Finder;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,6 +18,15 @@ namespace Lib.Models
             Debug.Assert(RotationIndex.InRange(0, Unit.Period - 1));
             PivotLocation = pivotLocation;
         }
+
+        public PositionedUnit(Unit unit, UnitState state) : this(unit, state.angle, state.position)
+        { }
+
+        public PositionedUnit TranslateToState(UnitState state)
+        {
+            return new PositionedUnit(Unit, state);
+        }
+        
 
         protected bool Equals(PositionedUnit other)
         {
