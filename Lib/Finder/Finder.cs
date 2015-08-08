@@ -57,7 +57,7 @@ namespace Lib.Finder
                 var to = new UnitState {position = state.position, angle = angle};
                 if (!CanBePlaced(field, figure.FixAt(to)) || parents[to] != null)
                     continue;
-                parents[to] = new TransitionInfo {state = state, operation = delta == -1 ? 'd' : 'k'};
+                parents[to] = new TransitionInfo {state = state, operation = delta == 1 ? 'd' : 'k'};
                 DFS(to, field, figure, parents);
             }
         }
