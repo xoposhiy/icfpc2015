@@ -79,12 +79,11 @@ namespace Lib.Models
             {
                 if (removedLines > 0)
                     for (int x = 0; x < width; x++)
-                        map[x, y] = y >= removedLines ? map[x, y - removedLines] : false;
+                        map[x, y] = y >= removedLines && map[x, y - removedLines];
                 if (Enumerable.Range(0, width).All(x => map[x, y]))
                 {
                     removedLines++;
                     y++;
-                    continue;
                 }
             }
             return removedLines;
