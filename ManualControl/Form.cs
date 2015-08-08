@@ -122,7 +122,7 @@ namespace ManualControl
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
-            g.Clear(Color.White);
+            g.Clear(Map.IsOver ? Color.LightCoral : Color.White);
             for (var x = 0; x < MapWidth; x++)
             {
                 for (var y = 0; y < MapHeight; y++)

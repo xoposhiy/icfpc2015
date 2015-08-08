@@ -33,8 +33,10 @@ namespace Lib.Models
             Width = filled.GetLength(0);
             Height = filled.GetLength(1);
             Filled = filled;
-            Unit = unit;
+            Unit = unit.Members.All(IsValid) ? unit : PositionedUnit.Null;
         }
+
+        public bool IsOver => Unit == PositionedUnit.Null;
 
         public bool[,] Filled { get; private set; }
 
@@ -42,6 +44,7 @@ namespace Lib.Models
 
         public Map LockUnit()
         {
+            if (IsOver) return this;
             bool[,] f = (bool[,])Filled.Clone();
             foreach (var cell in Unit.Members)
                 f[cell.X, cell.Y] = true;
@@ -50,12 +53,23 @@ namespace Lib.Models
 
         public bool IsSafeMovement(Directions direction)
         {
-            throw new NotImplementedException();
+            var nextUnit = Unit.Move(direction);
+            return nextUnit.Members.All(IsValid);
+        }
+
+        private bool IsValid(Point p)
+        {
+            return p.X.InRange(0, Width - 1)
+                && p.Y.InRange(0, Height - 1)
+                && !Filled[p.X, p.Y];
         }
 
         public Map Move(Directions dir)
         {
-            return new Map(Id, Filled, Unit.Move(dir), NextUnits);
+            if (IsOver) return this;
+            return IsSafeMovement(dir)
+                ? new Map(Id, Filled, Unit.Move(dir), NextUnits)
+                : LockUnit();
         }
     }
 }

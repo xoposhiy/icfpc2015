@@ -7,6 +7,8 @@ namespace Lib.Models
 {
     public class PositionedUnit
     {
+        public static PositionedUnit Null = new PositionedUnit(new Unit(new List<Point>(), new Point(0, 0)), 0, new Point(int.MaxValue, int.MaxValue));
+
         public PositionedUnit(Unit unit, int rotationIndex, Point pivotLocation)
         {
             Unit = unit;
