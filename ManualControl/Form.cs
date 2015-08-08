@@ -29,9 +29,9 @@ namespace ManualControl
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            grid.Size = grid.GetDesiredSize();
             scores.Size = new Size(100, 30);
             grid.Location = new Point(0, 30);
+            grid.Size = new Size(ClientSize.Width / 2, ClientSize.Height - 30);
 
             help.Size = new Size(ClientSize.Width-grid.Width, 100);
             help.Location = new Point(grid.Right, ClientSize.Height- help.Height);
