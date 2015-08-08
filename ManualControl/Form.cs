@@ -124,6 +124,7 @@ namespace ManualControl
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            if (program.Focused) return;
             if (controller.Running) return;
            if (keymap.ContainsKey(e.KeyData) && MovementRequested != null)
                 mapHistory.Push(Map.Move(keymap[e.KeyData]));
