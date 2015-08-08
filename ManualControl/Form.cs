@@ -47,6 +47,7 @@ namespace ManualControl
             playBot = new Button();
             stepBut = new Button();
             back = new Button();
+            program.Font = new Font("Consolas",12);
 
             Controls.Add(grid);
             Controls.Add(scores);
@@ -152,7 +153,7 @@ namespace ManualControl
             grid.Invalidate();
             scores.Text = Map.Scores.TotalScores.ToString();
 
-            if (controller.Running && controller.ProgramPointer>0 && controller.ProgramPointer<controller.Program.Length-1)
+            if (controller.Running && controller.ProgramPointer<controller.Program.Length-1)
             {
                 var before = controller.Program.Substring(0, controller.ProgramPointer);
                 var after = controller.Program.Substring(controller.ProgramPointer+1);
