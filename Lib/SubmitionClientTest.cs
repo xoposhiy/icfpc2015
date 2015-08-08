@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using Lib.Intelligence;
 using Lib.Models;
@@ -14,7 +15,7 @@ namespace Lib
         [Test, Explicit]
         public void SendOne()
         {
-            client.PostSubmitions(new SubmitionJson
+            client.PostSubmissions(new SubmitionJson
             {
                 problemId = 1,
                 seed = 0,
@@ -26,20 +27,28 @@ namespace Lib
         [Test, Explicit]
         public void GetResults()
         {
-            var res = client.GetSubmitions();
+            var res = client.GetSubmissions();
             Console.WriteLine(res.Length);
             foreach (var submission in res.OrderByDescending(x => x.createdAt))
                 Console.WriteLine(submission);
         }
 
         [Test, Explicit]
+        public void SendAllSolutionsFromFile()
+        {
+	        var payload = File.ReadAllText(@"..\\..\\..\\all-solutions.json");
+	        //Console.Out.WriteLine(payload);
+	        client.PostSubmissions(payload);
+        }
+
+	    [Test, Explicit]
         public void SendAllProblems()
         {
             var submissions =
                 from p in Problems.LoadProblems()
                 from seed in p.sourceSeeds
                 select Solve(p,seed);
-            client.PostSubmitions(submissions.ToArray());
+            client.PostSubmissions(submissions.ToArray());
         }
 
         private static SubmitionJson Solve(ProblemJson p, int seed)
