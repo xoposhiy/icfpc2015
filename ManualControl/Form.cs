@@ -165,7 +165,7 @@ namespace ManualControl
         {
             if (program.Focused) return;
             if (controller.Running) return;
-           if (keymap.ContainsKey(e.KeyData) && MovementRequested != null)
+           if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
                 mapHistory.Push(Map.Move(keymap[e.KeyData]));
             if (e.KeyData == Keys.Z && mapHistory.Count > 1)
                 mapHistory.Pop();

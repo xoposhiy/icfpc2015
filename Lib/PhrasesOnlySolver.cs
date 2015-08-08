@@ -31,7 +31,7 @@ namespace Lib
         public SolverResult Solve(Map map)
         {
             var res = SolveMap(map);
-            return new SolverResult(res.Item2.Scores.TotalScores, res.Item1);
+            return new SolverResult("Phrases", res.Item2.Scores.TotalScores, res.Item1);
         }
     }
 
