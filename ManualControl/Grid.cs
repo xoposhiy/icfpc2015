@@ -21,6 +21,7 @@ namespace ManualControl
         private readonly Stack<Map> mapHistory;
         public int LabelXOffset;
         public int LabetYOffset;
+        PositionedUnit mousePositionedUnit;
 
         public Size GetDesiredSize()
         {
@@ -106,6 +107,12 @@ namespace ManualControl
                     DrawHexagon(g, x, y, penTypes[occupation], brushTypes[occupation], p.Equals(Map.Unit.PivotLocation));
                 }
             }
+
+            if (mousePositionedUnit!= null)
+            foreach (var member in mousePositionedUnit.Unit.Members)
+            {
+                DrawHexagon(e.Graphics, member.X + mousePositionedUnit.PivotLocation.X, member.Y + mousePositionedUnit.PivotLocation.Y, pen, brush, false);
+            }
         }
 
         private Point GetLocation(float pixelX, float pixelY)
@@ -131,13 +138,9 @@ namespace ManualControl
         protected override void OnMouseMove(MouseEventArgs e)
         {
             var point = GetLocation(e.X - Radius * (float)Geometry.Width / 2, e.Y - Radius * (float)Geometry.Height / 2);
-            var unit = new PositionedUnit(Map.Unit.Unit, Map.Unit.RotationIndex, point);
+            mousePositionedUnit = new PositionedUnit(Map.Unit.Unit, Map.Unit.RotationIndex, point);
 
-            var graphics = this.CreateGraphics();
-            foreach (var member in unit.Unit.Members)
-            {
-                DrawHexagon(graphics, member.X + unit.PivotLocation.X, member.Y + unit.PivotLocation.Y, pen, brush, false);
-            }
+            
             this.Invalidate();
         }
     }
