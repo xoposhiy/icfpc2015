@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.CodeDom;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using Lib.Models;
@@ -78,7 +80,33 @@ namespace Lib.Finder
             return string.Join("", path.ToString().Reverse());
         }
 
-        public static string GetPath(bool[,] field, Unit figure, UnitState target)
+        private static Directions CharToDirection(char c)
+        {
+            switch (c)
+            {
+                case 'W':
+                    return Directions.W;
+                case 'E':
+                    return Directions.E;
+                case 'S':
+                    return Directions.SW;
+                case 'D':
+                    return Directions.SE;
+                case 'L':
+                    return Directions.CCW;
+                case 'R':
+                    return Directions.CW;
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        private static Directions[] StringToDirections(string path)
+        {
+            return path.Select(CharToDirection).ToArray();
+        }
+
+        public static Directions[] GetPath(bool[,] field, Unit figure, UnitState target)
         {
             var startState = new UnitState {position = figure.GetStartPosition(field.GetLength(0)), angle = 0};
             if (!CanBePlaced(field, figure.FixAt(startState)))
@@ -89,7 +117,7 @@ namespace Lib.Finder
 
             DFS(startState, field, figure, parents);
 
-            return RestorePath(target, parents);
+            return StringToDirections(RestorePath(target, parents));
         }
     }
 }
