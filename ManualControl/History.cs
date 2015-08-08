@@ -25,40 +25,7 @@ namespace ManualControl
     }
 
 
-    public class MainModel
-    {
-        public History History;
 
-        bool playing;
-        public event Action PlayingChanged;
-
-        Timer timer;
-
-        public bool Playing { get; private set; }
-
-        public MainModel()
-        {
-            timer = new Timer();
-            timer.Interval = 10;
-            timer.Tick += (s, a) => { History.Forward(); if (History.Ended) Pause(); };
-        }
-
-        public void Play()
-        {
-            timer.Start();
-            Playing = true;
-            if (PlayingChanged != null) PlayingChanged();
-        }
-
-        public void Pause()
-        {
-            timer.Stop();
-            Playing = false;
-            if (PlayingChanged != null) PlayingChanged();
-        }
-
-        public Solver Solver { get; set; }
-    }
 
     public class History
     {

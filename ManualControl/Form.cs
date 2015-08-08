@@ -34,13 +34,15 @@ namespace ManualControl
             help.Size = new Size(ClientSize.Width-grid.Width, 100);
             help.Location = new Point(grid.Right, ClientSize.Height- help.Height);
 
+
+            suggest.Location = new Point(scores.Right, 0);
+            suggest.Size = new Size(100, scores.Height);
            
 
-            runBotIteration.Location = new Point(scores.Right, 0);
-            runBotIteration.Size = new Size(100, scores.Height);
-
+            runBotIteration.Location = new Point(suggest.Right, 0);
+            runBotIteration.Size = suggest.Size;
             runBotGame.Location = new Point(runBotIteration.Right, 0);
-            runBotGame.Size = new Size(100, scores.Height);
+            runBotGame.Size = suggest.Size;
 
 
         }
@@ -102,8 +104,21 @@ namespace ManualControl
         private void Suggest_Click(object sender, EventArgs e)
         {
             if (mapHistory.Playing) return;
-            var suggestion = new NamiraOracle().GetSuggestions(Map);
-            
+            if (mapHistory.Suggestions==null 
+                || mapHistory.Suggestions.GetCurrentSuggestion()==null
+                || mapHistory.Suggestions.Unit!=Map.Unit.Unit
+                )
+                { 
+                     var suggestion = mapHistory.Solver.Oracle.GetSuggestions(Map);
+                mapHistory.Suggestions = new SuggestionsModel
+                {
+                    Position = -1,
+                    Suggestions = suggestion.ToList(),
+                    Unit = Map.Unit.Unit
+                };
+            }
+            mapHistory.Suggestions.Position++;
+            UpdateAll();
         }
 
         int IterationNumber;

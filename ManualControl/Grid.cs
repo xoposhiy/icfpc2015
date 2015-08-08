@@ -125,6 +125,20 @@ namespace ManualControl
                     DrawHexagon(e.Graphics, member.X, member.Y, Pens.Black, exist ? Brushes.Aqua : Brushes.MistyRose, false);
                 }
             }
+
+            if (mapHistory.Suggestions != null)
+            {
+                var s = mapHistory.Suggestions.GetCurrentSuggestion();
+                if (s!= null)
+                {
+                    var sugg = new PositionedUnit(mapHistory.Suggestions.Unit, s.Position);
+                    foreach(var member in sugg.Members)
+                    {
+                        DrawHexagon(e.Graphics, member.X, member.Y, Pens.Black, Brushes.Yellow, false);
+                    }
+                }
+            }
+
         }
 
 
