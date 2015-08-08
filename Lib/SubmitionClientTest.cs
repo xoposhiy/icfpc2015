@@ -34,7 +34,7 @@ namespace Lib
 				{
 					problemId = p.id,
 					seed = 0,
-					solution = "bap",
+					solution = "YogSothoth",
 					tag = "SendSinglePhrase-" + DateTime.Now
 				};
 			client.PostSubmissions(submissions.ToArray());

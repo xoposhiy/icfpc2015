@@ -9,11 +9,12 @@ namespace Lib
     {
         public static string[] all =
         {
-            "Ei!", // powerScore: 1
-            "Ia! Ia!", // powerScore: 2
-            "R'lyeh", // powerScore: 4
-            "Yuggoth", //powerScore: 8
-            "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!", // powerScore: 516 = 512 + 4
+			"Ei!", // powerBits: 1
+			"Ia! Ia!", // powerBits: 2
+			"R'lyeh", // powerBits: 4
+			"Yuggoth", //powerBits: 8
+			"YogSothoth", //powerBits: 32
+			"Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!", // powerBits: 516 = 512 + 4
         };
 
         public static Directions[][] AsDirections = all.Select(p => p.ToDirections().ToArray()).ToArray();
