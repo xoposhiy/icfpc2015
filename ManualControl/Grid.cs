@@ -21,6 +21,7 @@ namespace ManualControl
         private readonly Stack<Map> mapHistory;
         public int LabelXOffset;
         public int LabetYOffset;
+
         PositionedUnit mousePositionedUnit;
 
         public Size GetDesiredSize()
@@ -46,6 +47,7 @@ namespace ManualControl
                 [Occupation.Unit] = Brushes.LawnGreen,
             };
             DoubleBuffered = true;
+            mousePositionedUnit = Map.Unit;
         }
 
         public void DrawHexagonInGraphicCoordinates(Graphics g, int gx, int gy, int kx, int ky, Pen pen, Brush brush, bool marked)
@@ -109,9 +111,9 @@ namespace ManualControl
             }
 
             if (mousePositionedUnit!= null)
-            foreach (var member in mousePositionedUnit.Unit.Members)
+            foreach (var member in mousePositionedUnit.Members)
             {
-                DrawHexagon(e.Graphics, member.X + mousePositionedUnit.PivotLocation.X, member.Y + mousePositionedUnit.PivotLocation.Y, pen, brush, false);
+                DrawHexagon(e.Graphics, member.X, member.Y, pen, brush, false);
             }
         }
 
@@ -125,21 +127,19 @@ namespace ManualControl
             return Geometry.GetMapLocation(geometryPoint.X, geometryPoint.Y);
         }
 
-        protected override void OnMouseClick(MouseEventArgs e)
+        protected override void OnMouseWheel(MouseEventArgs e)
         {
-            var point = GetLocation(e.X - Radius* (float)Geometry.Width / 2, e.Y - Radius* (float)Geometry.Height / 2);
-            
-            DrawHexagon(this.CreateGraphics(), point.X, point.Y, new Pen(Color.DarkOrange, 3), new SolidBrush(Color.DarkOrange), false);
+            mousePositionedUnit = mousePositionedUnit.Move(Directions.CW);
+            this.Invalidate();
         }
-        
+
         Pen pen = new Pen(Color.Aqua);
         SolidBrush brush = new SolidBrush(Color.Azure);
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             var point = GetLocation(e.X - Radius * (float)Geometry.Width / 2, e.Y - Radius * (float)Geometry.Height / 2);
-            mousePositionedUnit = new PositionedUnit(Map.Unit.Unit, Map.Unit.RotationIndex, point);
-
+            mousePositionedUnit = new PositionedUnit(Map.Unit.Unit, mousePositionedUnit.RotationIndex, point);
             
             this.Invalidate();
         }
