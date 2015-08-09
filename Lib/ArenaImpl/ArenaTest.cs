@@ -33,7 +33,7 @@ namespace Lib.ArenaImpl
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void FastOnBadProblems()
         {
-            int[] smallMaps = { 23, 4, 9, 22 };
+            int[] smallMaps = { 14 };
             EvaluateSolver(EdgeSolver(), smallMaps);
         }
 
@@ -98,11 +98,10 @@ namespace Lib.ArenaImpl
         private static Solver EdgeSolver()
         {
             var finder = new MagicDfsFinder();
+            var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
+            var hircine = new HircineOracle(finder, mephala, WeightedMetric.Keening, 2, 5);
 
-            var mephala = new MephalaOracle(finder, MephalaMetric.Keening);
-            var hircine = new HircineOracle(finder, mephala, MephalaMetric.Keening, 2, 5);
-
-            var solver = new Solver(finder, mephala);
+            var solver = new Solver(finder, hircine);
             return solver;
         }
     }

@@ -48,7 +48,7 @@ namespace Lib.Finder
             return new UnitPosition(new Point(x, y), a);
         }
 
-        private const int MaxDepth = 3;
+        private const int MaxDepth = 2;
         private readonly Directions[][] allSpells = Phrases.AsDirections.Reverse().ToArray();
 
         private IEnumerable<List<Directions[]>> GenerateSpellsSequences(List<Directions[]> list, int desiredLength)
@@ -86,6 +86,10 @@ namespace Lib.Finder
                 for (int i = 0; i < sequence.Count; i++)
                     midPositions[i] = finish = GetMidPositionByPhrase(finish, sequence[i], map.Unit.Unit.Period);
 
+                var path = dfsFinder.GetSpellLengthAndPath(map, finish);
+                if (path?.Item2 == null)
+                    continue;
+
                 var maps = midPositions.Select(p => new Map(map.Id, map.Filled, new PositionedUnit(map.Unit.Unit, p),
                                                             map.NextUnits, map.UsedPositions, map.Scores)).ToArray();
                 bool ok = true;
@@ -94,9 +98,6 @@ namespace Lib.Finder
                 if (!ok)
                     continue;
 
-                var path = dfsFinder.GetSpellLengthAndPath(map, finish);
-                if (path == null || path.Item2 == null)
-                    continue;
                 Directions[] result = path.Item2.Concat(((IEnumerable<Directions[]>)sequence).Reverse().SelectMany(s => s)).ToArray();
                 if (map.IsGoodPath(result))
                     return Tuple.Create<int, IEnumerable<Directions>>(

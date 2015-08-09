@@ -14,7 +14,7 @@ namespace Lib.Intelligence
         private readonly int bestSugessionsCount;
         private readonly double metricEpsilon;
 
-        public Solver(IFinder finder, IOracle oracle, int bestSugessionsCount = 50, double metricEpsilon = 1)
+        public Solver(IFinder finder, IOracle oracle, int bestSugessionsCount = 20, double metricEpsilon = 1)
         {
             Finder = finder;
             Oracle = oracle;
