@@ -36,7 +36,7 @@ namespace Lib.Intelligence
             return
                 selectedSugessions
                     .Select(s => GetPath(map, s))
-                    .MaxItem(path => path.ToPhrase().ToOriginalPhrase().GetPowerScore());
+                    .MaxItem(path => path.ToPhrase().ToOriginalPhrase().GetPowerScoreWithoutUniqueBonus());
         }
 
         private IEnumerable<Directions> GetPath(Map map, OracleSuggestion s)

@@ -76,11 +76,15 @@ namespace Lib.Finder
                     yield return sequence;
         }
 
+        private const bool ChooseCarefully = false;
+
         public Tuple<int, IEnumerable<Directions>> GetSpellLengthAndPath(Map map, UnitPosition target)
         {
+            Tuple<int, IEnumerable<Directions>> best = null;
+            int bestCost = -1;
+
             foreach (var sequence in GenerateSpellsSequences())
             {
-                var spellLength = sequence.Sum(s => s.Length);
                 var midPositions = new UnitPosition[sequence.Count];
                 var finish = target;
                 for (int i = 0; i < sequence.Count; i++)
@@ -98,13 +102,23 @@ namespace Lib.Finder
                 if (!ok)
                     continue;
 
-                Directions[] result = path.Item2.Concat(((IEnumerable<Directions[]>)sequence).Reverse().SelectMany(s => s)).ToArray();
+                var result = path.Item2.Concat(((IEnumerable<Directions[]>)sequence).Reverse().SelectMany(s => s)).ToArray();
                 if (map.IsGoodPath(result))
-                    return Tuple.Create<int, IEnumerable<Directions>>(
-                        spellLength + path.Item1, result);
+                {
+                    if (!ChooseCarefully)
+                        return Tuple.Create<int, IEnumerable<Directions>>(0, result);
+                    int cost = result.ToPhrase().ToOriginalPhrase().GetPowerScoreWithoutUniqueBonus();
+                    if (cost > bestCost)
+                    {
+                        bestCost = cost;
+                        best = Tuple.Create<int, IEnumerable<Directions>>(0, result);
+                    }
+                }
             }
 
-            return dfsFinder.GetSpellLengthAndPath(map, target);
+            if (best == null)
+                best = dfsFinder.GetSpellLengthAndPath(map, target);
+            return best;
         }
 
         public IEnumerable<Map> GetReachablePositions(Map map)

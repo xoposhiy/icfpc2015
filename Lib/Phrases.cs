@@ -56,6 +56,13 @@ namespace Lib
             return score + words.Count * 300;
         }
 
+        public static int GetPowerScoreWithoutUniqueBonus(this string textInOriginalTongue)
+        {
+            int score;
+            GetPowerWords(textInOriginalTongue, out score);
+            return score;
+        }
+
         public static HashSet<string> GetPowerWords(this string textInOriginalTongue, out int scoreWithoutUniqueBonus)
         {
             var distinctWords = new HashSet<string>();
