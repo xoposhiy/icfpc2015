@@ -19,14 +19,14 @@ namespace Lib.ArenaImpl
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void EvaluateEdgeSolver()
         {
-            EvaluateSolver(EdgeSolver());
+            EvaluateSolver(CuttingEdgeSolver());
         }
         [Test]
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void FastEvaluate()
         {
             int[] smallMaps = { 0, 1, 10, 13, 15, 16, 17, 19, 20, 21, 22, 23 };
-            EvaluateSolver(EdgeSolver(), smallMaps);
+            EvaluateSolver(CuttingEdgeSolver(), smallMaps);
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace Lib.ArenaImpl
         public void FastOnBadProblems()
         {
             int[] smallMaps = { 14 };
-            EvaluateSolver(EdgeSolver(), smallMaps);
+            EvaluateSolver(CuttingEdgeSolver(), smallMaps);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -95,13 +95,13 @@ namespace Lib.ArenaImpl
             return model;
         }
 
-        private static Solver EdgeSolver()
+        public static Solver CuttingEdgeSolver()
         {
             var finder = new MagicDfsFinder();
             var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
             var hircine = new HircineOracle(finder, mephala, WeightedMetric.Keening, 2, 5);
 
-            var solver = new Solver(finder, hircine);
+            var solver = new Solver(finder, mephala);
             return solver;
         }
     }
