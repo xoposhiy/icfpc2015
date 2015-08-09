@@ -34,13 +34,13 @@ namespace Lib.Intelligence
 
             for (int i = 0; i < suggestions.Count; i++)
             {
-                if (suggestions[i].Metrics / suggestions[0].Metrics < 0.99) break;
+                if (suggestions[i].Metrics / suggestions[0].Metrics < 0.998) break;
                 magicNumber++;
 
                 var result = Finder.GetSpellLengthAndPath(map, suggestions[i].Position);
                 if (result == null) continue;
                 
-                var metrics = Math.Min(1, suggestions[i].Metrics + result.Item1 / 100.0);
+                var metrics = Math.Min(1, suggestions[i].Metrics + result.Item1 / 50.0);
                 if (metrics > bestMetrics)
                 {
                     bestMetrics = metrics;
