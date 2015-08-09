@@ -153,3 +153,8 @@ OK      alalEi!!            Ei!!
 OK      alalgalois!         galois!
 OK      alaldavar!          davar!
 OK      alalglider          glider
+OK      alaltsathoggua!     tsathoggua!
+OK      alalblue hades      blue hades
+OK      alalcthulhu fhtagn! cthulhu fhtagn!
+OK      alalR'lYeh          R'lYeh
+OK      alalPh'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn.Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn.

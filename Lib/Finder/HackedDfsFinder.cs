@@ -77,7 +77,7 @@ namespace Lib.Finder
                 DfsStep(map, (Directions)d, history);
         }
 
-        private static readonly Random r = new Random();
+        private static readonly Random r = new Random(31415);
 
         private void DfsStep(Map map, Directions d, List<Directions> history)
         {

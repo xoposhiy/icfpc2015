@@ -42,7 +42,7 @@ namespace WordsFarmer
                 if (words.Count == 0) break;
                 var word = words[0];
                 words.RemoveAt(0);
-                CheckWord(word + "!");
+                CheckWord(word);
             }
 
             File.AppendAllLines("..\\..\\wrongWords.txt",

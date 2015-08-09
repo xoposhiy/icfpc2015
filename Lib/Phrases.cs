@@ -15,8 +15,11 @@ namespace Lib
             "Ia! Ia!", // powerBits: 2
             "Yuggoth", //powerBits: 8
             "YogSothoth", //powerBits: 32
-            "Necronomicon", // powerBits: 64
-            "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!", // powerBits: 516 = 512 + 4
+            "blue hades", //powerBits: 65536
+            "Tsathoggua", //powerBits: 16
+            "Necronomicon", //powerBits: 64
+            "cthulhu fhtagn!", //powerBits: 256
+            "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn." // powerBits: 516 = 512 + 4
         };
 
         public static string[] all = Words.Select(w => w.Original).ToArray();
