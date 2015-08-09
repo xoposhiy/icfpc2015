@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lib.ArenaImpl;
@@ -12,54 +11,39 @@ namespace Lib.Intelligence
     {
         public readonly IFinder Finder;
         public readonly IOracle Oracle;
-        private readonly string name;
+        private readonly int bestSugessionsCount;
+        private readonly double metricEpsilon;
 
-        public string Name => name;
-        public Solver(IFinder finder, IOracle oracle)
+        public Solver(IFinder finder, IOracle oracle, int bestSugessionsCount = 50, double metricEpsilon = 1)
         {
-            this.Finder = finder;
-            this.Oracle = oracle;
-            name = oracle.GetType().Name + "-" + finder.GetType().Name;
+            Finder = finder;
+            Oracle = oracle;
+            this.bestSugessionsCount = bestSugessionsCount;
+            this.metricEpsilon = metricEpsilon;
+            Name = oracle.GetType().Name + "-" + finder.GetType().Name;
         }
+
+        public string Name { get; }
 
         public IEnumerable<Directions> MakeMove(Map map)
         {
             var suggestions = Oracle.GetSuggestions(map).ToList();
-
-            int magicNumber = 0;
-
-            double bestMetrics = -1;
-            IEnumerable<Directions> bestPath = null;
-            int bestSuggestionIndex = -1;
-
-            for (int i = 0; i < suggestions.Count; i++)
-            {
-                if (suggestions[i].Metrics / suggestions[0].Metrics < 0.998) break;
-                magicNumber++;
-
-                var result = Finder.GetSpellLengthAndPath(map, suggestions[i].Position);
-                if (result == null) continue;
-                
-                var metrics = Math.Min(1, suggestions[i].Metrics + result.Item1 / 50.0);
-                if (metrics > bestMetrics)
-                {
-                    bestMetrics = metrics;
-                    bestPath = result.Item2;
-                    bestSuggestionIndex = i;
-                }
-            }
-            if(bestPath != null) return bestPath.Concat(new[] { suggestions[bestSuggestionIndex].LockingDirection });
-
-            for (int i = magicNumber; i < suggestions.Count; i++)
-            {
-                var result = Finder.GetPath(map, suggestions[i].Position);
-                if (result == null) continue;
-                return result.Concat(new[] { suggestions[i].LockingDirection });
-            }
-
-            return null;
+            if (suggestions.Count == 0) return null;
+            var bestMetric = suggestions[0].Metrics;
+            var selectedSugessions = suggestions
+                .Take(bestSugessionsCount)
+                .Where(s => s.Metrics >= bestMetric * metricEpsilon).ToList();
+            return
+                selectedSugessions
+                    .Select(s => GetPath(map, s))
+                    .MaxItem(path => path.ToPhrase().ToOriginalPhrase().GetPowerScore());
         }
-       
+
+        private IEnumerable<Directions> GetPath(Map map, OracleSuggestion s)
+        {
+            return Finder.GetSpellLengthAndPath(map, s.Position).Item2.Concat(new[] { s.LockingDirection });
+        }
+
         public string ResultAsCommands(Map map)
         {
             return ResultAsTuple(map).Item1;
@@ -67,7 +51,7 @@ namespace Lib.Intelligence
 
         public Tuple<string, Map> ResultAsTuple(Map map)
         {
-            string result = "";
+            var result = "";
             while (!map.IsOver)
             {
                 var dirs = MakeMove(map).ToList();
@@ -82,7 +66,7 @@ namespace Lib.Intelligence
             var t = ResultAsTuple(map);
             var commands = t.Item1.ToOriginalPhrase();
             var score = t.Item2.Scores.TotalScores + commands.GetPowerScore();
-            return new SolverResult(name, score, commands);
+            return new SolverResult(Name, score, commands);
         }
     }
 }

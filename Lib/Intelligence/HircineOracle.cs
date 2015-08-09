@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lib.Finder;
 using Lib.Models;
 
 namespace Lib.Intelligence
 {
     public class HircineOracle : IOracle
     {
+        private readonly IFinder finder;
         IOracle backupOracle;
         List<WeightedMetric> metric;
         int lookupDepth;
         int lookupWidth;
 
 
-        public HircineOracle(IOracle backupOracle,List<WeightedMetric> metric, int lookupDepth, int lookupWidth)
+        public HircineOracle(IFinder finder, IOracle backupOracle, List<WeightedMetric> metric, int lookupDepth, int lookupWidth)
         {
+            this.finder = finder;
             this.backupOracle = backupOracle;
             this.metric = metric;
             this.lookupDepth = lookupDepth;
@@ -29,27 +32,24 @@ namespace Lib.Intelligence
             if (step == lookupDepth) return map.Scores.TotalScores;
             if (map.IsOver) return map.Scores.TotalScores;
             return EvaluateSuggestions(step, map).OrderByDescending(z => z.Metrics).First().Metrics;
-            
+
         }
 
         IEnumerable<OracleSuggestion> EvaluateSuggestions(int step, Map map)
         {
+            var reachable = new HashSet<UnitPosition>(finder.GetReachablePositions(map).Select(m => m.Unit.Position));
             var suggestions = OracleServices
                 .GetAllFinalPositions(map)
+                .Where(s => reachable.Contains(s.Position))
                 .Select(suggestion => metric.Evaluate(map, suggestion))
                 .OrderByDescending(z => z.Metrics)
                 .Take(lookupWidth)
                 .ToList();
 
-            var list = new List<OracleSuggestion>();
-
-            foreach (var s in suggestions)
-            {
-                var newMap = map.TeleportUnit(s.Position).LockUnit();
-                list.Add(new OracleSuggestion(s.Position,s.LockingDirection,Evaluate(step+1, map)));
-            }
-
-            return list;
+            return
+                from s in suggestions
+                let newMap = map.TeleportUnit(s.Position).LockUnit()
+                select new OracleSuggestion(s.Position, s.LockingDirection, Evaluate(step + 1, newMap));
         }
 
 

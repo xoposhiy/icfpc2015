@@ -65,34 +65,6 @@ namespace Lib.Models
             return goodStates;
         }
 
-        public static bool IsEmptyPosition(this Map map, PositionedUnit positionedUnit)
-        {
-            if (positionedUnit.Rectangle.X == 0 || positionedUnit.Rectangle.X + positionedUnit.Rectangle.Width >= map.Width)
-                return false;
-            if (positionedUnit.Rectangle.Y + positionedUnit.Rectangle.Height >= map.Height)
-                return false;
-
-            if (positionedUnit.Rectangle.X < 1) return false;
-            if (positionedUnit.Rectangle.X + positionedUnit.Rectangle.Width + 1 >= map.Width) return false;
-            if (positionedUnit.Rectangle.Y < 1) return false;
-            if (positionedUnit.Rectangle.Y + positionedUnit.Rectangle.Height + 1 >= map.Height) return false;
-
-            for (int j = 0; j < positionedUnit.Rectangle.Width; j++)
-            {
-                
-                if (map.Filled[positionedUnit.Rectangle.X - 1, j]) return false;
-                if (map.Filled[positionedUnit.Rectangle.X + positionedUnit.Rectangle.Width + 1, j]) return false;
-            }
-
-            for (int i = 0; i < positionedUnit.Rectangle.Width; i++)
-            {
-                if (positionedUnit.Rectangle.Y < 1) continue;
-                if (map.Filled[i, positionedUnit.Rectangle.Y - 1]) return false;
-                if (map.Filled[i, positionedUnit.Rectangle.Y + positionedUnit.Rectangle.Height + 1]) return false;
-            }
-            return true;
-        }
-
         public static bool Contains(this Map map, Point point)
         {
             return point.X.InRange(0, map.Width - 1) && point.Y.InRange(0, map.Height - 1);

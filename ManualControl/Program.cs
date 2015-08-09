@@ -15,7 +15,8 @@ namespace ManualControl
 
             var model = new MainModel() {FastForwardSteps = 1};
             var dfsFinder = new MagicDfsFinder();
-            var mephala = new MephalaOracle(dfsFinder, WeightedMetric.Sunder);
+            var mephala = new MephalaOracle(dfsFinder, MephalaMetric.Keening);
+            var hircine = new HircineOracle(dfsFinder, mephala,MephalaMetric.Keening, 4, 7);
             //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
             model.Solver = new Solver(dfsFinder, mephala);
             model.History = new History(map);
