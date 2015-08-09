@@ -45,7 +45,22 @@ namespace Lib.ArenaImpl
             var arena = new Arena(maps.Select(i => ps[i]).ToArray());
             ArenaModel res = arena.RunAllProblems(solver);
             File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
+            File.WriteAllText("solutions.json", JsonConvert.SerializeObject(GetSubmissions(res), Formatting.Indented));
             Approvals.Verify(res);
+        }
+
+        private static SubmitionJson[] GetSubmissions(ArenaModel model)
+        {
+            var tag = model.SolverName + "-" + DateTime.Now;
+            var submissions = model.Problems.SelectMany(
+                p => p.MapResults.Select(r => new SubmitionJson
+                {
+                    problemId = p.Id,
+                    seed = r.Seed,
+                    solution = r.Result.Commands,
+                    tag = tag
+                })).ToArray();
+            return submissions;
         }
 
         [Test, Explicit]
@@ -64,15 +79,7 @@ namespace Lib.ArenaImpl
         {
             var client = SubmitionClient.Default;
             var model = LoadModel();
-            var tag = model.SolverName + "-" + DateTime.Now;
-            var submissions = model.Problems.SelectMany(
-                p => p.MapResults.Select(r => new SubmitionJson
-                {
-                    problemId = p.Id,
-                    seed = r.Seed,
-                    solution = r.Result.Commands,
-                    tag = tag
-                })).ToArray();
+            var submissions = GetSubmissions(model);
             Console.WriteLine("submit problems: " + string.Join(", ", submissions.Select(s => s.problemId)));
             client.PostSubmissions(submissions);
         }
