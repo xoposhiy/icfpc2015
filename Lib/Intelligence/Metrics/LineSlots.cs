@@ -14,12 +14,7 @@ namespace Lib.Intelligence.Metrics
     {
         const int maxLineSlotLength = 3;
 
-        static double GetCountOfEmptyCellsInLine(Map map, int y)
-        {
-            return Enumerable.Range(0, map.Width)
-                .Where(x => !map.Filled[x,y])
-                .Count();
-        }
+
 
         static IEnumerable<Point> GetPath(int startX, int startY, double dx, double dy)
         {

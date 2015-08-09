@@ -18,12 +18,15 @@ namespace SetPartition
     static class SetPartition
     {
         static Random rnd = new Random();
-        static Tuple<int, int>[] mapIndices = new Tuple<int, int>[] { Tuple.Create(4, 0), Tuple.Create(4, 1), Tuple.Create(4, 2) };
+        static Tuple<int, int>[] mapIndices = new Tuple<int, int>[]
+            {
+                Tuple.Create(0,0)
+            };
         static Map[] maps;
         static double[] baseline;
 
 
-        static List<Func<Map, Map, PositionedUnit, double>> functions = WeightedMetric.KnownFunctions.ToList();
+        static List<Func<Map, Map, PositionedUnit, double>> functions; 
 
         static double Run(ArrayChromosome<double> argument)
         {
@@ -39,7 +42,7 @@ namespace SetPartition
 
         static double Run(Map map, List<WeightedMetric> metric)
         {
-            var finder = new MagicDfsFinder();
+            var finder = new BfsNoMagicFinder();
             var mephala = new MephalaOracle(finder, metric);
             var solver = new Solver(finder, mephala);
             // Console.Write("Solving ");
@@ -60,6 +63,9 @@ namespace SetPartition
 
         static void Main()
         {
+            functions= WeightedMetric.KnownFunctions.ToList();
+
+
             maps = mapIndices
                 .Select(z => Problems.LoadProblems()[z.Item1].ToMap(z.Item2))
                 .ToArray();
@@ -69,10 +75,10 @@ namespace SetPartition
                 () => new ArrayChromosome<double>(functions.Count)
                 , rnd);
 
-            Solutions.AppearenceCount.MinimalPoolSize(ga, 5);
+            Solutions.AppearenceCount.MinimalPoolSize(ga, 10);
             Solutions.MutationOrigins.Random(ga,0.5);
             //Solutions.CrossFamilies.Random(ga, z => z * 0.5);
-            Solutions.Selections.Threashold(ga, 4);
+            Solutions.Selections.Threashold(ga, 8);
 
 
 

@@ -1,4 +1,5 @@
 ﻿using Lib.Models;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,15 +11,36 @@ namespace Lib.Intelligence.Metrics
 {
     public class ClosureIndex
     {
+        struct ClosureIndexChange
+        {
+            public int before;
+            public int after;
+        }
+
+
         public static double Minimize(Map before, Map after, PositionedUnit unit)
         {
-            var beforeIndex = FindClosureIndex(before, unit.Rectangle.X - 2, unit.Rectangle.Right + 2, unit.Rectangle.Y - 2, unit.Rectangle.Bottom + 2);
-            var afterIndex = FindClosureIndex(after, unit.Rectangle.X - 2, unit.Rectangle.Right + 2, unit.Rectangle.Y - 2, unit.Rectangle.Bottom + 2);
+            var xmin = Math.Max(0, unit.Rectangle.X - 2);
+            var xmax = Math.Min(before.Width, unit.Rectangle.Right + 2);
+            var ymin = Math.Max(0, unit.Rectangle.Y - 2);
+            var ymax = Math.Min(before.Height, unit.Rectangle.Bottom + 2);
 
-            if (afterIndex > beforeIndex) return 0;
-            if (beforeIndex < 0.001) return 1;
-            var result = 1 - afterIndex / beforeIndex;
-            return result;
+            var dict = new Dictionary<int, int>();
+            for (int i = -4; i <= 4; i++)
+                dict[i] = 0;
+
+            for(int x= xmin;x< xmax;x++)
+                for (int y= ymin;y<ymax;y++)
+                {
+                    var delta = FindClosureIndex(x, y, after) - FindClosureIndex(x, y, before);
+                    dict[delta]++;
+                }
+            if (dict[4] > 0 || dict[3] > 0) return 0;
+            if (dict[2] > 0 || dict[1] > 0) return 0.2;
+            if (dict[-1] > 0 || dict[-2] > 0) return 0.8;
+            if (dict[-3] > 0 || dict[-4] > 0) return 1;
+
+            return 0.5;
         }
 
 
@@ -38,29 +60,30 @@ namespace Lib.Intelligence.Metrics
         //                yield return new Point(xx, yy); 
         //}
 
-        static double FindClosureIndex(Map map, int xmin, int xmax, int ymin, int ymax)
+   
+
+        static Point[] GetCap(int x, int y)
         {
-            int pointsCount = 0;
-            double closure = 0;
-            for (int x = xmin; x <= xmax; x++)
-                for (int y = ymin; y <= ymax; y++)
-                {
-                    if (!map.IsInside(new Point(x, y))) continue;
-                    pointsCount++;
-                    if (map.Filled[x, y]) continue;
-                    closure += FindClosureIndex(x, y, map);
-                }
-            return closure / pointsCount;
+            if (y % 2 == 0) return new[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y) };
+            else return new[]{ new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y) };
+
+        }
+        [TestCase(5,3,4,3,5,2,6,2,6,3)]
+        [TestCase(7,2,6,2,6,1,7,1,8,2)]
+        public static void TestGetCap(int x, int y, params int[] coos)
+        {
+            var given = GetCap(x, y).SelectMany(p => new[] { p.X, p.Y }).ToArray();
+            Assert.AreEqual(coos, given);
         }
 
-        static double FindClosureIndex(int x, int y, Map map)
+
+
+        static int FindClosureIndex(int x, int y, Map map)
         {
             if (map.Filled[x, y]) return 0;
-            Point[] cap = null;
-            if (y % 2 == 0) cap = new[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y) };
-            else cap = new[] { new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y) };
-            int problems = cap.Where(p => !map.IsInside(p) || map.Filled[p.X, p.Y]).Count();
-            return problems / 4.0;
+            var cap = GetCap(x, y);
+             int problems = cap.Where(p => !map.IsInside(p) || map.Filled[p.X, p.Y]).Count();
+            return problems;
         }
 
     }

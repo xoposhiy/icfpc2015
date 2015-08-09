@@ -11,10 +11,10 @@ namespace ManualControl
         [STAThread]
         public static void Main()
         {
-            var map = Problems.LoadProblems()[4].ToMap(0);
+            var map = Problems.LoadProblems()[12].ToMap(2);
 
             var model = new MainModel() {FastForwardSteps = 1};
-            var dfsFinder = new MagicDfsFinder();
+            var dfsFinder = new BfsNoMagicFinder();
             var mephala = new MephalaOracle(dfsFinder, WeightedMetric.Keening);
             //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
             model.Solver = new Solver(dfsFinder, mephala);
