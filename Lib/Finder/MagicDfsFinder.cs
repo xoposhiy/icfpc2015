@@ -7,7 +7,7 @@ namespace Lib.Finder
 {
     public class MagicDfsFinder : IFinder
     {
-        private readonly IFinder dfsFinder = new DfsFinder();
+        private readonly IFinder dfsFinder = new HackedDfsFinder();
 
         private static UnitPosition GetMidPositionByPhrase(UnitPosition target, IEnumerable<Directions> directions, int period)
         {
