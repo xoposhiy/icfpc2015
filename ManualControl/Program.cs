@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 using Lib;
 using Lib.Models;
@@ -14,13 +15,12 @@ namespace ManualControl
         {
             //RunTest(); return;
 
-            var allseeds = Problems.LoadProblems().ToArray();
-            var maxseeds = allseeds.OrderByDescending(z => z.sourceSeeds.Count).ToArray();
+            var map = Problems.LoadProblems()[10].ToMap(0);
 
-
-            var map = Problems.LoadProblems()[4].ToMap(0);
             var model = new MainModel();
-            model.Solver = new Lib.Intelligence.Solver(new DfsFinder(), new AzuraOracle());
+            var dfsFinder = new DfsFinder();
+//            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
+            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new MephalaOracle(dfsFinder, Metrics.ShouldNotCreateSimpleHoles));
             model.History = new History(map);
             var form = new TetrisForm(model);
             form.MovementRequested = dir => { map.Unit.Move(dir); };

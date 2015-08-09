@@ -12,10 +12,13 @@ namespace Lib.Intelligence
     {
         public readonly UnitPosition Position;
         public readonly Directions LockingDirection;
-        public OracleSuggestion(UnitPosition position, Directions lockingDirection)
+
+        public readonly double Metrics;
+        public OracleSuggestion(UnitPosition position, Directions lockingDirection, double metrics = 0)
         {
             Position = position;
             LockingDirection = lockingDirection;
+            Metrics = metrics;
         }
         
     }

@@ -5,8 +5,9 @@
         public SolverResult(string name, int score, string commands)
         {
             Name = name;
-            Score = score;
-            Commands = commands;
+            int phrasesScore;
+            Commands = commands.ToOriginalPhrase(out phrasesScore);
+            Score = score + phrasesScore;
         }
 
         public override string ToString()

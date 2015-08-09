@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Lib;
 using Lib.Models;
 using Lib.Finder;
 using Lib.Intelligence;
@@ -11,7 +12,7 @@ namespace ManualControl
 {
     internal class TetrisForm : Form
     {
-        private readonly MainModel mapHistory = new MainModel();
+        private readonly MainModel mapHistory;
         public Map Map => mapHistory.History.CurrentMap;
         private readonly Dictionary<Keys, Directions> keymap;
         public Action<Directions> MovementRequested;
@@ -24,8 +25,6 @@ namespace ManualControl
         Button suggest,runBotIteration, runBotGame;
        
         
-        private bool showHelp;
-
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
@@ -68,7 +67,7 @@ namespace ManualControl
 
             scores = new Label();
             help = new Label();
-            help.Text = "UIOP - movement\r\nQW - rotate\r\nZ - undo\r\nL - lock";
+            help.Text = "UIOP — movement\r\nQW — rotate\r\nZ — undo\r\nAS — switch between maps";
             help.BackColor = Color.Black;
             help.Font = new Font("Arial", 10);
             help.ForeColor = Color.Yellow;
@@ -82,7 +81,7 @@ namespace ManualControl
             Controls.Add(runBotIteration);
             Controls.Add(suggest);
             Controls.Add(player);
-
+            currentProblemIndex = Map.Id;
 
             runBotGame.Click += RunBotGame_Click;
             runBotIteration.Click += RunBotIteration_Click;
@@ -109,7 +108,7 @@ namespace ManualControl
                 MessageBox.Show("Сам туда иди!");
                 return;
             }
-            var program = path.ToPhrase();
+            var program = path.ToPhrase().ToOriginalPhrase();
             mapHistory.History.Append(program, "Hand");
             mapHistory.Play();
         }
@@ -137,7 +136,7 @@ namespace ManualControl
 
         void MakeMove()
         {
-            var program = mapHistory.Solver.MakeMove(Map).ToPhrase();
+            var program = mapHistory.Solver.MakeMove(Map).ToPhrase().ToOriginalPhrase();
             mapHistory.History.Append(program, "Iter" + IterationNumber);
             IterationNumber++;
             mapHistory.Play();
@@ -158,13 +157,14 @@ namespace ManualControl
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}. Press 'H' for help!";
+            Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}.";
             DoubleBuffered = true;
             WindowState = FormWindowState.Maximized;
         }
 
         void UpdateAll()
         {
+            Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}.";
             Invalidate();
             grid.Invalidate();
             scores.Text = Map.Scores.TotalScores.ToString();
@@ -181,6 +181,34 @@ namespace ManualControl
             }
             if (e.KeyData == Keys.Z && mapHistory.History.CurrentPosition > 0)
                 mapHistory.History.Backward();
+            if (e.KeyData == Keys.Escape)
+                mapHistory.Suggestions.Clear();
+            if (e.KeyData == Keys.A)
+                ProblemIndex--;
+            if (e.KeyData == Keys.S)
+                ProblemIndex++;
         }
+
+        private List<ProblemJson> problems = Problems.LoadProblems();
+
+        private int ProblemIndex
+        {
+            get
+            {
+                return currentProblemIndex;
+            }
+            set
+            {
+                currentProblemIndex = (value + problems.Count) % problems.Count;
+                mapHistory.History = new History(problems[currentProblemIndex].ToMap(0));
+                mapHistory.History.Updated += UpdateAll;
+                grid.UpdateRadius();
+                grid.Invalidate();
+                UpdateAll();
+
+            }
+        }
+
+        private int currentProblemIndex = 0;
     }
 }

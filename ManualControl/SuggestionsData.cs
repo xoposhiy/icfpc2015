@@ -33,12 +33,21 @@ namespace ManualControl
             Position = 0;
             Unit = unit;
             Suggestions = suggestions.ToList();
-            OraclePresense = suggestions
+            OraclePresense = Suggestions
                 .Take(200)
                 .Select(z => new PositionedUnit(unit, z.Position))
                 .SelectMany(z => z.Members)
                 .Distinct()
                 .ToList();
+
+            OnUpdated();
+        }
+
+        public void Clear()
+        {
+            Suggestions = null;
+            Unit = null;
+            OraclePresense = new List<Point>();
 
             OnUpdated();
         }

@@ -39,7 +39,7 @@ namespace ManualControl
                 buttons[i].Text = names[i];
 
 
-            mapHistory.PlayingChanged += EnabledChanged;
+            mapHistory.PlayingChanged += OnEnabledChanged;
             play.Click += (s, a) => mapHistory.Play();
             pause.Click += (s, a) => mapHistory.Pause();
             step.Click += (s, a) => { mapHistory.History.Forward(); };
@@ -47,14 +47,14 @@ namespace ManualControl
             {
                 mapHistory.History.Backward();
             };
-            EnabledChanged();
+            OnEnabledChanged();
             
         }
 
       
 
 
-        void EnabledChanged()
+        void OnEnabledChanged()
         {
             play.Enabled = !mapHistory.Playing;
             step.Enabled = !mapHistory.Playing;

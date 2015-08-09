@@ -34,7 +34,7 @@ namespace Lib
 				{
 					problemId = p.id,
 					seed = 0,
-					solution = "bap",
+					solution = "YogSothoth",
 					tag = "SendSinglePhrase-" + DateTime.Now
 				};
 			client.PostSubmissions(submissions.ToArray());
@@ -45,7 +45,7 @@ namespace Lib
         {
             var res = client.GetSubmissions();
             Console.WriteLine(res.Length);
-            foreach (var submission in res.OrderByDescending(x => x.createdAt).Take(50))
+            foreach (var submission in res.OrderByDescending(x => x.createdAt).Take(200))
                 Console.WriteLine(submission);
         }
 
@@ -64,20 +64,30 @@ namespace Lib
                 from p in Problems.LoadProblems()
                 from seed in p.sourceSeeds
                 select Solve(p,seed);
-            client.PostSubmissions(submissions.ToArray());
+	        foreach (var submitionJson in submissions.Select(Log))
+	        {
+	            client.PostSubmissions(submitionJson);
+	        }
+        }
+
+        private SubmitionJson Log(SubmitionJson submission)
+        {
+            Console.WriteLine(submission.problemId + " " + submission.seed);
+            return submission;
         }
 
         private static SubmitionJson Solve(ProblemJson p, int seed)
         {
             var map = p.ToMap(seed);
-            var s1 = new PhrasesOnlySolver().Solve(map);
-            var s2 = new Solver(new DfsFinder(), new NamiraOracle()).Solve(map);
-            var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
+            var finder = new MagicDfsFinder();
+            var bestRes = new Solver(finder, new MephalaOracle(finder, Metrics.ShouldNotCreateSimpleHoles)).Solve(map);
+//            var s2 = new Solver(finder, new AzuraOracle()).Solve(map);
+//            var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
             return new SubmitionJson
             {
                 problemId = p.id,
                 seed = seed,
-                solution = bestRes.Commands,
+                solution = bestRes.Commands.ToOriginalPhrase(),
                 tag = bestRes.Name + "-" + DateTime.Now
             };
         }

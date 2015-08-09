@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using Lib.Intelligence;
@@ -83,6 +84,18 @@ namespace Lib.Models
                 if (map.Filled[i, positionedUnit.Rectangle.Y + positionedUnit.Rectangle.Height + 1]) return false;
             }
             return true;
+        }
+
+        public static bool Contains(this Map map, Point point)
+        {
+            return point.X.InRange(0, map.Width - 1) && point.Y.InRange(0, map.Height - 1);
+        }
+
+        public static bool IsSimpleHole(this Map map, Point point)
+        {
+            return 
+                !map.Filled[point.X, point.Y] 
+                && point.HexaNeighbours().Where(map.Contains).All(n => map.Filled[n.X, n.Y]);
         }
     }
 

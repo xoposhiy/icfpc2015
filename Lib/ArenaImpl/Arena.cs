@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Lib.ArenaImpl
@@ -16,7 +17,7 @@ namespace Lib.ArenaImpl
             this.Problems = problems.Select(p => new ArenaProblem
             {
                 Problem = p,
-                MapResults = p.sourceSeeds.Select(seed => new ArenaMapResult {Seed = seed}).ToArray()
+                MapResults = p.sourceSeeds.Select(seed => new ArenaMapResult { Seed = seed }).ToArray()
             }).ToArray();
         }
 
@@ -24,14 +25,16 @@ namespace Lib.ArenaImpl
         {
             foreach (var arenaProblem in Problems)
             {
+                var sw = Stopwatch.StartNew();
                 RunProblem(arenaProblem, solver);
+                Console.WriteLine(arenaProblem.Problem.id + " " + sw.Elapsed);
             }
-            return new ArenaModel {Problems = Problems};
+            return new ArenaModel { Problems = Problems, SolverName = solver.Name };
         }
 
         public ArenaModel RunProblem(ArenaProblem problem, ISolver solver)
         {
-            for(int i=0; i<problem.Problem.sourceSeeds.Count; i++)
+            for (int i = 0; i < problem.Problem.sourceSeeds.Count; i++)
             {
                 Run(problem, i, solver);
             }

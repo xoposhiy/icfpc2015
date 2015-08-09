@@ -16,7 +16,8 @@ namespace Lib.ArenaImpl
         public override string ToString()
         {
             var mapRes = string.Join(",", MapResults.Select(m => m.ToString()));
-            return $"{Problem.id}\t{AvgScore}\t{mapRes}";
+            var performance = 100 * AvgScore / Problem.ScoreEstimate;
+            return $"{Problem.id}\t{performance}%\t{AvgScore}\t{mapRes}";
         }
     }
 }

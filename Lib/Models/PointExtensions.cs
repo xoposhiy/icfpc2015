@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Lib.Models
@@ -48,6 +49,28 @@ namespace Lib.Models
         public static PointF ToGeometry(this Point point)
         {
             return Geometry.GetGeometricLocation(point.X, point.Y);
+        }
+
+        public static IEnumerable<Point> HexaNeighbours(this Point p)
+        {
+            if (p.Y % 2 == 0)
+            {
+                yield return new Point(p.X - 1, p.Y);
+                yield return new Point(p.X - 1, p.Y - 1);
+                yield return new Point(p.X, p.Y - 1);
+                yield return new Point(p.X + 1, p.Y);
+                yield return new Point(p.X, p.Y + 1);
+                yield return new Point(p.X - 1, p.Y + 1);
+            }
+            else
+            {
+                yield return new Point(p.X - 1, p.Y);
+                yield return new Point(p.X, p.Y - 1);
+                yield return new Point(p.X + 1, p.Y - 1);
+                yield return new Point(p.X + 1, p.Y);
+                yield return new Point(p.X + 1, p.Y + 1);
+                yield return new Point(p.X, p.Y + 1);
+            }
         }
 
     }

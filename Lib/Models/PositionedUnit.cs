@@ -12,14 +12,22 @@ namespace Lib.Models
         public static PositionedUnit Null = new PositionedUnit(new Unit(new List<Point>(), new Point(0, 0)), 0, new Point(int.MaxValue, int.MaxValue));
         public readonly Unit Unit;
         public readonly UnitPosition Position;
-        public Rectangle Rectangle;
+        private Rectangle? rectangle;
+        private List<Point> members;
+
+        public Rectangle Rectangle
+        {
+            get
+            {
+                if (rectangle == null) rectangle = GetRectangle();
+                return rectangle.Value;
+            }
+        }
 
         public PositionedUnit(Unit unit, int rotationIndex, Point pivotLocation)
         {
-            //TODO pe
             Unit = unit;
             Position = new UnitPosition(pivotLocation, (rotationIndex + Unit.Period) % Unit.Period);
-            Rectangle = GetRectangle();
         }
 
         public PositionedUnit(Unit unit, UnitPosition position)
@@ -48,16 +56,16 @@ namespace Lib.Models
 
         public override int GetHashCode()
         {
-            return (Position != null ? Position.GetHashCode() : 0);
+            return Position?.GetHashCode() ?? 0;
         }
 
         public IEnumerable<Point> Members
         {
             get
             {
-                return Unit
+                return members ?? (members = Unit
                     .Displacements[Position.Angle]
-                    .Select(p => p.Add(Position.Point.ToGeometry()).ToMap());
+                    .Select(p => p.Add(Position.Point.ToGeometry()).ToMap()).ToList());
             }
         }
 

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Lib.Models;
-using NUnit.Framework;
 
 namespace Lib.Finder
 {
     public class DfsFinder : IFinder
     {
         private Map Map;
-        private Dictionary<UnitPosition, Tuple<UnitPosition, Directions>> Parents;
+        private Dictionary<UnitPosition, Tuple<Map, Directions>> Parents;
+        private readonly Directions[] dirs = (Directions[])Enum.GetValues(typeof(Directions));
 
         public IEnumerable<Directions> GetPath(Map map, UnitPosition target)
         {
@@ -19,21 +18,21 @@ namespace Lib.Finder
                        : RestoreDirections(target).Reverse();
         }
 
-        public IEnumerable<UnitPosition> GetReachablePositions(Map map)
+        public IEnumerable<Map> GetReachablePositions(Map map)
         {
             UpdateMap(map);
-            return Parents.Keys;
+            return Parents.Values.Select(t => t == null ? map : t.Item1.Move(t.Item2));
         }
 
         private void UpdateMap(Map map)
         {
             if (ReferenceEquals(Map, map)) return;
             Map = map;
-            Parents = new Dictionary<UnitPosition, Tuple<UnitPosition, Directions>>
+            Parents = new Dictionary<UnitPosition, Tuple<Map, Directions>>
             {
                 {map.Unit.Position, null}
             };
-            Dfs(map);
+            Dfs(map, 0, 0);
         }
 
         private IEnumerable<Directions> RestoreDirections(UnitPosition target)
@@ -43,54 +42,42 @@ namespace Lib.Finder
                 var tuple = Parents[target];
                 if (tuple == null) yield break;
                 yield return tuple.Item2;
-                target = tuple.Item1;
+                target = tuple.Item1.Unit.Position;
             }
         }
 
-        private void Dfs(Map map)
+        private void Dfs(Map map, int phraseIndex, int charIndex)
         {
-            var dirs = (Directions[])Enum.GetValues(typeof(Directions));
+
+            var phrase = Phrases.AsDirections[phraseIndex];
+            if (charIndex >= phrase.Length)
+            {
+                charIndex = 0;
+                phraseIndex = (phraseIndex + 1) % Phrases.all.Length;
+                phrase = Phrases.AsDirections[phraseIndex];
+            }
+            var dir = phrase[charIndex];
+            DfsStep(map, dir, phraseIndex, charIndex);
             foreach (var d in dirs)
             {
-                if (!map.IsSafeMovement(d)) continue;
-                var newMap = map.Move(d);
-                var pos = newMap.Unit.Position;
-                if (Parents.ContainsKey(pos)) continue;
-                Parents.Add(pos, Tuple.Create(map.Unit.Position, d));
-                Dfs(newMap);
+                DfsStep(map, d, phraseIndex, charIndex);
             }
         }
-    }
 
-    [TestFixture]
-    public class DfsFinderTest
-    {
-        [Test]
-        public void Test([Range(0, 9)] int targetX, [Range(0, 9)] int targetY)
-        {
-            var map = Problems.LoadProblems()[0].ToMap(0);
-            var path = new DfsFinder().GetPath(map, new UnitPosition(new Point(targetX, targetY), 0));
-            Assert.IsNotNull(path);
-            var map2 = map.Move(path);
-            Assert.IsFalse(map2.IsOver);
-            Assert.AreEqual(new Point(targetX, targetY), map2.Unit.Position.Point);
-            Assert.AreEqual(map.NextUnits.Count(), map2.NextUnits.Count());
-        }
+        private static Random r = new Random();
 
-        [Test]
-        public void Unpassable()
+        private void DfsStep(Map map, Directions d, int phraseIndex, int charIndex)
         {
-            var map = Problems.LoadProblems()[1].ToMap(0);
-            var path = new DfsFinder().GetPath(map, new UnitPosition(new Point(2, 4), 0));
-            Assert.IsNull(path);
-        }
-
-        [Test]
-        public void BadRotation()
-        {
-            var map = Problems.LoadProblems()[0].ToMap(0);
-            var path = new DfsFinder().GetPath(map, new UnitPosition(new Point(2, 4), 1));
-            Assert.IsNull(path);
+            if (!map.IsSafeMovement(d)) return;
+            var newMap = map.Move(d);
+            var pos = newMap.Unit.Position;
+            if (Parents.ContainsKey(pos)) return;
+            Parents.Add(pos, Tuple.Create(map, d));
+            var phrase = Phrases.AsDirections[phraseIndex];
+            if (charIndex < phrase.Length && phrase[charIndex] == d)
+                Dfs(newMap, phraseIndex, charIndex + 1);
+            else
+                Dfs(newMap, (phraseIndex + 1) % Phrases.all.Length, 0);
         }
     }
 }

@@ -11,6 +11,17 @@ namespace Lib
 {
     public class ProblemJson
     {
+        [JsonIgnore]
+        public int ScoreEstimate
+        {
+            get
+            {
+                var unitsCells = (int)units.Average(u => u.members.Count) * sourceLength;
+                var cells = unitsCells + filled.Count;
+                var lines = cells / width;
+                return unitsCells + 100 * lines + 300 * (Phrases.all.Length - 1);
+            }
+        }
         public int height { get; set; }
 
         public int width { get; set; }
@@ -37,7 +48,7 @@ namespace Lib
                 .Select(i => us[g.Next() % us.Count])
                 .Reverse()
                 .Aggregate(ImmutableStack<Unit>.Empty, (stack, unit) => stack.Push(unit));
-            return new Map(id, f, unitsSeq, new Scores(0,0));
+            return new Map(id, f, unitsSeq, new Scores(0, 0));
         }
     }
 
@@ -49,12 +60,12 @@ namespace Lib
         {
             var p = new ProblemJson
             {
-                filled = new List<CellJson> {new CellJson {x = 1, y = 2}},
+                filled = new List<CellJson> { new CellJson { x = 1, y = 2 } },
                 height = 10,
                 width = 12,
                 id = 42,
                 sourceLength = 22,
-                sourceSeeds = new List<int> {1, 2, 3},
+                sourceSeeds = new List<int> { 1, 2, 3 },
                 units = new List<UnitJson>
                 {
                     new UnitJson
