@@ -11,8 +11,8 @@ namespace Lib
         public static Phrase[] Words =
         {
             "Ei!", // powerBits: 1
-            "Ia! Ia!", // powerBits: 2
             "R'lyeh", // powerBits: 4
+            "Ia! Ia!", // powerBits: 2
             "Yuggoth", //powerBits: 8
             "YogSothoth", //powerBits: 32
             "Necronomicon", // powerBits: 64

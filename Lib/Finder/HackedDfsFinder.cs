@@ -52,7 +52,7 @@ namespace Lib.Finder
             for (int i = 0; i < dirs.Length; i++)
                 maxPrefixForDir[i] = Tuple.Create(0, i);
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var directions = Phrases.AsDirections[i];
                 for (int j = Math.Min(directions.Length - 1, history.Count); j >= 0; j--)
