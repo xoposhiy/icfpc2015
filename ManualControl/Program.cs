@@ -13,7 +13,12 @@ namespace ManualControl
         public static void Main()
         {
             //RunTest(); return;
-            var map = Problems.LoadProblems()[3].ToMap(0);
+
+            var allseeds = Problems.LoadProblems().ToArray();
+            var maxseeds = allseeds.OrderByDescending(z => z.sourceSeeds.Count).ToArray();
+
+
+            var map = Problems.LoadProblems()[4].ToMap(0);
             var model = new MainModel();
             model.Solver = new Lib.Intelligence.Solver(new DfsFinder(), new AzuraOracle());
             model.History = new History(map);
