@@ -22,7 +22,7 @@ namespace ManualControl
         ProgramPlayerControl player;
         
 
-        Button suggest,runBotIteration, runBotGame;
+        Button suggest,runBotIteration, runBotGame, say;
        
         
         protected override void OnSizeChanged(EventArgs e)
@@ -42,10 +42,14 @@ namespace ManualControl
             suggest.Size = new Size(100, scores.Height);
            
 
+
             runBotIteration.Location = new Point(suggest.Right, 0);
             runBotIteration.Size = suggest.Size;
             runBotGame.Location = new Point(runBotIteration.Right, 0);
             runBotGame.Size = suggest.Size;
+
+            say.Location = new Point(runBotGame.Right, 0);
+            say.Size = runBotGame.Size;
 
 
         }
@@ -60,10 +64,12 @@ namespace ManualControl
             runBotGame = new Button();
             runBotIteration = new Button();
             suggest = new Button();
+            say = new Button();
             player = new ProgramPlayerControl(mapHistory);
             runBotIteration.Text = "Iter";
             runBotGame.Text = "Game";
             suggest.Text = "Oracle";
+            say.Text = "Say";
 
             scores = new Label();
             help = new Label();
@@ -81,11 +87,13 @@ namespace ManualControl
             Controls.Add(runBotIteration);
             Controls.Add(suggest);
             Controls.Add(player);
+            Controls.Add(say);
             currentProblemIndex = Map.Id;
 
             runBotGame.Click += RunBotGame_Click;
             runBotIteration.Click += RunBotIteration_Click;
             suggest.Click += Suggest_Click;
+            say.Click += Say_Click;
 
             keymap = new Dictionary<Keys, Directions>
             {
@@ -97,6 +105,42 @@ namespace ManualControl
                 [Keys.P] = Directions.E
             };
         
+        }
+
+        private void Say_Click(object sender, EventArgs e)
+        {
+            var form = new Form
+            {
+                ClientSize = new Size(800, 350),
+                Controls =
+                {
+                    new TextBox
+                    {
+                        Size=new Size(800,300),
+                        Multiline=true,
+                    },
+                    new Button
+                    {
+                        Size=new Size(100,50),
+                        Location=new Point(500,300),
+                        DialogResult= DialogResult.OK,
+                        Text="OK"
+                    },
+                    new Button
+                    {
+                        Size=new Size(100,50),
+                        Location=new Point(700,300),
+                        DialogResult= DialogResult.Cancel,
+                        Text="Cancel"
+                    }
+                }
+            };
+            var dlg = form.ShowDialog();
+            if (dlg != DialogResult.OK) return;
+            var text = form.Controls[0].Text;
+
+            mapHistory.History.Append(text, "Say");
+            mapHistory.Play();
         }
 
         private void Grid_MovementRequested1(UnitPosition obj)
@@ -176,7 +220,7 @@ namespace ManualControl
 
             if (keymap.ContainsKey(e.KeyData) && MovementRequested != null && !Map.IsOver)
             {
-                mapHistory.History.Append("Kbd", keymap[e.KeyData], e.KeyCode.ToString().ToUpper()[0]);
+                mapHistory.History.Append("Kbd", keymap[e.KeyData], keymap[e.KeyData].ToChar());
                 mapHistory.History.Forward();
             }
             if (e.KeyData == Keys.Z && mapHistory.History.CurrentPosition > 0)
