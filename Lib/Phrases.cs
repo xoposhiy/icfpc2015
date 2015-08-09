@@ -8,9 +8,9 @@ namespace Lib
 {
     public static class Phrases
     {
-        public static string[] all =
+        public static Phrase[] Words =
         {
-			"Ei!", // powerBits: 1
+            "Ei!", // powerBits: 1
 			"Ia! Ia!", // powerBits: 2
 			"R'lyeh", // powerBits: 4
 			"Yuggoth", //powerBits: 8
@@ -18,6 +18,8 @@ namespace Lib
             "Necronomicon", // powerBits: 64
 			"Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!", // powerBits: 516 = 512 + 4
         };
+
+        public static string[] all = Words.Select(w => w.Original).ToArray();
 
         public static string ToOriginalPhrase(this string text)
         {

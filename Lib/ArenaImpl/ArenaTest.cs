@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ApprovalTests;
 using Lib.Finder;
 using Lib.Intelligence;
@@ -18,12 +19,14 @@ namespace Lib.ArenaImpl
             EvaluateSolver(EdgeSolver());
         }
         [Test]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public void FastEvaluate()
         {
             int[] smallMaps = { 0, 1, 10, 13, 15, 16, 17, 19, 20, 21, 22, 23 };
             EvaluateSolver(EdgeSolver(), smallMaps);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private static void EvaluateSolver(Solver solver, params int[] maps)
         {
             var ps = Problems.LoadProblems();

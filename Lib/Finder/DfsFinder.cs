@@ -53,7 +53,7 @@ namespace Lib.Finder
             if (charIndex >= phrase.Length)
             {
                 charIndex = 0;
-                phraseIndex = (phraseIndex + 1) % Phrases.all.Length;
+                phraseIndex = SelectNextPhrase(phraseIndex, map);
                 phrase = Phrases.AsDirections[phraseIndex];
             }
             var dir = phrase[charIndex];
@@ -61,6 +61,19 @@ namespace Lib.Finder
             foreach (var d in dirs)
             {
                 DfsStep(map, d, phraseIndex, charIndex);
+            }
+        }
+
+        private static int SelectNextPhrase(int phraseIndex, Map map)
+        {
+            int lastPhraseIndex = phraseIndex;
+            while (true)
+            {
+                phraseIndex = (phraseIndex + 1) % Phrases.all.Length;
+                if (phraseIndex == lastPhraseIndex) return 0;
+                var unitAfterPhrase = Phrases.Words[phraseIndex].Move(map.Unit);
+                if (map.IsValidPosition(unitAfterPhrase))
+                    return phraseIndex;
             }
         }
 
@@ -77,7 +90,7 @@ namespace Lib.Finder
             if (charIndex < phrase.Length && phrase[charIndex] == d)
                 Dfs(newMap, phraseIndex, charIndex + 1);
             else
-                Dfs(newMap, (phraseIndex + 1) % Phrases.all.Length, 0);
+                Dfs(newMap, phraseIndex, int.MaxValue);
         }
     }
 }
