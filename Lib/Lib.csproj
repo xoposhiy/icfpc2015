@@ -88,6 +88,7 @@
     <Compile Include="Intelligence\IOracle.cs" />
     <Compile Include="Intelligence\Lookaheader.cs" />
     <Compile Include="Intelligence\Metrics\Dissolution.cs" />
+    <Compile Include="Intelligence\Metrics\NewLineSlots.cs" />
     <Compile Include="Intelligence\Metrics\WeightedMetric.cs" />
     <Compile Include="Intelligence\MephalaOracle.cs" />
     <Compile Include="Intelligence\Metrics\ClosureIndex.cs" />
