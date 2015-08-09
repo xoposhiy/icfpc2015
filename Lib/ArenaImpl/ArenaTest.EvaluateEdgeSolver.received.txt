@@ -1,6 +1,0 @@
-﻿MephalaOracle-MagicDfsFinder
-TotalScore: 13749
-ProblemId	AvgScore	ScoreBySeeds
-0	5385	5385
-1	2926	2926
-2	5438	5691,5529,5513,5165,6515,5333,4842,5360,5201,5237

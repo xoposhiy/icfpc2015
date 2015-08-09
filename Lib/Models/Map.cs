@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
 namespace Lib.Models
@@ -39,7 +40,7 @@ namespace Lib.Models
             Width = filled.GetLength(0);
             Height = filled.GetLength(1);
             Filled = filled;
-            Unit = unit.Members.All(IsValid) ? unit : PositionedUnit.Null;
+            Unit = IsValidPosition(unit) ? unit : PositionedUnit.Null;
             UsedPositions = usedPositions.Add(Unit);
             Scores = scores;
         }
@@ -104,7 +105,7 @@ namespace Lib.Models
         public bool IsSafeMovement(Directions direction)
         {
             var nextUnit = Unit.Move(direction);
-            return !IsCatastrophicState(nextUnit) && IsValidPosition(nextUnit);
+            return !IsCatastrophicMove(nextUnit) && IsValidPosition(nextUnit);
         }
 
         public bool IsValidPosition(PositionedUnit unit)
@@ -112,30 +113,23 @@ namespace Lib.Models
             return unit.Members.All(IsValid);
         }
 
-        public bool IsCatastrophicState(PositionedUnit unit)
-        {
-            return UsedPositions.Contains(unit);
-        }
-
-        public bool IsCatastrophicMove(Directions d)
+        public bool IsCatastrophicMove(PositionedUnit unit)
         {
             if (IsOver) return true;
-            var nextUnit = Unit.Move(d);
-            return IsCatastrophicState(nextUnit);
+            return UsedPositions.Contains(unit);
         }
 
         private bool IsValid(Point p)
         {
-            return p.X.InRange(0, Width - 1)
-                   && p.Y.InRange(0, Height - 1)
-                   && !Filled[p.X, p.Y];
+            return p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Height && !Filled[p.X, p.Y];
         }
 
         public Map Move(Directions dir)
         {
-            if (IsCatastrophicMove(dir)) return Die();
-            return IsSafeMovement(dir)
-                       ? DoMove(dir)
+            var newUnit = Unit.Move(dir);
+            if (IsCatastrophicMove(newUnit)) return Die();
+            return IsValidPosition(newUnit)
+                       ? DoMove(newUnit)
                        : LockUnit();
         }
 
@@ -144,9 +138,8 @@ namespace Lib.Models
             return Move(c.ToDirection());
         }
 
-        private Map DoMove(Directions dir)
+        private Map DoMove(PositionedUnit nextUnit)
         {
-            var nextUnit = Unit.Move(dir);
             return new Map(Id, Filled, nextUnit, NextUnits, UsedPositions.Add(nextUnit), new Scores(Scores.TotalScores, 0));
         }
 
