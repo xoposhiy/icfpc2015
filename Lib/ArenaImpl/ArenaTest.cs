@@ -13,7 +13,7 @@ namespace Lib.ArenaImpl
     [TestFixture]
     public class ArenaTest
     {
-        [Test]
+        [Test, Explicit]
         public void EvaluateEdgeSolver()
         {
             EvaluateSolver(EdgeSolver());
