@@ -9,7 +9,7 @@ namespace Lib.Finder
 {
     public class MagicDfsFinder : IFinder
     {
-        private const int MaxDepth = 2;
+        private const int MaxDepth = 3;
         private readonly IFinder dfsFinder;
         private readonly Phrases phrases;
         private readonly Directions[][] allSpells;
@@ -114,7 +114,8 @@ namespace Lib.Finder
                 {
                     if (!ChooseCarefully)
                         return Tuple.Create<int, IEnumerable<Directions>>(0, result);
-                    int cost = result.ToPhrase().ToOriginalPhrase().GetPowerScoreWithoutUniqueBonus();
+                    var originalPhrase = phrases.ToOriginalPhrase(result.ToPhrase());
+                    int cost = phrases.GetPowerScoreWithoutUniqueBonus(originalPhrase);
                     if (cost > bestCost)
                     {
                         bestCost = cost;

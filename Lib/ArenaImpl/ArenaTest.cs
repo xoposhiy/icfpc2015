@@ -28,7 +28,7 @@ namespace Lib.ArenaImpl
             EvaluateSolver(CuttingEdgeSolver(Phrases.DefaultPowerWords), smallMaps);
         }
 
-        [Test]
+        [Test, Explicit]
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void FastOnBadProblems()
         {

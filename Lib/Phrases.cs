@@ -120,14 +120,14 @@ namespace Lib
         {
             var phrases = new Phrases(Phrases.DefaultPowerWords);
             Assert.That(phrases.GetPowerScore("Ei!"), Is.EqualTo(306));
-            Assert.That(phrases.GetPowerScore("Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!"), Is.EqualTo(714));
+            Assert.That(phrases.GetPowerScore("Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn."), Is.EqualTo(714));
         }
 
         [Test]
         public void Score_NestedPhrase()
         {
             var phrases = new Phrases(Phrases.DefaultPowerWords);
-            var testPhrase = "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!".ToDirections().ToPhrase();
+            var testPhrase = "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn.".ToDirections().ToPhrase();
             var originalPhrase = phrases.ToOriginalPhrase(testPhrase);
             Assert.That(phrases.GetPowerScore(originalPhrase), Is.EqualTo(714));
         }
