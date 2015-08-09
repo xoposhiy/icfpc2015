@@ -36,7 +36,7 @@ namespace Lib.Intelligence
                 {
                     if (!finalMap.IsValidPosition(positionedUnit.Move(dir)))
                     {
-                        var m = metrics.Sum(z => z.Function(lockedMap, positionedUnit) * z.Weight);
+                        var m = metrics.Sum(z => z.Function(map,lockedMap, positionedUnit) * z.Weight);
                         suggestions.Add(new OracleSuggestion(finalMap.Unit.Position, dir, m));
                         break;
                     }
