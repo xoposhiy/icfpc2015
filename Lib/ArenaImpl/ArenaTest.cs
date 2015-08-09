@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ApprovalTests;
@@ -17,9 +18,12 @@ namespace Lib.ArenaImpl
             EvaluateSolver(EdgeSolver());
         }
 
-        private static void EvaluateSolver(Solver solver, int count = int.MaxValue)
+        private static void EvaluateSolver(Solver solver, params int[] maps)
         {
-            var arena = new Arena(Problems.LoadProblems().Take(count).ToArray());
+            var ps = Problems.LoadProblems();
+            if (maps.Length == 0)
+                maps = Enumerable.Range(0, ps.Count).ToArray();
+            var arena = new Arena(maps.Select(i => ps[i]).ToArray());
             var res = arena.RunAllProblems(solver);
             File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
             Approvals.Verify(res);
