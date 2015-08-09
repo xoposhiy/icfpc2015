@@ -40,7 +40,7 @@ namespace Lib.Intelligence
             for (int y=0;y<map.Height;y++)
             {
                 bool ok = true;
-                for (int x=0;x<map.Height;x++)
+                for (int x=0;x<map.Width;x++)
                 {
                     if (!map.Filled[x, y] && !unit.Members.Contains(new Point(x, y)))
                     {

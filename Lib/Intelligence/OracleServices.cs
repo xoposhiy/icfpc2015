@@ -28,5 +28,24 @@ namespace Lib.Intelligence
             yield return Directions.CCW;
         }
 
+        public static IEnumerable<OracleSuggestion> GetAllFinalPositions(Map map)
+        {
+            foreach (var position in GetAllUnitPositions(map))
+            {
+                var positionedUnit = map.Unit.WithNewPosition(position);
+                if (!map.IsValidPosition(positionedUnit)) continue;
+                if (map.IsEmptyPosition(positionedUnit)) continue;
+
+                foreach (var dir in OracleServices.GetAllDirections())
+                {
+                    var nextPosition = positionedUnit.Move(dir);
+                    if (!map.IsValidPosition(nextPosition))
+                    {
+                        yield return new OracleSuggestion(position, dir);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

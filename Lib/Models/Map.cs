@@ -81,6 +81,11 @@ namespace Lib.Models
             return new Map(Id, f, NextUnits, newScores);
         }
 
+        public Map TeleportUnit(UnitPosition position)
+        {
+            return new Map(Id, Filled, new PositionedUnit(Unit.Unit, position), NextUnits, UsedPositions, Scores);
+        }
+
         private int RemoveFilledLines(bool[,] map)
         {
             var removedLines = 0;

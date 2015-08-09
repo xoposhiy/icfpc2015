@@ -38,7 +38,11 @@ namespace Lib.ArenaImpl
         private static Solver EdgeSolver()
         {
             var finder = new MagicDfsFinder();
-            var solver = new Solver(finder, new MephalaOracle(finder, MephalaMetric.HolesOnly));
+
+            var mephala = new MephalaOracle(finder, MephalaMetric.Combined);
+            var hircine = new HircineOracle(mephala,MephalaMetric.Combined,3, 5);
+
+            var solver = new Solver(finder, mephala);
             return solver;
         }
     }

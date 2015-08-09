@@ -15,6 +15,7 @@ namespace WordsFarmer
         public int Seed;
         public WordStatus Status;
         public int ProblemId;
+        public string OriginalWord;
     }
 
     enum WordStatus
@@ -31,9 +32,11 @@ namespace WordsFarmer
 
         public static WordPost PrepareWord(string s, int number)
         {
-            s = s.Replace("-", " ");
+            var oldS = s;
+            s = s.Replace("-", "");
+            s = s.Replace("’", "'");
             s = "alal" + s;
-            var result = new WordPost { Word = s, Seed = problem.sourceSeeds[number], ProblemId=problem.id };
+            var result = new WordPost {OriginalWord=oldS, Word = s, Seed = problem.sourceSeeds[number], ProblemId=problem.id };
             
             result.Status = CheckWordAcceptance(result);
             return result;

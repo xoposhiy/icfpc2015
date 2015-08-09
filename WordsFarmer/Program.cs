@@ -42,16 +42,15 @@ namespace WordsFarmer
                 if (words.Count == 0) break;
                 var word = words[0];
                 words.RemoveAt(0);
-                CheckWord(word);
                 CheckWord(word + "!");
             }
 
-            File.AppendAllLines("..\\..\\wrondWords.txt",
-                wrongs.Select(z => string.Format("{0,-8}{1}", z.Status, z.Word))
+            File.AppendAllLines("..\\..\\wrongWords.txt",
+                wrongs.Select(z => string.Format("{0,-8}{1,-20}{2}", z.Status, z.Word,z.OriginalWord))
                 );
 
             File.AppendAllLines ("..\\..\\submittedWords.txt",
-                posts.Select(z => string.Format("{0,-8}{1}", z.Status, z.Word))
+                posts.Select(z => string.Format("{0,-8}{1,-20}{2}", z.Status, z.Word,z.OriginalWord))
                 );
 
             File.WriteAllLines("..\\..\\words.txt", words);
@@ -83,7 +82,7 @@ namespace WordsFarmer
 
         public static void Main()
         {
-          //PostWords(); return;
+           //PostWords(); return;
            ReadSubmissions();
         }
     }

@@ -83,6 +83,7 @@
     <Compile Include="Finder\IFinder.cs" />
     <Compile Include="Finder\MagicDfsFinder.cs" />
     <Compile Include="Intelligence\AzuraOracle.cs" />
+    <Compile Include="Intelligence\HircineOracle.cs" />
     <Compile Include="Intelligence\IOracle.cs" />
     <Compile Include="Intelligence\Lookaheader.cs" />
     <Compile Include="Intelligence\MephalaMetric.cs" />

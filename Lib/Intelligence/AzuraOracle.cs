@@ -20,25 +20,8 @@ namespace Lib.Intelligence
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
             var allUnitPositions = OracleServices.GetAllUnitPositions(map);
-
-            var suggestions = new List<OracleSuggestion>();
-            foreach (var position in allUnitPositions)
-            {
-                var positionedUnit = map.Unit.WithNewPosition(position);
-                if (!map.IsValidPosition(positionedUnit)) continue;
-                if(map.IsEmptyPosition(positionedUnit)) continue;
-
-                foreach (var dir in OracleServices.GetAllDirections())
-                {
-                    var nextPosition = positionedUnit.Move(dir);
-                    if (!map.IsValidPosition(nextPosition))
-                    {
-                        suggestions.Add(new OracleSuggestion(position, dir));
-                        break;
-                    }
-                }
-            }
-            return suggestions.OrderByDescending(z => z.Position.Point.Y); 
+            
+            return OracleServices.GetAllFinalPositions(map).OrderByDescending(z => z.Position.Point.Y); 
         }
     }
 }

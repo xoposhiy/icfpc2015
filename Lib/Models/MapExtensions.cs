@@ -72,14 +72,21 @@ namespace Lib.Models
             if (positionedUnit.Rectangle.Y + positionedUnit.Rectangle.Height >= map.Height)
                 return false;
 
-            for (int j = -1; j < positionedUnit.Rectangle.Width; j++)
+            if (positionedUnit.Rectangle.X < 1) return false;
+            if (positionedUnit.Rectangle.X + positionedUnit.Rectangle.Width + 1 >= map.Width) return false;
+            if (positionedUnit.Rectangle.Y < 1) return false;
+            if (positionedUnit.Rectangle.Y + positionedUnit.Rectangle.Height + 1 >= map.Height) return false;
+
+            for (int j = 0; j < positionedUnit.Rectangle.Width; j++)
             {
+                
                 if (map.Filled[positionedUnit.Rectangle.X - 1, j]) return false;
                 if (map.Filled[positionedUnit.Rectangle.X + positionedUnit.Rectangle.Width + 1, j]) return false;
             }
 
-            for (int i = -1; i < positionedUnit.Rectangle.Width; i++)
+            for (int i = 0; i < positionedUnit.Rectangle.Width; i++)
             {
+                if (positionedUnit.Rectangle.Y < 1) continue;
                 if (map.Filled[i, positionedUnit.Rectangle.Y - 1]) return false;
                 if (map.Filled[i, positionedUnit.Rectangle.Y + positionedUnit.Rectangle.Height + 1]) return false;
             }

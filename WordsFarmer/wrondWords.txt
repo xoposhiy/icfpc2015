@@ -71,3 +71,86 @@ Period  alalEihort
 Period  alalEihort!
 Period  alalEtepsed Egnis
 Period  alalEtepsed Egnis!
+Period  alalGurathnaka
+Period  alalGurathnaka!
+Period  alalGur'la ya
+Period  alalGur'la ya!
+Period  alalGzxtyos
+Period  alalGzxtyos!
+NotWord alalHastalÿk
+NotWord alalHastalÿk!
+Period  alalHastur
+Period  alalHastur!
+NotWord alalH’chtelegoth
+NotWord alalH’chtelegoth!
+Period  alalHnarqu
+Period  alalHnarqu!
+Period  alalHziulquoigmnzhah
+Period  alalHziulquoigmnzhah!
+Period  alalInpesca
+Period  alalInpesca!
+Period  alalIthaqua
+Period  alalIthaqua!
+Period  alalJuk Shabb!
+Period  alalKag'Naru of the Air
+Period  alalKag'Naru of the Air!
+Period  alalKaunuzoth
+Period  alalKaunuzoth!
+Period  alalKhal'kru
+Period  alalKhal'kru!
+Period  alalKrang
+Period  alalKrang!
+Period  alalKurpannga
+Period  alalKurpannga!
+NotWord alalM’basui Gwandu
+NotWord alalM’basui Gwandu!
+Period  alalMnomquah
+Period  alalMnomquah!
+Period  alalMortllgh
+Period  alalMortllgh!
+NotWord alalNgirrth’lu
+NotWord alalNgirrth’lu!
+Period  alalNorthot
+Period  alalNorthot!
+Period  alalNssu Ghahnb!
+Period  alalOb'mbu
+Period  alalOb'mbu!
+Period  alalPsuchawrl
+Period  alalPsuchawrl!
+Period  alalQuachil Uttaus
+Period  alalQuachil Uttaus!
+Period  alalQuyagen
+Period  alalQuyagen!
+Period  alalQ'yth az
+Period  alalQ'yth az!
+Period  alalRaandaii B'nk
+Period  alalRaandaii B'nk!
+Period  alalRh'Thulla of the Wind!
+Period  alalRlim Shaikorth
+Period  alalRlim Shaikorth!
+Period  alalRuhtra Dyoll
+Period  alalRuhtra Dyoll!
+Period  alalSedmelluq
+Period  alalSedmelluq!
+Period  alalShaurash Ho
+Period  alalShaurash Ho!
+Period  alalShudde M'ell
+Period  alalShudde M'ell!
+Period  alalSthanee!
+Period  alalS'tya Yg'Nalle!
+Period  alalTurua
+Period  alalTurua!
+Period  alalUitzilcapac
+Period  alalUitzilcapac!
+Period  alalVhuzompha
+Period  alalVhuzompha!
+Period  alalVibur
+Period  alalVibur!
+Period  alalVthyarilops
+Period  alalVthyarilops!
+Period  alalVulthoom
+Period  alalVulthoom!
+Period  alalThe Worm that Gnaws in the Night
+Period  alalThe Worm that Gnaws in the Night!
+Period  alalXinlurgash
+Period  alalXinlurgash!

@@ -180,7 +180,8 @@ namespace ManualControl
 
         void MakeMove()
         {
-            var program = mapHistory.Solver.MakeMove(Map).ToPhrase().ToOriginalPhrase();
+            var program = mapHistory.Solver.MakeMove(Map)?.ToPhrase()?.ToOriginalPhrase();
+            if (program == null) return;
             mapHistory.History.Append(program, "Iter" + IterationNumber);
             IterationNumber++;
             mapHistory.Play();
