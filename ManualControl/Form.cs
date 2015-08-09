@@ -5,8 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Lib;
 using Lib.Models;
-using Lib.Finder;
-using Lib.Intelligence;
 
 namespace ManualControl
 {
@@ -20,11 +18,8 @@ namespace ManualControl
         Label scores;
         Label help;
         ProgramPlayerControl player;
-        
-
         Button suggest,runBotIteration, runBotGame, say;
-       
-        
+
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
@@ -40,8 +35,6 @@ namespace ManualControl
 
             suggest.Location = new Point(scores.Right, 0);
             suggest.Size = new Size(100, scores.Height);
-           
-
 
             runBotIteration.Location = new Point(suggest.Right, 0);
             runBotIteration.Size = suggest.Size;
@@ -50,8 +43,6 @@ namespace ManualControl
 
             say.Location = new Point(runBotGame.Right, 0);
             say.Size = runBotGame.Size;
-
-
         }
 
         public TetrisForm(MainModel model)
@@ -73,7 +64,7 @@ namespace ManualControl
 
             scores = new Label();
             help = new Label();
-            help.Text = "UIOP — movement\r\nQW — rotate\r\nZ — undo\r\nAS — switch between maps";
+            help.Text = "UIOP — movement\r\nQW — rotate\r\nZ — undo\r\nAS — switch between maps\r\nCtrl+C — copy current commamds to clipboard";
             help.BackColor = Color.Black;
             help.Font = new Font("Arial", 10);
             help.ForeColor = Color.Yellow;
@@ -232,6 +223,9 @@ namespace ManualControl
                 ProblemIndex--;
             if (e.KeyData == Keys.S)
                 ProblemIndex++;
+
+            if (e.Control && e.KeyCode == Keys.C)
+                Clipboard.SetText(string.Join("", mapHistory.History.Items.Skip(1).Select(x => x.Char)).ToOriginalPhrase());
         }
 
         private List<ProblemJson> problems = Problems.LoadProblems();

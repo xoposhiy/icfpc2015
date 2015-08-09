@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Lib.Models;
@@ -55,6 +56,7 @@ namespace Lib
     [TestFixture]
     public class ProblemJsonTest
     {
+        [MethodImpl(MethodImplOptions.NoInlining)]
         [Test, UseReporter(typeof(DiffReporter))]
         public void Test()
         {

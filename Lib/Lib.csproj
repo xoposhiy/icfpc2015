@@ -109,6 +109,7 @@
     <Compile Include="Models\Unit.cs" />
     <Compile Include="Models\UnitPosition.cs" />
     <Compile Include="Models\Vector.cs" />
+    <Compile Include="Phrase.cs" />
     <Compile Include="Phrases.cs" />
     <Compile Include="ProblemJson.cs" />
     <Compile Include="Problems.cs" />

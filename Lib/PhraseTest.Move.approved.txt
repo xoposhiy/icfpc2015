@@ -1,0 +1,7 @@
+﻿phrase[0] = {Width=-0,5, Height=0,8660254} Ei!
+phrase[1] = {Width=-3,5, Height=4,330127} Ia! Ia!
+phrase[2] = {Width=1, Height=1,732051} R'lyeh
+phrase[3] = {Width=0, Height=3,464102} Yuggoth
+phrase[4] = {Width=1, Height=5,196152} YogSothoth
+phrase[5] = {Width=6, Height=6,928203} Necronomicon
+phrase[6] = {Width=-2, Height=27,71281} Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
@@ -11,6 +12,7 @@ namespace ManualControl
 {
     internal class Program
     {
+        [STAThread]
         public static void Main()
         {
             //RunTest(); return;
