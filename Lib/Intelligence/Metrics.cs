@@ -54,5 +54,12 @@ namespace Lib.Intelligence
             if (lines == 1) return 0.1;
             return 1;
         }
+
+
+        public static double ShouldCountSpells()
+        {
+
+            return 0;
+        }
     }
 }

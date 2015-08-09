@@ -8,9 +8,6 @@ using Lib.Models;
 
 namespace Lib.Intelligence
 {
-
-
-
     public class MephalaOracle: IOracle
     {
         private readonly List<MephalaMetric> metrics;
