@@ -26,9 +26,12 @@ namespace Lib.Intelligence
 
         public static readonly List<MephalaMetric> Keening = new List<MephalaMetric>
         {
-            new MephalaMetric(Metrics.GoDown, 1),
-            new MephalaMetric(Metrics.ShouldEraseLines,3),
-            new MephalaMetric(Metrics.MinimizeClosureIndex,1.5)
+//            new MephalaMetric(Metrics.GoDown, 0.2), // 0.4 0.4 0.75 //0.2 0.8 0.9
+//            new MephalaMetric(Metrics.ShouldEraseLines,0.8),
+//            new MephalaMetric(Metrics.MinimizeClosureIndex,0.9)
+            new MephalaMetric(Metrics.GoDown, 0.4), // 0.4 0.4 0.75 //0.2 0.8 0.9
+            new MephalaMetric(Metrics.ShouldEraseLines,0.4),
+            new MephalaMetric(Metrics.MinimizeClosureIndex,0.75)
         };
     }
 
