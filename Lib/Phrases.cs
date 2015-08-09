@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Lib.Models;
@@ -49,7 +50,15 @@ namespace Lib
 
         public static int GetPowerScore(this string textInOriginalTongue)
         {
-            var pScore = new int[all.Length];
+            int score;
+            var words = GetPowerWords(textInOriginalTongue, out score);
+            return score + words.Distinct().Count() * 300;
+        }
+
+        public static IEnumerable<string> GetPowerWords(this string textInOriginalTongue, out int scoreWithoutUniqueBonus)
+        {
+            var words = new List<string>();
+            scoreWithoutUniqueBonus = 0;
             for (var index = 0; index < all.Length; index++)
             {
                 var phrase = all[index];
@@ -57,14 +66,13 @@ namespace Lib
                 int foundIndex;
                 while ((foundIndex = textInOriginalTongue.IndexOf(phrase, startIndex, StringComparison.InvariantCulture)) >= 0)
                 {
-                    if (pScore[index] == 0)
-                        pScore[index] = 300;
-                    pScore[index] += 2 * phrase.Length;
+                    scoreWithoutUniqueBonus += 2 * phrase.Length;
                     startIndex = foundIndex + 1;
+                    words.Add(phrase);
                 }
             }
-            return pScore.Sum();
-        }
+            return words;
+        } 
     }
 
     [TestFixture]

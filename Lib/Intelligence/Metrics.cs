@@ -32,7 +32,6 @@ namespace Lib.Intelligence
             }
             return score;
         }
-
         
         public static double ShouldEraseLines(Map before, Map after, PositionedUnit unit)
         {

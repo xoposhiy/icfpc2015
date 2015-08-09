@@ -24,12 +24,39 @@ namespace Lib.Intelligence
 
         public IEnumerable<Directions> MakeMove(Map map)
         {
-            foreach (var e in Oracle.GetSuggestions(map))
+            var suggestions = Oracle.GetSuggestions(map).ToList();
+
+            int magicNumber = 0;
+
+            double bestMetrics = -1;
+            IEnumerable<Directions> bestPath = null;
+            int bestSuggestionIndex = -1;
+
+            for (int i = 0; i < suggestions.Count; i++)
             {
-                var result = Finder.GetPath(map, e.Position);
+                if (suggestions[i].Metrics / suggestions[0].Metrics < 0.99) break;
+                magicNumber++;
+
+                var result = Finder.GetSpellLengthAndPath(map, suggestions[i].Position);
                 if (result == null) continue;
-                return result.Concat(new[] { e.LockingDirection });
+                
+                var metrics = Math.Min(1, suggestions[i].Metrics + result.Item1 / 100.0);
+                if (metrics > bestMetrics)
+                {
+                    bestMetrics = metrics;
+                    bestPath = result.Item2;
+                    bestSuggestionIndex = i;
+                }
             }
+            if(bestPath != null) return bestPath.Concat(new[] { suggestions[bestSuggestionIndex].LockingDirection });
+
+            for (int i = magicNumber; i < suggestions.Count; i++)
+            {
+                var result = Finder.GetPath(map, suggestions[i].Position);
+                if (result == null) continue;
+                return result.Concat(new[] { suggestions[i].LockingDirection });
+            }
+
             return null;
         }
        

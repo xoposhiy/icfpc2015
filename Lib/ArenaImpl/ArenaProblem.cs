@@ -9,7 +9,7 @@ namespace Lib.ArenaImpl
         [JsonIgnore]
         public ProblemJson Problem;
 
-        public int Id => Problem.id;
+        public int Id;
 
         public int AvgScore { get { return (int)MapResults.Average(r => r.Result.Score); } }
 

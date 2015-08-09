@@ -72,6 +72,5 @@ namespace Lib.Models
                 yield return new Point(p.X, p.Y + 1);
             }
         }
-
     }
 }

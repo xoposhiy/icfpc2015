@@ -11,11 +11,12 @@ namespace Lib.Finder
         private Dictionary<UnitPosition, Tuple<Map, Directions>> Parents;
         private readonly Directions[] dirs = (Directions[])Enum.GetValues(typeof(Directions));
 
-        public IEnumerable<Directions> GetPath(Map map, UnitPosition target)
+        public Tuple<int, IEnumerable<Directions>> GetSpellLengthAndPath(Map map, UnitPosition target)
         {
             UpdateMap(map);
-            return !Parents.ContainsKey(target) ? null
-                       : RestoreDirections(target).Reverse();
+            var path = !Parents.ContainsKey(target) ? null
+                                                 : RestoreDirections(target).Reverse();
+            return Tuple.Create(0, path); //TODO not zero!
         }
 
         public IEnumerable<Map> GetReachablePositions(Map map)

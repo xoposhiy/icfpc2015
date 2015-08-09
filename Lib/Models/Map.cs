@@ -58,8 +58,7 @@ namespace Lib.Models
         }
 
         public bool IsOver => ReferenceEquals(Unit, PositionedUnit.Null);
-
-
+        
         public Map LockUnit()
         {
             if (IsOver) return this;
@@ -80,6 +79,7 @@ namespace Lib.Models
 
             return new Map(Id, f, NextUnits, newScores);
         }
+
 
         public Map TeleportUnit(UnitPosition position)
         {
