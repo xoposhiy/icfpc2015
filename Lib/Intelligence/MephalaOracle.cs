@@ -8,14 +8,16 @@ using Lib.Models;
 
 namespace Lib.Intelligence
 {
+
+
+
     public class MephalaOracle: IOracle
     {
-        private readonly Func<Map, PositionedUnit, double> metrics;
+        private readonly List<MephalaMetric> metrics;
         private readonly IFinder finder;
 
-        public MephalaOracle(IFinder finder, Func<Map, PositionedUnit, double> metrics)
+        public MephalaOracle(IFinder finder, List<MephalaMetric> metrics)
         {
-            this.metrics = metrics;
             this.finder = finder;
         }
          
@@ -33,7 +35,7 @@ namespace Lib.Intelligence
                 {
                     if (!finalMap.IsValidPosition(positionedUnit.Move(dir)))
                     {
-                        var m = metrics(lockedMap, positionedUnit);
+                        var m = metrics.Sum(z => z.Function(lockedMap, positionedUnit) * z.Weight);
                         suggestions.Add(new OracleSuggestion(finalMap.Unit.Position, dir, m));
                         break;
                     }

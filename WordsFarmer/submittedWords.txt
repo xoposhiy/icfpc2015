@@ -48,3 +48,52 @@ OK    alalAbholos
 OK    alalAbholos!
 OK    alalAlala
 OK    alalAlala!
+OK      alalNecronomicon
+OK      alalNecronomicon!
+OK      alalAmmutseba
+OK      alalAmmutseba!
+OK      alalAphoom Zhah
+OK      alalAphoom Zhah!
+OK      alalApocolothoth
+OK      alalApocolothoth!
+OK      alalAtlach Nacha
+OK      alalAtlach Nacha!
+OK      alalAyi'ig
+OK      alalAyi'ig!
+OK      alalAylith
+OK      alalAylith!
+OK      alalBasatan
+OK      alalBasatan!
+OK      alalBugg Shash
+OK      alalBugg Shash!
+OK      alalByatis
+OK      alalByatis!
+OK      alalChaugnar Faugn
+OK      alalChaugnar Faugn!
+OK      alalCoatlicue
+OK      alalCoinchenn
+OK      alalCoinchenn!
+OK      alalCthaat
+OK      alalCthaat!
+OK      alalCthaeghya
+OK      alalCthaeghya!
+OK      alalCthugha
+OK      alalCthugha!
+OK      alalCthulhu
+OK      alalCthulhu!
+OK      alalCthylla
+OK      alalCthylla!
+OK      alalCtoggha
+OK      alalCtoggha!
+OK      alalCynothoglys
+OK      alalCynothoglys!
+OK      alalDhumin
+OK      alalDhumin!
+OK      alalDygra
+OK      alalDygra!
+OK      alalDythalla
+OK      alalDythalla!
+OK      alalEi'lor
+OK      alalEi'lor!
+OK      alalGhadamon
+OK      alalGhadamon!

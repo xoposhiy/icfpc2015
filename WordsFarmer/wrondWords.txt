@@ -48,3 +48,26 @@ PeriodalalThe Thing on the Doorstep!
 PeriodalalThe Shadow Out of Time!
 PeriodalalThe Haunter of the Dark
 PeriodalalThe Haunter of the Dark!
+Period  alalAmon Gorloth
+Period  alalAmon Gorloth!
+Period  alalArwassa
+Period  alalArwassa!
+Period  alalBaoht Z'uqqa Mogg
+Period  alalBaoht Z'uqqa Mogg!
+NotWord alalB’gnu Thun
+NotWord alalB’gnu Thun!
+Period  alalBokrug
+Period  alalBokrug!
+Period  alalCoatlicue!
+Period  alalCrom Cruach
+Period  alalCrom Cruach!
+NotWord alalCyäegha
+NotWord alalCyäegha!
+Period  alalThe Dweller in the Gulf
+Period  alalThe Dweller in the Gulf!
+NotWord alalDzéwà
+NotWord alalDzéwà!
+Period  alalEihort
+Period  alalEihort!
+Period  alalEtepsed Egnis
+Period  alalEtepsed Egnis!

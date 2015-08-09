@@ -20,7 +20,7 @@ namespace ManualControl
             var model = new MainModel();
             var dfsFinder = new DfsFinder();
 //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
-            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new MephalaOracle(dfsFinder, Metrics.ShouldNotCreateSimpleHoles));
+            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new MephalaOracle(dfsFinder, MephalaMetric.HolesOnly));
             model.History = new History(map);
             var form = new TetrisForm(model);
             form.MovementRequested = dir => { map.Unit.Move(dir); };
