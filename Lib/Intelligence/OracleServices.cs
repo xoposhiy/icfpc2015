@@ -1,10 +1,7 @@
-﻿using Lib.Finder;
-using Lib.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Lib.Models;
 
 namespace Lib.Intelligence
 {
@@ -12,10 +9,14 @@ namespace Lib.Intelligence
     {
         public static IEnumerable<UnitPosition> GetAllUnitPositions(Map map)
         {
-            for (int x = 0; x < map.Width; x++)
-                for (int y = 0; y < map.Height; y++)
-                    for (int rot = 0; rot < map.Unit.Unit.Period; rot++)
-                        yield return new UnitPosition { Angle = rot, Point = new System.Drawing.Point(x, y) };
+            for (var x = 0; x < map.Width; x++)
+            {
+                for (var y = 0; y < map.Height; y++)
+                {
+                    for (var rot = 0; rot < map.Unit.Unit.Period; rot++)
+                        yield return new UnitPosition {Angle = rot, Point = new Point(x, y)};
+                }
+            }
         }
 
         public static IEnumerable<Directions> GetAllDirections()
@@ -34,16 +35,13 @@ namespace Lib.Intelligence
             {
                 var positionedUnit = map.Unit.WithNewPosition(position);
                 if (!map.IsValidPosition(positionedUnit)) continue;
-                if (map.IsEmptyPosition(positionedUnit)) continue;
 
-                foreach (var dir in OracleServices.GetAllDirections())
+                var lockableDirections = GetAllDirections()
+                    .Where(dir => !map.IsValidPosition(positionedUnit.Move(dir)));
+                foreach (var dir in lockableDirections)
                 {
-                    var nextPosition = positionedUnit.Move(dir);
-                    if (!map.IsValidPosition(nextPosition))
-                    {
-                        yield return new OracleSuggestion(position, dir);
-                        break;
-                    }
+                    yield return new OracleSuggestion(position, dir);
+                    break;
                 }
             }
         }

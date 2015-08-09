@@ -29,14 +29,15 @@ namespace Lib
 		[Test, Explicit]
 		public void SendSinglePhrase()
 		{
+		    var tag = "SendSinglePhrase-" + DateTime.Now;
             var submissions =
 				from p in Problems.LoadProblems()
 				select new SubmitionJson
 				{
 					problemId = p.id,
 					seed = 0,
-					solution = "fus ro dah",
-					tag = "SendSinglePhrase-" + DateTime.Now
+					solution = "icfpc2015!",
+					tag = tag
 				};
             miningClient.PostSubmissions(submissions.ToArray());
 		}

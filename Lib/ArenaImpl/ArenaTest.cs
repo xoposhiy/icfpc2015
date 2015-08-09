@@ -99,8 +99,8 @@ namespace Lib.ArenaImpl
         {
             var finder = new MagicDfsFinder();
 
-            var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
-            var hircine = new HircineOracle(mephala,WeightedMetric.Keening,2, 5);
+            var mephala = new MephalaOracle(finder, MephalaMetric.Keening);
+            var hircine = new HircineOracle(finder, mephala, MephalaMetric.Keening, 2, 5);
 
             var solver = new Solver(finder, mephala);
             return solver;
