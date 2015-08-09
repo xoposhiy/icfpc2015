@@ -17,7 +17,7 @@ namespace ManualControl
         {
             //RunTest(); return;
 
-            var map = Problems.LoadProblems()[15].ToMap(0);
+            var map = Problems.LoadProblems()[20].ToMap(0);
 
             var model = new MainModel();
             var dfsFinder = new MagicDfsFinder();
