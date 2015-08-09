@@ -13,10 +13,10 @@ namespace Lib.Intelligence
 
     public class MephalaOracle: IOracle
     {
-        private readonly List<MephalaMetric> metrics;
+        private readonly List<WeightedMetric> metrics;
         private readonly IFinder finder;
 
-        public MephalaOracle(IFinder finder, List<MephalaMetric> metrics)
+        public MephalaOracle(IFinder finder, List<WeightedMetric> metrics)
         {
             this.metrics = metrics;
             this.finder = finder;

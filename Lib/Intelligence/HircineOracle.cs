@@ -10,12 +10,12 @@ namespace Lib.Intelligence
     public class HircineOracle : IOracle
     {
         IOracle backupOracle;
-        List<MephalaMetric> metric;
+        List<WeightedMetric> metric;
         int lookupDepth;
         int lookupWidth;
 
 
-        public HircineOracle(IOracle backupOracle,List<MephalaMetric> metric, int lookupDepth, int lookupWidth)
+        public HircineOracle(IOracle backupOracle,List<WeightedMetric> metric, int lookupDepth, int lookupWidth)
         {
             this.backupOracle = backupOracle;
             this.metric = metric;

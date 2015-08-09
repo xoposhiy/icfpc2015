@@ -12,7 +12,7 @@ namespace AIRLab.GeneticAlgorithms
             Run(alg, iterationShowRate);
         }*/
 
-        public static void Run<T>(GeneticAlgorithm<T> alg, int iterationShowRate)
+        public static void Run<T>(GeneticAlgorithm<T> alg, int iterationShowRate, Func<T,string> printer)
             where T: Chromosome
         {
             for (var cnt=0;;cnt++)
@@ -24,7 +24,7 @@ namespace AIRLab.GeneticAlgorithms
                 for (var i = 0; i < bound; i++)
                 {
                     Console.SetCursorPosition(0, i);
-                    Console.Write("{0}\t{1}", alg.Pool[i].Value, alg.Pool[i]);
+                    Console.Write("{0}\t{1}", alg.Pool[i].Value, printer(alg.Pool[i]));
                 }
                 Console.SetCursorPosition(0, 16);                
                 Console.WriteLine("Iterations:     " + alg.CurrentIteration);

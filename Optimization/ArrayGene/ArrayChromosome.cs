@@ -32,6 +32,7 @@ namespace AIRLab.GeneticAlgorithms
 
        
 
+
         public override Array ObjectCode
         {
             get { return Code; }

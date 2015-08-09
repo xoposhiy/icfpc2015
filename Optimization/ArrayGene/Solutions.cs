@@ -7,6 +7,8 @@ namespace AIRLab.GeneticAlgorithms
 {
     public partial class ArrayGeneSolutions
     {
+
+
         public class Crossover
         {
             public static void Mix<G>(GeneticAlgorithm<G> alg)
@@ -88,6 +90,20 @@ namespace AIRLab.GeneticAlgorithms
             {
                 ByElement<G, bool>(a, (rnd, c) => !c);
             }
+
+            public static void Double<G>(GeneticAlgorithm<G> a,double negateProbability, double zeroProbability, double windowsSize)
+            where G : ArrayChromosome<double>
+            {
+                ByElement<G, double>(a, (rnd, c) =>
+                {
+                    if (rnd.NextDouble() < negateProbability) return -c;
+                    if (rnd.NextDouble() < zeroProbability) return 0;
+                    var e = c + (rnd.NextDouble() * windowsSize*2 - windowsSize);
+                    if (e < -1) e = -1;
+                    if (e > 1) e = 1;
+                    return e;
+                });
+            }
         }
 
         public class Appearences
@@ -109,6 +125,12 @@ namespace AIRLab.GeneticAlgorithms
             {
                 ByElement(a, rnd => rnd.Next(2) == 0);
             }
+
+            public static void Double<G>(GeneticAlgorithm<G> a)
+                where G : ArrayChromosome<double>
+                {
+                    ByElement(a, rnd => rnd.NextDouble()*2-1);
+                }
 
             public static void Permutation<G>(GeneticAlgorithm<G> alg)
                 where G : ArrayChromosome<int>

@@ -30,7 +30,7 @@ namespace Lib.ArenaImpl
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private static void EvaluateSolver(Solver solver, params int[] maps)
+        public static void EvaluateSolver(Solver solver, params int[] maps)
         {
             var ps = Problems.LoadProblems();
             if (maps.Length == 0)
@@ -78,8 +78,8 @@ namespace Lib.ArenaImpl
         {
             var finder = new MagicDfsFinder();
 
-            var mephala = new MephalaOracle(finder, MephalaMetric.Keening);
-            var hircine = new HircineOracle(mephala,MephalaMetric.Keening,2, 5);
+            var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
+            var hircine = new HircineOracle(mephala,WeightedMetric.Keening,2, 5);
 
             var solver = new Solver(finder, mephala);
             return solver;
