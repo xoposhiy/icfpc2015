@@ -1,27 +1,78 @@
-PeriodalalHoward Phillips Lovecraft
-PeriodalalHoward Phillips Lovecraft!
-PeriodalalHastur
-PeriodalalHastur!
-PeriodalalIthaqua
-PeriodalalIthaqua!
-PeriodalalNyarlathotep
-PeriodalalNyarlathotep!
-PeriodalalShub Niggurath
-PeriodalalShub Niggurath!
-PeriodalalThe Tomb!
-PeriodalalA Reminiscence of Dr. Samuel Johnson!
-PeriodalalBeyond the Wall of Sleep
-PeriodalalBeyond the Wall of Sleep!
-PeriodalalMemory!
-PeriodalalThe Transition of Juan Romero
-PeriodalalThe Transition of Juan Romero!
-PeriodalalThe Statement of Randolph Carter
-PeriodalalThe Statement of Randolph Carter!
-PeriodalalThe Street
-PeriodalalThe Street!
-PeriodalalThe Cats of Ulthar
-PeriodalalThe Cats of Ulthar!
-PeriodalalThe Tree
-PeriodalalThe Tree!
-NotWordalalCelephaïs
-NotWordalalCelephaïs!
+Period  alalArwassa         Arwassa
+Period  alalArwassa!        Arwassa!
+Period  alalBaoht Z'uqqaMoggBaoht Z'uqqa-Mogg
+Period  alalBaoht Z'uqqaMogg!Baoht Z'uqqa-Mogg!
+NotWord alalB’gnuThun       B’gnu-Thun
+NotWord alalB’gnuThun!      B’gnu-Thun!
+Period  alalBokrug          Bokrug
+Period  alalBokrug!         Bokrug!
+Period  alalCoatlicue!      Coatlicue!
+Period  alalCrom Cruach     Crom Cruach
+Period  alalCrom Cruach!    Crom Cruach!
+NotWord alalCyäegha         Cyäegha
+NotWord alalCyäegha!        Cyäegha!
+Period  alalThe Dweller in the GulfThe Dweller in the Gulf
+Period  alalThe Dweller in the Gulf!The Dweller in the Gulf!
+Period  alalBaoht Z'uqqaMogg!Baoht Z'uqqa-Mogg!
+Period  alalB'gnuThun!      B’gnu-Thun!
+NotWord alalDzéwà!          Dzéwà!
+Period  alalEihort!         Eihort!
+Period  alalEtepsed Egnis!  Etepsed Egnis!
+Period  alalGod of the Red Flux!God of the Red Flux!
+Period  alalGurathnaka!     Gurathnaka!
+Period  alalGur'laya!       Gur'la-ya!
+Period  alalGzxtyos!        Gzxtyos!
+NotWord alalHastalÿk!       Hastalÿk!
+Period  alalHastur!         Hastur!
+Period  alalH'chtelegoth!   H’chtelegoth!
+Period  alalHnarqu!         Hnarqu!
+Period  alalHziulquoigmnzhah!Hziulquoigmnzhah!
+Period  alalInpesca!        Inpesca!
+Period  alalIthaqua!        Ithaqua!
+Period  alalJukShabb!       Juk-Shabb!
+Period  alalKag'Naru of the Air!Kag'Naru of the Air!
+Period  alalKaunuzoth!      Kaunuzoth!
+Period  alalKhal'kru!       Khal'kru!
+Period  alalKrang!          Krang!
+Period  alalKurpannga!      Kurpannga!
+Period  alalM'basui Gwandu! M’basui Gwandu!
+Period  alalMnomquah!       Mnomquah!
+Period  alalMortllgh!       Mortllgh!
+NotWord alalNctosa & Nctolhu!Nctosa & Nctolhu!
+Period  alalNgirrth'lu!     Ngirrth’lu!
+NotWord alalNorthot[36]!    Northot[36]!
+Period  alalNssuGhahnb!     Nssu-Ghahnb!
+Period  alalOb'mbu!         Ob'mbu!
+Period  alalPsuchawrl!      Psuchawrl!
+Period  alalQuachil Uttaus! Quachil Uttaus!
+Period  alalQuyagen!        Quyagen!
+Period  alalQ'ythaz!        Q'yth-az!
+Period  alalRaandaiiB'nk!   Raandaii-B'nk!
+Period  alalRh'Thulla of the Wind!Rh'Thulla of the Wind!
+Period  alalRlim Shaikorth! Rlim Shaikorth!
+Period  alalRuhtra Dyoll!   Ruhtra Dyoll!
+Period  alalSedmelluq!      Sedmelluq!
+Period  alalNorthot!        Northot!
+Period  alalShaurashHo!     Shaurash-Ho!
+Period  alalShudde M'ell!   Shudde M'ell!
+Period  alalSthanee!        Sthanee!
+Period  alalS'tyaYg'Nalle!  S'tya-Yg'Nalle!
+Period  alalTurua!          Turua!
+Period  alalUitzilcapac!    Uitzilcapac!
+Period  alalVhuzompha!      Vhuzompha!
+Period  alalVibur!          Vibur!
+Period  alalVthyarilops!    Vthyarilops!
+Period  alalVulthoom!       Vulthoom!
+Period  alalThe Worm that Gnaws in the Night!The Worm that Gnaws in the Night!
+Period  alalXinlurgash!     Xinlurgash!
+Period  alalY'golonac!      Y'golonac!
+Period  alalYhashtur!       Yhashtur!
+Period  alalY'lla!          Y'lla!
+Period  alalYugSiturath!    Yug-Siturath!
+Period  alalZstylzhemghi!   Zstylzhemghi!
+Period  alalZushakon!       Zushakon!
+NotWord alalA162!           A-16-2!
+Period  alalA252!           A-25-2!
+Period  alalsomething 'davar' visually written actual 'davar' Human 'Hex' simultaneously!something 'davar' visually written actual 'davar' Human 'Hex' simultaneously!
+Period  alalNyarlathotep!   Nyarlathotep!
+Period  alalY'golonac!      Y'golonac!

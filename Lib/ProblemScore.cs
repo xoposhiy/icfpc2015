@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using Newtonsoft.Json;
@@ -22,7 +23,8 @@ namespace Lib
 	[TestFixture]
 	public class ProblemScoreTest
 	{
-		[Test, UseReporter(typeof(DiffReporter))]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        [Test, UseReporter(typeof(DiffReporter))]
 		public void Test()
 		{
 			var settings = new JsonSerializerSettings

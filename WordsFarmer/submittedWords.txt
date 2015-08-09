@@ -1,99 +1,151 @@
-﻿OK    alalLovecraft
-OK    alalLovecraft!
-OK    alalThe Temple
-OK    alalThe Nameless City
-OK    alalThe Moon Bog
-OK    alalThe Moon Bog!
-OK    alalEx Oblivione
-OK    alalEx Oblivione!
-OK    alalThe Outsider
-OK    alalThe Outsider!
-OK    alalSweet Ermengarde
-OK    alalWhat the Moon Brings
-OK    alalWhat the Moon Brings!
-OK    alalAzathoth
-OK    alalAzathoth!
-OK    alalThe Hound
-OK    alalThe Hound!
-OK    alalThe Rats in the Walls
-OK    alalThe Rats in the Walls!
-OK    alalThe Unnamable
-OK    alalThe Festival
-OK    alalThe Festival!
-OK    alalThe Shunned House
-OK    alalThe Horror at Red Hook
-OK    alalThe Horror at Red Hook!
-OK    alalHe
-OK    alalIn the Vault
-OK    alalIn the Vault!
-OK    alalCool Air
-OK    alalCool Air!
-OK    alalPickman's Model
-OK    alalPickman's Model!
-OK    alalThe Silver Key
-OK    alalThe Descendant
-OK    alalThe Descendant!
-OK    alalThe Very Old Folk
-OK    alalThe Very Old Folk!
-OK    alalHistory of the Necronomicon
-OK    alalHistory of the Necronomicon!
-OK    alalIbid
-OK    alalIbid!
-OK    alalThe Book
-OK    alalThe Book!
-OK    alalThe Evil Clergyman
-OK    alalThe Evil Clergyman!
-OK    alalThe Shadow Out of Time
-OK    alalAbholos
-OK    alalAbholos!
-OK    alalAlala
-OK    alalAlala!
-OK      alalNecronomicon
-OK      alalNecronomicon!
-OK      alalAmmutseba
-OK      alalAmmutseba!
-OK      alalAphoom Zhah
-OK      alalAphoom Zhah!
-OK      alalApocolothoth
-OK      alalApocolothoth!
-OK      alalAtlach Nacha
-OK      alalAtlach Nacha!
-OK      alalAyi'ig
-OK      alalAyi'ig!
-OK      alalAylith
-OK      alalAylith!
-OK      alalBasatan
-OK      alalBasatan!
-OK      alalBugg Shash
-OK      alalBugg Shash!
-OK      alalByatis
-OK      alalByatis!
-OK      alalChaugnar Faugn
-OK      alalChaugnar Faugn!
-OK      alalCoatlicue
-OK      alalCoinchenn
-OK      alalCoinchenn!
-OK      alalCthaat
-OK      alalCthaat!
-OK      alalCthaeghya
-OK      alalCthaeghya!
-OK      alalCthugha
-OK      alalCthugha!
-OK      alalCthulhu
-OK      alalCthulhu!
-OK      alalCthylla
-OK      alalCthylla!
-OK      alalCtoggha
-OK      alalCtoggha!
-OK      alalCynothoglys
-OK      alalCynothoglys!
-OK      alalDhumin
-OK      alalDhumin!
-OK      alalDygra
-OK      alalDygra!
-OK      alalDythalla
-OK      alalDythalla!
-OK      alalEi'lor
-OK      alalEi'lor!
-OK      alalGhadamon
-OK      alalGhadamon!
+﻿OK      alalAbholos         Abholos
+OK      alalAbholos!        Abholos!
+OK      alalAlala           Alala
+OK      alalAlala!          Alala!
+OK      alalAmmutseba       Ammutseba
+OK      alalAmmutseba!      Ammutseba!
+OK      alalAmonGorloth     Amon-Gorloth
+OK      alalAmonGorloth!    Amon-Gorloth!
+OK      alalAphoomZhah      Aphoom-Zhah
+OK      alalAphoomZhah!     Aphoom-Zhah!
+OK      alalApocolothoth    Apocolothoth
+OK      alalApocolothoth!   Apocolothoth!
+OK      alalAtlachNacha     Atlach-Nacha
+OK      alalAtlachNacha!    Atlach-Nacha!
+OK      alalAyi'ig          Ayi'ig
+OK      alalAyi'ig!         Ayi'ig!
+OK      alalAylith          Aylith
+OK      alalAylith!         Aylith!
+OK      alalBasatan         Basatan
+OK      alalBasatan!        Basatan!
+OK      alalBuggShash       Bugg-Shash
+OK      alalBuggShash!      Bugg-Shash!
+OK      alalByatis          Byatis
+OK      alalByatis!         Byatis!
+OK      alalChaugnar Faugn  Chaugnar Faugn
+OK      alalChaugnar Faugn! Chaugnar Faugn!
+OK      alalCoatlicue       Coatlicue
+OK      alalCoinchenn       Coinchenn
+OK      alalCoinchenn!      Coinchenn!
+OK      alalCthaat          Cthaat
+OK      alalCthaat!         Cthaat!
+OK      alalCthaeghya       Cthaeghya
+OK      alalCthaeghya!      Cthaeghya!
+OK      alalCthugha         Cthugha
+OK      alalCthugha!        Cthugha!
+OK      alalCthulhu         Cthulhu
+OK      alalCthulhu!        Cthulhu!
+OK      alalCthylla         Cthylla
+OK      alalCthylla!        Cthylla!
+OK      alalCtoggha         Ctoggha
+OK      alalCtoggha!        Ctoggha!
+OK      alalCynothoglys     Cynothoglys
+OK      alalCynothoglys!    Cynothoglys!
+OK      alalDhumin          Dhumin
+OK      alalDhumin!         Dhumin!
+OK      alalDygra           Dygra
+OK      alalDygra!          Dygra!
+OK      alalDythalla        Dythalla
+OK      alalDythalla!       Dythalla!
+OK      alalEi'lor!         Ei'lor!
+OK      alalGhadamon!       Ghadamon!
+OK      alalGhatanothoa!    Ghatanothoa!
+OK      alalGhisguth!       Ghisguth!
+OK      alalGlaaki!         Glaaki!
+OK      alalGleeth!         Gleeth!
+OK      alalGloon!          Gloon!
+OK      alalGobogeg!        Gobogeg!
+OK      alalGogHoor!        Gog-Hoor!
+OK      alalGolgoroth!      Gol-goroth!
+OK      alalGolothess!      Golothess!
+OK      alalThe Green God!  The Green God!
+OK      alalGrothGolka!     Groth-Golka!
+OK      alalGtuhanai!       Gtuhanai!
+OK      alalHan!            Han!
+OK      alalIdhyaa!         Idh-yaa!
+OK      alalIod!            Iod!
+OK      alalIstasha!        Istasha!
+OK      alalJanai'ngo!      Janai'ngo!
+OK      alalKaalut!         Kaalut!
+OK      alalKassogtha!      Kassogtha!
+OK      alalKlosmiebhyx!    Klosmiebhyx!
+OK      alalK'nar'st!       K'nar'st!
+OK      alalLam!            Lam!
+OK      alalLythalia!       Lythalia!
+OK      alalMappo no Ryujin!Mappo no Ryujin!
+OK      alalM'Nagalah!      M'Nagalah!
+OK      alalMordiggian!     Mordiggian!
+OK      alalMormo!          Mormo!
+OK      alalMynoghra!       Mynoghra!
+OK      alalNug and Yeb!    Nug and Yeb!
+OK      alalNyaghoggua!     Nyaghoggua!
+OK      alalNycrama!        Nycrama!
+OK      alalNyogtha!        Nyogtha!
+OK      alalOorn!           Oorn!
+OK      alalOthuum!         Othuum!
+OK      alalOthuyeg!        Othuyeg!
+OK      alalPharol!         Pharol!
+OK      alalPoseidon!       Poseidon!
+OK      alalPtarAxtlan!     Ptar-Axtlan!
+OK      alalRagnalla!       Ragnalla!
+OK      alalRaphanasuan!    Raphanasuan!
+OK      alalRhanTegoth!     Rhan-Tegoth!
+OK      alalRhogog!         Rhogog!
+OK      alalRokon!          Rokon!
+OK      alalSaa'itii!       Saa'itii!
+OK      alalScathach!       Scathach!
+OK      alalSebek!          Sebek!
+OK      alalSfatlicllp!     Sfatlicllp!
+OK      alalShaklatal!      Shaklatal!
+OK      alalShathak!        Shathak!
+OK      alalShebTeth!       Sheb-Teth!
+OK      alalShlithneth!     Shlithneth!
+OK      alalShoGath!        Sho-Gath!
+OK      alalShterot!        Shterot!
+OK      alalShuyNihl!       Shuy-Nihl!
+OK      alalSummanus!       Summanus!
+OK      alalSwarog!         Swarog!
+OK      alalThanaroa!       Thanaroa!
+OK      alalTharapithia!    Tharapithia!
+OK      alalThog!           Thog!
+OK      alalTh'rygh!        Th'rygh!
+OK      alalTsathoggua!     Tsathoggua!
+OK      alalTulushuggua!    Tulushuggua!
+OK      alalUt'UllsHr'Her!  Ut'Ulls-Hr'Her!
+OK      alalVileOct!        Vile-Oct!
+OK      alalVolgnaGath!     Volgna-Gath!
+OK      alalVoltiyig!       Voltiyig!
+OK      alalXalafu!         Xalafu!
+OK      alalXcthol!         Xcthol!
+OK      alalXirdneth!       Xirdneth!
+OK      alalXotli!          Xotli!
+OK      alalXoxiigghua!     Xoxiigghua!
+OK      alalYeggHa!         Yegg-Ha!
+OK      alalYhagni!         Yhagni!
+OK      alalYig!            Yig!
+OK      alalYmnar!          Ymnar!
+OK      alalYogSapha!       Yog-Sapha!
+OK      alalYorith!         Yorith!
+OK      alalYsbaddaden!     Ysbaddaden!
+OK      alalYthogtha!       Ythogtha!
+OK      alalZathog!         Zathog!
+OK      alalZhar and Lloigor!Zhar and Lloigor!
+OK      alalZindarak!       Zindarak!
+OK      alalZothOmmog!      Zoth-Ommog!
+OK      alalZ'toggua!       Z'toggua!
+OK      alalZvilpogghua!    Zvilpogghua!
+OK      alalwhats with the ten!whats with the ten!
+OK      alal'davar'!        'davar'!
+OK      alalA251!           A-25-1!
+OK      alalA250!           A-25-0!
+OK      alal'Hex'!          'Hex'!
+OK      alalHex!            Hex!
+OK      alalIdhyaa!         Idh-yaa!
+OK      alalNodens!         Nodens!
+OK      alalAzathoth!       Azathoth!
+OK      alalYibbTsll!       Yibb-Tsll!
+OK      alalYomagn'tho!     Yomagn'tho!
+OK      alalGlaaki!         Glaaki!
+OK      alalLukthu!         Lu-kthu!
+OK      alalMordiggian!     Mordiggian!
+OK      alalYig!            Yig!

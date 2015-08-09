@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Lib.Models;
@@ -46,24 +48,46 @@ namespace Lib.Finder
             return new UnitPosition(new Point(x, y), a);
         }
 
-        
+        private const int MaxDepth = 3;
+
+        private IEnumerable<List<Directions[]>> GenerateSpellsSequences(List<Directions[]> list)
+        {
+            if (list.Count < MaxDepth)
+            {
+                foreach (var spell in Phrases.all.OrderByDescending(p => p.Length))
+                {
+                    list.Add(spell.ToDirections().ToArray());
+                    foreach (var res in GenerateSpellsSequences(list))
+                        yield return res;
+                    list.RemoveAt(list.Count - 1);
+                }
+            }
+
+            if (list.Count > 0)
+                yield return list;
+        }
 
         public IEnumerable<Directions> GetPath(Map map, UnitPosition target)
         {
-            foreach (var phrase in Phrases.all.OrderByDescending(p => p.Length))
+            foreach (var sequence in GenerateSpellsSequences(new List<Directions[]>()))
             {
-                var directions = phrase.ToDirections().ToArray();
-                int period = map.Unit.Unit.Period;
-                var midPosition = GetMidPositionByPhrase(target, directions, period);
-                var midPositionedUnit = new PositionedUnit(map.Unit.Unit, midPosition);
-                var midMap = new Map(map.Id, map.Filled, midPositionedUnit, map.NextUnits, map.UsedPositions, map.Scores);
+                var midPositions = new UnitPosition[sequence.Count];
+                var finish = target;
+                for (int i = 0; i < sequence.Count; i++)
+                    midPositions[i] = finish = GetMidPositionByPhrase(finish, sequence[i], map.Unit.Unit.Period);
 
-                if (!midMap.IsGoodPath(directions))
+                var maps = midPositions.Select(p => new Map(map.Id, map.Filled, new PositionedUnit(map.Unit.Unit, p),
+                                                            map.NextUnits, map.UsedPositions, map.Scores)).ToArray();
+                bool ok = true;
+                for (int i = 0; i < sequence.Count && ok; i++)
+                    ok &= maps[i].IsGoodPath(sequence[i]);
+                if (!ok)
                     continue;
-                var path = dfsFinder.GetPath(map, midPosition);
+
+                var path = dfsFinder.GetPath(map, finish);
                 if (path == null)
                     continue;
-                var result = path.Concat(directions).ToArray();
+                var result = path.Concat(((IEnumerable<Directions[]>)sequence).Reverse().SelectMany(s => s)).ToArray();
                 if (map.IsGoodPath(result))
                     return result;
             }

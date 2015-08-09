@@ -44,7 +44,7 @@ namespace Lib
 		[Test, Explicit]
         public void GetResults()
         {
-            var res = miningClient.GetSubmissions();
+            var res = client.GetSubmissions();
             Console.WriteLine(res.Length);
             foreach (var submission in res.OrderByDescending(x => x.createdAt).Take(200))
                 Console.WriteLine(submission);

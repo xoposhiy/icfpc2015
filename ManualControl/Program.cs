@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
@@ -11,6 +13,7 @@ namespace ManualControl
 {
     internal class Program
     {
+        [STAThread]
         public static void Main()
         {
             //RunTest(); return;
@@ -19,8 +22,10 @@ namespace ManualControl
 
             var model = new MainModel();
             var dfsFinder = new DfsFinder();
-//            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
-            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new MephalaOracle(dfsFinder, MephalaMetric.HolesOnly));
+            var mephala = new MephalaOracle(dfsFinder, MephalaMetric.Combined);
+            var hircine = new HircineOracle(mephala,MephalaMetric.HolesOnly, 4, 7);
+            //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
+            model.Solver = new Lib.Intelligence.Solver(dfsFinder, hircine);
             model.History = new History(map);
             var form = new TetrisForm(model);
             form.MovementRequested = dir => { map.Unit.Move(dir); };

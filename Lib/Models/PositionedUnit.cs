@@ -85,6 +85,10 @@ namespace Lib.Models
                 maxY = Math.Max(maxY, member.Y);
             }
 
+            if (minX == Int32.MaxValue)
+            {
+                throw new Exception("Empty Unit detected");
+            }
             return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
 
