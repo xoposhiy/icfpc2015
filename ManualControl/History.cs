@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Lib;
 
 namespace ManualControl
 {
@@ -34,6 +35,11 @@ namespace ManualControl
         public Map CurrentMap {  get { return allHistory[CurrentPosition].Map; } }
 
         public IEnumerable<HistoryItem> Items { get { return allHistory; } }
+
+        public string GetCommandsInOriginalTongueForCurrentPosition()
+        {
+            return string.Join("", allHistory.Skip(1).Take(CurrentPosition).Select(x => x.Char)).ToOriginalPhrase();
+        }
 
         public bool Ended { get { return CurrentPosition == allHistory.Count - 1; } }
 

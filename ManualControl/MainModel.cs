@@ -1,11 +1,6 @@
-﻿using Lib.Intelligence;
-using Lib.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
+using Lib.Intelligence;
 
 namespace ManualControl
 {
@@ -27,7 +22,8 @@ namespace ManualControl
             timer.Interval = 10;
             timer.Tick += (s, a) =>
             {
-                History.Forward();
+                for (int i = 0; i < FastForwardSteps; i++)
+                    History.Forward();
                 if (History.Ended)
                 {
                     Pause();
@@ -54,5 +50,7 @@ namespace ManualControl
         public Solver Solver { get; set; }
 
         public SuggestionsModel Suggestions = new SuggestionsModel();
+
+        public int FastForwardSteps = 1;
     }
 }

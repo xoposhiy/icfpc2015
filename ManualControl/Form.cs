@@ -24,7 +24,7 @@ namespace ManualControl
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            scores.Size = new Size(100, 30);
+            scores.Size = new Size(200, 30);
             grid.Location = new Point(0, 30);
             grid.Size = new Size(ClientSize.Width / 2, ClientSize.Height - 30);
 
@@ -110,6 +110,7 @@ namespace ManualControl
                     {
                         Size=new Size(800,300),
                         Multiline=true,
+                        MaxLength = int.MaxValue,
                     },
                     new Button
                     {
@@ -204,8 +205,14 @@ namespace ManualControl
             Text = $"ProblemId: {Map.Id} - W: {Map.Width}, H: {Map.Height}.";
             Invalidate();
             grid.Invalidate();
-            scores.Text = Map.Scores.TotalScores.ToString();
+            var moveScores = Map.Scores.TotalScores;
+            if (powerScoreUpdateSteps++ % FastForwardSteps == 0)
+                powerScore = mapHistory.History.GetCommandsInOriginalTongueForCurrentPosition().GetPowerScore();
+            var totalScore = powerScore + moveScores;
+            scores.Text = string.Format("M:{0} P:{1} T:{2}", moveScores, powerScore, totalScore);
         }
+
+        private int powerScoreUpdateSteps;
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -226,7 +233,7 @@ namespace ManualControl
                 ProblemIndex++;
 
             if (e.Control && e.KeyCode == Keys.C)
-                Clipboard.SetText(string.Join("", mapHistory.History.Items.Skip(1).Select(x => x.Char)).ToOriginalPhrase());
+                Clipboard.SetText(mapHistory.History.GetCommandsInOriginalTongueForCurrentPosition());
         }
 
         private List<ProblemJson> problems = Problems.LoadProblems();
@@ -250,5 +257,7 @@ namespace ManualControl
         }
 
         private int currentProblemIndex = 0;
+        private int powerScore;
+        public int FastForwardSteps = 1;
     }
 }

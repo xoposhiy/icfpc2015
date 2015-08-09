@@ -1,11 +1,6 @@
-﻿using System.Drawing;
-using System;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
+﻿using System;
 using System.Windows.Forms;
 using Lib;
-using Lib.Models;
 using Lib.Finder;
 using Lib.Intelligence;
 
@@ -16,17 +11,15 @@ namespace ManualControl
         [STAThread]
         public static void Main()
         {
-            //RunTest(); return;
-
             var map = Problems.LoadProblems()[9].ToMap(0);
 
-            var model = new MainModel();
+            var model = new MainModel() {FastForwardSteps = 1};
             var dfsFinder = new MagicDfsFinder();
             var mephala = new MephalaOracle(dfsFinder, WeightedMetric.Sunder);
             //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
-            model.Solver = new Lib.Intelligence.Solver(dfsFinder, mephala);
+            model.Solver = new Solver(dfsFinder, mephala);
             model.History = new History(map);
-            var form = new TetrisForm(model);
+            var form = new TetrisForm(model) {FastForwardSteps = model.FastForwardSteps};
             form.MovementRequested = dir => { map.Unit.Move(dir); };
             Application.Run(form);
         }

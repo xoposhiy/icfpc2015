@@ -8,14 +8,14 @@ namespace Lib
 {
 	public class SubmitionClient
 	{
-		private readonly int teamId;
+	    public readonly int TeamId;
 		private readonly string apiKey;
 		public static readonly SubmitionClient Default = new SubmitionClient(37, "0u0hbMTthhsUHWOZwAngrgZBZZM5J/OuXaexUvIsP0k=");
 		public static readonly SubmitionClient ForMining = new SubmitionClient(300, "F5zuiPDlHUUuOLC38CZpSBgD2G0WVpQWrmSIxJPFNNw=");
 
 		public SubmitionClient(int teamId, string apiKey)
 		{
-			this.teamId = teamId;
+			this.TeamId = teamId;
 			this.apiKey = apiKey;
 		}
 
@@ -50,7 +50,7 @@ namespace Lib
 		{
 			using (var client = new HttpClient())
 			{
-				client.BaseAddress = new Uri("https://davar.icfpcontest.org/teams/" + teamId + "/solutions");
+				client.BaseAddress = new Uri("https://davar.icfpcontest.org/teams/" + TeamId + "/solutions");
 				var byteArray = Encoding.ASCII.GetBytes(":" + apiKey);
 				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 				return use(client);

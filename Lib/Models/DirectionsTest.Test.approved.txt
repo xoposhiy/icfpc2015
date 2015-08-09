@@ -1,7 +1,10 @@
 ﻿d[0] = Ei! → E SW W
-d[1] = Ia! Ia! → SW SW W SE SW SW W
-d[2] = R'lyeh → CW W SE E E SW
+d[1] = R'lyeh → CW W SE E E SW
+d[2] = Ia! Ia! → SW SW W SE SW SW W
 d[3] = Yuggoth → E CCW SW SW SE CCW SW
 d[4] = YogSothoth → E SE SW CCW SE CCW SW SE CCW SW
-d[5] = Necronomicon → SE E E CW SE SE SE SE SW E SE SE
-d[6] = Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn! → W SW W SE SW SE CCW SW SE SE SW SE CCW W SE SW E SW SE E CCW SW CCW SE SW CCW SE CW W SE E E SW SE CCW SW SW SW W SE SW SW SE SE E SW CCW SW SW SE W
+d[5] = blue hades → E SE CCW E SE SW SW CW E CCW
+d[6] = Tsathoggua → CCW CCW SW CCW SW SE SW SW CCW SW
+d[7] = Necronomicon → SE E E CW SE SE SE SE SW E SE SE
+d[8] = cthulhu fhtagn! → E CCW SW CCW SE SW CCW SE E SW CCW SW SW SE W
+d[9] = Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn. → W SW W SE SW SE CCW SW SE SE SW SE CCW W SE SW E SW SE E CCW SW CCW SE SW CCW SE CW W SE E E SW SE CCW SW SW SW W SE SW SW SE SE E SW CCW SW SW SE W

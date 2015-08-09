@@ -50,17 +50,29 @@ namespace Lib.ArenaImpl
         }
 
         [Test, Explicit]
+        public void AssertAvgScores()
+        {
+            var model = LoadModel();
+            var actual = model.Problems.Select(x => x.AvgScore).ToArray();
+            Console.Out.WriteLine("Mine: {0}", string.Join(", ", actual));
+            var theirs = ScoreboardClient.GetMyAvScores(SubmitionClient.ForMining.TeamId);
+            Console.Out.WriteLine("Theirs: {0}", string.Join(", ", theirs));
+            Assert.That(actual, Is.EqualTo(theirs));
+        }
+
+        [Test, Explicit]
         public void SendJson()
         {
             var client = SubmitionClient.Default;
             var model = LoadModel();
+            var tag = model.SolverName + "-" + DateTime.Now;
             var submissions = model.Problems.SelectMany(
                 p => p.MapResults.Select(r => new SubmitionJson
                 {
                     problemId = p.Id,
                     seed = r.Seed,
                     solution = r.Result.Commands,
-                    tag = model.SolverName + "-" + DateTime.Now
+                    tag = tag
                 })).ToArray();
             Console.WriteLine("submit problems: " + string.Join(", ", submissions.Select(s => s.problemId)));
             client.PostSubmissions(submissions);

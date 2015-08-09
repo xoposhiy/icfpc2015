@@ -51,9 +51,9 @@ namespace Lib
             return problems;
         }
 
-        public static int[] GetMyAvScores()
+        public static int[] GetMyAvScores(int? teamId = null)
         {
-            return LoadProblemRankings().Select(p => p.rankings.Single(r => r.teamId == 37).score).ToArray();
+            return LoadProblemRankings().Select(p => p.rankings.Single(r => r.teamId == (teamId ?? SubmitionClient.Default.TeamId)).score).ToArray();
         }
 
         [Test]
@@ -65,5 +65,4 @@ namespace Lib
             }
         }
     }
-
 }

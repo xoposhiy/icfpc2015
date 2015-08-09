@@ -80,7 +80,9 @@ namespace Lib.Intelligence
         public SolverResult Solve(Map map)
         {
             var t = ResultAsTuple(map);
-            return new SolverResult(name, t.Item2.Scores.TotalScores, t.Item1);
+            var commands = t.Item1.ToOriginalPhrase();
+            var score = t.Item2.Scores.TotalScores + commands.GetPowerScore();
+            return new SolverResult(name, score, commands);
         }
     }
 }
