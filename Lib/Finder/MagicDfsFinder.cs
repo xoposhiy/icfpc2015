@@ -49,27 +49,36 @@ namespace Lib.Finder
         }
 
         private const int MaxDepth = 3;
+        private readonly Directions[][] allSpells = Phrases.AsDirections.Reverse().ToArray();
 
-        private IEnumerable<List<Directions[]>> GenerateSpellsSequences(List<Directions[]> list)
+        private IEnumerable<List<Directions[]>> GenerateSpellsSequences(List<Directions[]> list, int desiredLength)
         {
-            if (list.Count < MaxDepth)
+            if (list.Count < desiredLength)
             {
-                foreach (var spell in Phrases.all.OrderByDescending(p => p.Length))
+                foreach (var spell in allSpells)
                 {
-                    list.Add(spell.ToDirections().ToArray());
-                    foreach (var res in GenerateSpellsSequences(list))
+                    list.Add(spell);
+                    foreach (var res in GenerateSpellsSequences(list, desiredLength))
                         yield return res;
                     list.RemoveAt(list.Count - 1);
                 }
             }
 
-            if (list.Count > 0)
+            if (list.Count == desiredLength)
                 yield return list;
+        }
+
+        private IEnumerable<List<Directions[]>> GenerateSpellsSequences()
+        {
+            var list = new List<Directions[]>();
+            for (int length = MaxDepth; length >= 1; length--)
+                foreach (var sequence in GenerateSpellsSequences(list, length))
+                    yield return sequence;
         }
 
         public Tuple<int, IEnumerable<Directions>> GetSpellLengthAndPath(Map map, UnitPosition target)
         {
-            foreach (var sequence in GenerateSpellsSequences(new List<Directions[]>()))
+            foreach (var sequence in GenerateSpellsSequences())
             {
                 var spellLength = sequence.Sum(s => s.Length);
                 var midPositions = new UnitPosition[sequence.Count];

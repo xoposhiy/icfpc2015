@@ -43,12 +43,26 @@ namespace Lib
             Console.WriteLine(myRes.Sum(r => r.Item2.rank));
         }
 
-        private static ProblemRanking[] LoadProblemRankings()
+        public static ProblemRanking[] LoadProblemRankings()
         {
             var s = new HttpClient().GetStringAsync("https://davar.icfpcontest.org/rankings.js").Result;
             JObject v = (JObject)JsonConvert.DeserializeObject(s.Substring(11));
             var problems = v["data"]["settings"].ToObject<ProblemRanking[]>();
             return problems;
+        }
+
+        public static int[] GetMyAvScores()
+        {
+            return LoadProblemRankings().Select(p => p.rankings.Single(r => r.teamId == 37).score).ToArray();
+        }
+
+        [Test]
+        public void MyAvScores()
+        {
+            foreach (var score in GetMyAvScores())
+            {
+                Console.WriteLine(score);
+            }
         }
     }
 

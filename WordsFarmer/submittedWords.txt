@@ -149,3 +149,7 @@ OK      alalGlaaki!         Glaaki!
 OK      alalLukthu!         Lu-kthu!
 OK      alalMordiggian!     Mordiggian!
 OK      alalYig!            Yig!
+OK      alalEi!!            Ei!!
+OK      alalgalois!         galois!
+OK      alaldavar!          davar!
+OK      alalglider          glider

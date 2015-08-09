@@ -129,6 +129,12 @@ namespace Lib.Models
             return p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Height && !Filled[p.X, p.Y];
         }
 
+        public bool IsInside(Point p)
+        {
+            return p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Height;
+        }
+
+
         public Map Move(Directions dir)
         {
             var newUnit = Unit.Move(dir);

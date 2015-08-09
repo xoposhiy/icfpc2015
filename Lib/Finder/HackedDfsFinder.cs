@@ -49,36 +49,36 @@ namespace Lib.Finder
 
         private void Dfs(Map map, List<Directions> history)
         {
-            int phraseIndex = 0;
-            int phrasePrefix = 0;
-            for (int i = 0; i < 3; i++)
+            var maxPrefixForDir = new Tuple<int, int>[dirs.Length];
+            for (int i = 0; i < dirs.Length; i++)
+                maxPrefixForDir[i] = Tuple.Create(-1, i);
+
+            for (int i = 0; i < 1; i++)
             {
                 var directions = Phrases.AsDirections[i];
-                for (int j = 1; j <= Math.Min(directions.Length - 1, history.Count); j++)
+                for (int j = Math.Min(directions.Length - 1, history.Count); j >= 0; j--)
                 {
                     bool eq = true;
                     for (int k = 0; k < j && eq; k++)
                         if (directions[k] != history[history.Count - j + k])
                             eq = false;
-                    if (eq && j >= phrasePrefix && map.IsGoodPath(directions.Skip(j)))
+                    if (eq && map.IsGoodPath(directions.Skip(j)))
                     {
-                        phraseIndex = i;
-                        phrasePrefix = j;
+                        int index = (int)directions[j];
+                        var pair = maxPrefixForDir[index];
+                        if (j >= pair.Item1)
+                            maxPrefixForDir[index] = Tuple.Create(j, pair.Item2);
+                        break;
                     }
                 }
             }
-            int charIndex = phrasePrefix;
 
-            var phrase = Phrases.AsDirections[phraseIndex];
-            if (charIndex >= phrase.Length)
-                throw new Exception();
-            var dir = phrase[charIndex];
-            DfsStep(map, dir, history);
-            foreach (var d in dirs)
-                DfsStep(map, d, history);
+            var dirsOrder = Enumerable.Range(0, dirs.Length).OrderByDescending(i => maxPrefixForDir[i]);
+            foreach (var d in dirsOrder)
+                DfsStep(map, (Directions)d, history);
         }
 
-        private static Random r = new Random();
+        private static readonly Random r = new Random();
 
         private void DfsStep(Map map, Directions d, List<Directions> history)
         {

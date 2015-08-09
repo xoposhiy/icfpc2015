@@ -76,3 +76,5 @@ Period  alalA252!           A-25-2!
 Period  alalsomething 'davar' visually written actual 'davar' Human 'Hex' simultaneously!something 'davar' visually written actual 'davar' Human 'Hex' simultaneously!
 Period  alalNyarlathotep!   Nyarlathotep!
 Period  alalY'golonac!      Y'golonac!
+Period  alalturing!         turing!
+Period  alalturing          turing
