@@ -17,6 +17,12 @@ namespace Lib.ArenaImpl
         {
             EvaluateSolver(EdgeSolver());
         }
+        [Test]
+        public void FastEvaluate()
+        {
+            int[] smallMaps = { 0, 1, 10, 13, 15, 16, 17, 19, 20, 21, 22, 23 };
+            EvaluateSolver(EdgeSolver(), smallMaps);
+        }
 
         private static void EvaluateSolver(Solver solver, params int[] maps)
         {

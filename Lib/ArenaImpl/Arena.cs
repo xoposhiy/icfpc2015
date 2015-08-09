@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Lib.ArenaImpl
@@ -24,7 +25,9 @@ namespace Lib.ArenaImpl
         {
             foreach (var arenaProblem in Problems)
             {
+                var sw = Stopwatch.StartNew();
                 RunProblem(arenaProblem, solver);
+                Console.WriteLine(arenaProblem.Problem.id + " " + sw.Elapsed);
             }
             return new ArenaModel { Problems = Problems, SolverName = solver.Name };
         }
