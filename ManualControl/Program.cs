@@ -18,11 +18,11 @@ namespace ManualControl
         {
             //RunTest(); return;
 
-            var map = Problems.LoadProblems()[9].ToMap(0);
+            var map = Problems.LoadProblems()[7].ToMap(0);
 
             var model = new MainModel();
             var dfsFinder = new MagicDfsFinder();
-            var mephala = new MephalaOracle(dfsFinder, WeightedMetric.Sunder);
+            var mephala = new MephalaOracle(dfsFinder, WeightedMetric.Keening);
             //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
             model.Solver = new Lib.Intelligence.Solver(dfsFinder, mephala);
             model.History = new History(map);

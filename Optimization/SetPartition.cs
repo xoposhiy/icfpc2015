@@ -18,7 +18,7 @@ namespace SetPartition
     static class SetPartition
     {
         static Random rnd = new Random();
-        static Map initialMap = Problems.LoadProblems()[9].ToMap(0);
+        static Map initialMap = Problems.LoadProblems()[7].ToMap(0);
 
         static List<Func<Map, Map, PositionedUnit, double>> functions = WeightedMetric.KnownFunctions.ToList();
 
