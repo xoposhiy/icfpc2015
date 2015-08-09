@@ -196,3 +196,9 @@ OK      alalBuckarooBanzai  BuckarooBanzai
 OK      alalPlanet 10       Planet 10
 OK      alalYoyodyne        Yoyodyne
 OK      alalcanada          canada
+OK      alalConway          Conway
+OK      alalCocke           Cocke
+OK      alalBackus          Backus
+OK      alalBigboote        Bigboote
+OK      alalbigbooty        big-booty
+OK      alalbigbootay       bigboo-tay

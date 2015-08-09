@@ -101,7 +101,7 @@ namespace Lib.ArenaImpl
             var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
             var hircine = new HircineOracle(finder, mephala, WeightedMetric.Keening, 2, 5);
 
-            var solver = new Solver(finder, hircine);
+            var solver = new Solver(finder, mephala);
             return solver;
         }
     }

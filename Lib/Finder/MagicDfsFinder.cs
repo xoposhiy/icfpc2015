@@ -48,7 +48,7 @@ namespace Lib.Finder
             return new UnitPosition(new Point(x, y), a);
         }
 
-        private const int MaxDepth = 2;
+        private const int MaxDepth = 3;
         private readonly Directions[][] allSpells = Phrases.AsDirections.Reverse().ToArray();
 
         private IEnumerable<List<Directions[]>> GenerateSpellsSequences(List<Directions[]> list, int desiredLength)
