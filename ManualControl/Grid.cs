@@ -26,6 +26,11 @@ namespace ManualControl
 
         protected override void OnSizeChanged(EventArgs e)
         {
+            UpdateRadius();
+        }
+
+        public void UpdateRadius()
+        {
             Radius = (int)Math.Min(
                 Width / (Map.Width * Geometry.Width),
                 Height / (Map.Height * Geometry.YOffset));
