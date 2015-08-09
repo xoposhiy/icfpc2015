@@ -18,6 +18,7 @@ namespace Lib.Intelligence
 
         public MephalaOracle(IFinder finder, List<MephalaMetric> metrics)
         {
+            this.metrics = metrics;
             this.finder = finder;
         }
          
