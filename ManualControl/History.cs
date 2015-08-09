@@ -30,6 +30,8 @@ namespace ManualControl
 
     public class History
     {
+        private readonly Phrases phrases = new Phrases(Phrases.DefaultPowerWords);
+
         List<HistoryItem> allHistory;
         public int CurrentPosition { get; private set; }
         public Map CurrentMap {  get { return allHistory[CurrentPosition].Map; } }
@@ -38,7 +40,7 @@ namespace ManualControl
 
         public string GetCommandsInOriginalTongueForCurrentPosition()
         {
-            return string.Join("", allHistory.Skip(1).Take(CurrentPosition).Select(x => x.Char)).ToOriginalPhrase();
+            return phrases.ToOriginalPhrase(string.Join("", allHistory.Skip(1).Take(CurrentPosition).Select(x => x.Char)));
         }
 
         public bool Ended { get { return CurrentPosition == allHistory.Count - 1; } }

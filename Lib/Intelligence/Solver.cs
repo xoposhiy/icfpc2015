@@ -9,13 +9,15 @@ namespace Lib.Intelligence
 {
     public class Solver : ISolver
     {
+        private readonly Phrases phrases;
         public readonly IFinder Finder;
         public readonly IOracle Oracle;
         private readonly int bestSugessionsCount;
         private readonly double metricEpsilon;
 
-        public Solver(IFinder finder, IOracle oracle, int bestSugessionsCount = 20, double metricEpsilon = 1)
+        public Solver(Phrases phrases, IFinder finder, IOracle oracle, int bestSugessionsCount = 20, double metricEpsilon = 1)
         {
+            this.phrases = phrases;
             Finder = finder;
             Oracle = oracle;
             this.bestSugessionsCount = bestSugessionsCount;
@@ -36,7 +38,7 @@ namespace Lib.Intelligence
             return
                 selectedSugessions
                     .Select(s => GetPath(map, s))
-                    .MaxItem(path => path.ToPhrase().ToOriginalPhrase().GetPowerScore());
+                    .MaxItem(path => phrases.GetPowerScore(phrases.ToOriginalPhrase(path.ToPhrase())));
         }
 
         private IEnumerable<Directions> GetPath(Map map, OracleSuggestion s)
@@ -64,8 +66,8 @@ namespace Lib.Intelligence
         public SolverResult Solve(Map map)
         {
             var t = ResultAsTuple(map);
-            var commands = t.Item1.ToOriginalPhrase();
-            var score = t.Item2.Scores.TotalScores + commands.GetPowerScore();
+            var commands = phrases.ToOriginalPhrase(t.Item1);
+            var score = t.Item2.Scores.TotalScores + phrases.GetPowerScore(commands);
             return new SolverResult(Name, score, commands);
         }
     }

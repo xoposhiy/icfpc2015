@@ -20,7 +20,7 @@ namespace Lib
                 var unitsCells = (int)units.Average(u => u.members.Count) * sourceLength;
                 var cells = unitsCells + filled.Count;
                 var lines = cells / width;
-                return unitsCells + 100 * lines + 300 * (Phrases.all.Length - 1);
+                return unitsCells + 100 * lines + 300 * (Phrases.DefaultPowerWords.Length - 1);
             }
         }
         public int height { get; set; }

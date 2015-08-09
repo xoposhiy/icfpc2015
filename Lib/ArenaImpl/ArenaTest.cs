@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -19,14 +18,14 @@ namespace Lib.ArenaImpl
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void EvaluateEdgeSolver()
         {
-            EvaluateSolver(CuttingEdgeSolver());
+            EvaluateSolver(CuttingEdgeSolver(Phrases.DefaultPowerWords));
         }
         [Test]
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void FastEvaluate()
         {
             int[] smallMaps = { 0, 1, 10, 13, 15, 16, 17, 19, 20, 21, 22, 23 };
-            EvaluateSolver(CuttingEdgeSolver(), smallMaps);
+            EvaluateSolver(CuttingEdgeSolver(Phrases.DefaultPowerWords), smallMaps);
         }
 
         [Test]
@@ -34,7 +33,7 @@ namespace Lib.ArenaImpl
         public void FastOnBadProblems()
         {
             int[] smallMaps = { 14 };
-            EvaluateSolver(CuttingEdgeSolver(), smallMaps);
+            EvaluateSolver(CuttingEdgeSolver(Phrases.DefaultPowerWords), smallMaps);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -95,13 +94,14 @@ namespace Lib.ArenaImpl
             return model;
         }
 
-        public static Solver CuttingEdgeSolver()
+        public static Solver CuttingEdgeSolver(string[] powerWords)
         {
-            var finder = new MagicDfsFinder();
+            var phrases = new Phrases(powerWords);
+            var finder = new MagicDfsFinder(phrases);
             var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
             var hircine = new HircineOracle(finder, mephala, WeightedMetric.Keening, 2, 5);
 
-            var solver = new Solver(finder, mephala);
+            var solver = new Solver(phrases, finder, mephala);
             return solver;
         }
     }

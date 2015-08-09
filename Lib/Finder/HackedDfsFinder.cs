@@ -7,9 +7,15 @@ namespace Lib.Finder
 {
     public class HackedDfsFinder : IFinder
     {
+        private readonly Phrases phrases;
         private Map Map;
         private Dictionary<UnitPosition, Tuple<Map, Directions>> Parents;
         private readonly Directions[] dirs = (Directions[])Enum.GetValues(typeof(Directions));
+
+        public HackedDfsFinder(Phrases phrases)
+        {
+            this.phrases = phrases;
+        }
 
         public Tuple<int, IEnumerable<Directions>> GetSpellLengthAndPath(Map map, UnitPosition target)
         {
@@ -55,7 +61,7 @@ namespace Lib.Finder
 
             for (int i = 0; i < 1; i++)
             {
-                var directions = Phrases.AsDirections[i];
+                var directions = phrases.AsDirections[i];
                 for (int j = Math.Min(directions.Length - 1, history.Count); j >= 0; j--)
                 {
                     bool eq = true;

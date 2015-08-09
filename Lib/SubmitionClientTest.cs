@@ -80,16 +80,18 @@ namespace Lib
 
         private static SubmitionJson Solve(ProblemJson p, int seed)
         {
+            var phrases = new Phrases(Phrases.DefaultPowerWords);
+
             var map = p.ToMap(seed);
-            var finder = new MagicDfsFinder();
-            var bestRes = new Solver(finder, new MephalaOracle(finder, WeightedMetric.Keening)).Solve(map);
+            var finder = new MagicDfsFinder(phrases);
+            var bestRes = new Solver(phrases, finder, new MephalaOracle(finder, WeightedMetric.Keening)).Solve(map);
 //            var s2 = new Solver(finder, new AzuraOracle()).Solve(map);
 //            var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
             return new SubmitionJson
             {
                 problemId = p.id,
                 seed = seed,
-                solution = bestRes.Commands.ToOriginalPhrase(),
+                solution = phrases.ToOriginalPhrase(bestRes.Commands),
                 tag = bestRes.Name + "-" + DateTime.Now
             };
         }

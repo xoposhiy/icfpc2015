@@ -34,9 +34,10 @@ namespace SetPartition
 
         static double Run(List<WeightedMetric> metric)
         {
-            var finder = new MagicDfsFinder();
+            var phrases = new Phrases(Phrases.DefaultPowerWords);
+            var finder = new MagicDfsFinder(phrases);
             var mephala = new MephalaOracle(finder, metric);
-            var solver = new Solver(finder, mephala);
+            var solver = new Solver(phrases, finder, mephala);
             // Console.Write("Solving ");
             //Console.WriteLine(argument.Code.Select(z => Math.Round(z, 3).ToString()).Aggregate((a, b) => a + " " + b));
             var result = solver.Solve(initialMap);

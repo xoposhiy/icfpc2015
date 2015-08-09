@@ -9,7 +9,17 @@ namespace Lib.Finder
 {
     public class MagicDfsFinder : IFinder
     {
-        private readonly IFinder dfsFinder = new HackedDfsFinder();
+        private const int MaxDepth = 2;
+        private readonly IFinder dfsFinder;
+        private readonly Phrases phrases;
+        private readonly Directions[][] allSpells;
+
+        public MagicDfsFinder(Phrases phrases)
+        {
+            this.phrases = phrases;
+            dfsFinder = new HackedDfsFinder(phrases);
+            allSpells = phrases.AsDirections.Reverse().ToArray();
+        }
 
         private static UnitPosition GetMidPositionByPhrase(UnitPosition target, IEnumerable<Directions> directions, int period)
         {
@@ -47,9 +57,6 @@ namespace Lib.Finder
             }
             return new UnitPosition(new Point(x, y), a);
         }
-
-        private const int MaxDepth = 2;
-        private readonly Directions[][] allSpells = Phrases.AsDirections.Reverse().ToArray();
 
         private IEnumerable<List<Directions[]>> GenerateSpellsSequences(List<Directions[]> list, int desiredLength)
         {

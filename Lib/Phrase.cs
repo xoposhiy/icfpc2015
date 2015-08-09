@@ -10,11 +10,6 @@ namespace Lib
 {
     public class Phrase
     {
-        public static implicit operator Phrase(string original)
-        {
-            return new Phrase(original);
-        }
-
         public Phrase(string original)
         {
             Original = original;
@@ -50,7 +45,7 @@ namespace Lib
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Move()
         {
-            Approvals.VerifyAll(Phrases.Words.Select(w => w.shift + " " + w.Original), "phrase");
+            Approvals.VerifyAll(new Phrases(Phrases.DefaultPowerWords).Words.Select(w => w.shift + " " + w.Original), "phrase");
         }
     }
 }

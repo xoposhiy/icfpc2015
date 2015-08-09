@@ -6,9 +6,9 @@ using NUnit.Framework;
 
 namespace Lib
 {
-    public static class Phrases
+    public class Phrases
     {
-        public static Phrase[] Words =
+        public static string[] DefaultPowerWords =
         {
             "Ei!", // powerBits: 1
             "R'lyeh", // powerBits: 4
@@ -24,13 +24,22 @@ namespace Lib
             "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn." // powerBits: 516 = 512 + 4
         };
 
-        public static string[] all = Words.Select(w => w.Original).ToArray();
-        public static Directions[][] AsDirections = all.Select(p => p.ToDirections().ToArray()).ToArray();
-        public static string[] AsCanonical = AsDirections.Select(ds => ds.ToPhrase()).ToArray();
-
-        public static string ToOriginalPhrase(this string text)
+        public Phrases(string[] powerWords)
         {
-            var pairs = AsCanonical.Zip(all, (s1, s2) => new {canonical = s1, original = s2}).OrderByDescending(pair => pair.canonical.Length).ToList();
+            Words = powerWords.Select(x => new Phrase(x)).ToArray();
+            All = Words.Select(w => w.Original).ToArray();
+            AsDirections = All.Select(p => p.ToDirections().ToArray()).ToArray();
+            AsCanonical = AsDirections.Select(ds => ds.ToPhrase()).ToArray();
+        }
+
+        public readonly Phrase[] Words;
+        public readonly string[] All;
+        public readonly Directions[][] AsDirections;
+        public readonly string[] AsCanonical;
+
+        public string ToOriginalPhrase(string text)
+        {
+            var pairs = AsCanonical.Zip(All, (s1, s2) => new {canonical = s1, original = s2}).OrderByDescending(pair => pair.canonical.Length).ToList();
             while (true)
             {
                 var found = false;
@@ -49,27 +58,27 @@ namespace Lib
             return text;
         }
 
-        public static int GetPowerScore(this string textInOriginalTongue)
+        public int GetPowerScore(string textInOriginalTongue)
         {
             int score;
             var words = GetPowerWords(textInOriginalTongue, out score);
             return score + words.Count * 300;
         }
 
-        public static int GetPowerScoreWithoutUniqueBonus(this string textInOriginalTongue)
+        public int GetPowerScoreWithoutUniqueBonus(string textInOriginalTongue)
         {
             int score;
             GetPowerWords(textInOriginalTongue, out score);
             return score;
         }
 
-        public static HashSet<string> GetPowerWords(this string textInOriginalTongue, out int scoreWithoutUniqueBonus)
+        public HashSet<string> GetPowerWords(string textInOriginalTongue, out int scoreWithoutUniqueBonus)
         {
             var distinctWords = new HashSet<string>();
             scoreWithoutUniqueBonus = 0;
-            for (var index = 0; index < all.Length; index++)
+            for (var index = 0; index < All.Length; index++)
             {
-                var phrase = all[index];
+                var phrase = All[index];
                 var startIndex = 0;
                 int foundIndex;
                 while ((foundIndex = textInOriginalTongue.IndexOf(phrase, startIndex, StringComparison.InvariantCulture)) >= 0)
@@ -89,7 +98,7 @@ namespace Lib
         [Test]
         public void Test()
         {
-            var ps = Phrases.AsDirections.Select(p => p.ToPhrase());
+            var ps = new Phrases(Phrases.DefaultPowerWords).AsDirections.Select(p => p.ToPhrase());
             foreach (var p in ps)
                 Console.WriteLine(p);
         }
@@ -97,10 +106,11 @@ namespace Lib
         [Test]
         public void ToOriginal()
         {
-            var original = string.Join("", Phrases.all);
+            var phrases = new Phrases(Phrases.DefaultPowerWords);
+            var original = string.Join("", phrases.All);
             var canonical = original.ToDirections().ToPhrase();
             Console.WriteLine(canonical);
-            var converted = canonical.ToOriginalPhrase();
+            var converted = phrases.ToOriginalPhrase(canonical);
             Console.WriteLine(converted);
             Assert.AreEqual(original, converted);
         }
@@ -108,14 +118,18 @@ namespace Lib
         [Test]
         public void GetPowerScore()
         {
-            Assert.That("Ei!".GetPowerScore(), Is.EqualTo(306));
-            Assert.That("Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!".GetPowerScore(), Is.EqualTo(714));
+            var phrases = new Phrases(Phrases.DefaultPowerWords);
+            Assert.That(phrases.GetPowerScore("Ei!"), Is.EqualTo(306));
+            Assert.That(phrases.GetPowerScore("Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!"), Is.EqualTo(714));
         }
 
         [Test]
         public void Score_NestedPhrase()
         {
-            Assert.That("Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!".ToDirections().ToPhrase().ToOriginalPhrase().GetPowerScore(), Is.EqualTo(714));
+            var phrases = new Phrases(Phrases.DefaultPowerWords);
+            var testPhrase = "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!".ToDirections().ToPhrase();
+            var originalPhrase = phrases.ToOriginalPhrase(testPhrase);
+            Assert.That(phrases.GetPowerScore(originalPhrase), Is.EqualTo(714));
         }
     }
 }

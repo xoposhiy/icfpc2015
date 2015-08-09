@@ -11,6 +11,8 @@ namespace ManualControl
 {
     internal class TetrisForm : Form
     {
+        private readonly Phrases phrases = new Phrases(Phrases.DefaultPowerWords);
+
         private readonly MainModel mapHistory;
         public Map Map => mapHistory.History.CurrentMap;
         private readonly Dictionary<Keys, Directions> keymap;
@@ -145,7 +147,7 @@ namespace ManualControl
                 MessageBox.Show("Сам туда иди!");
                 return;
             }
-            var program = path.ToPhrase().ToOriginalPhrase();
+            var program = phrases.ToOriginalPhrase(path.ToPhrase());
             mapHistory.History.Append(program, "Hand");
             mapHistory.Play();
         }
@@ -173,7 +175,8 @@ namespace ManualControl
 
         void MakeMove()
         {
-            var program = mapHistory.Solver.MakeMove(Map)?.ToPhrase()?.ToOriginalPhrase();
+            var phrase = mapHistory.Solver.MakeMove(Map)?.ToPhrase();
+            var program = phrase == null ? null : phrases.ToOriginalPhrase(phrase);
             if (program == null) return;
             mapHistory.History.Append(program, "Iter" + IterationNumber);
             IterationNumber++;
@@ -207,7 +210,7 @@ namespace ManualControl
             grid.Invalidate();
             var moveScores = Map.Scores.TotalScores;
             if (powerScoreUpdateSteps++ % FastForwardSteps == 0)
-                powerScore = mapHistory.History.GetCommandsInOriginalTongueForCurrentPosition().GetPowerScore();
+                powerScore = phrases.GetPowerScore(mapHistory.History.GetCommandsInOriginalTongueForCurrentPosition());
             var totalScore = powerScore + moveScores;
             scores.Text = string.Format("M:{0} P:{1} T:{2}", moveScores, powerScore, totalScore);
         }

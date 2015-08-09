@@ -15,7 +15,7 @@ namespace Lib.Models
         [Test, UseReporter(typeof(DiffReporter))]
         public void Test()
         {
-            var directions = Phrases.all.Select(w => w + " → " + string.Join(" ", w.ToDirections().Select(d => d.ToString())));
+            var directions = new Phrases(Phrases.DefaultPowerWords).All.Select(w => w + " → " + string.Join(" ", w.ToDirections().Select(d => d.ToString())));
             Console.WriteLine(directions);
             Approvals.VerifyAll(directions, "d");
         }

@@ -84,7 +84,7 @@ namespace Lib.Models
         [Test]
         public void Test()
         {
-            var ds = string.Join("", Phrases.all).ToLower().ToDirections().ToList();
+            var ds = string.Join("", new Phrases(Phrases.DefaultPowerWords).All).ToLower().ToDirections().ToList();
             var converted = ds.ToPhrase().ToDirections();
             CollectionAssert.AreEqual(ds, converted);
         }

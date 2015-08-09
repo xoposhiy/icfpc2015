@@ -12,9 +12,7 @@ namespace play_icfp2015
         private static void Main(string[] args)
         {
             var powerWords = ParseMultiArgs(args, "-p").ToArray();
-            Phrases.all = powerWords;
-
-            var solver = ArenaTest.CuttingEdgeSolver();
+            var solver = ArenaTest.CuttingEdgeSolver(powerWords);
             var tag = "final-submission-" + DateTime.Now;
             var submissions =
                 from problem in LoadProblems(args)
