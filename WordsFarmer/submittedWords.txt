@@ -1,0 +1,99 @@
+﻿OK    alalLovecraft
+OK    alalLovecraft!
+OK    alalThe Temple
+OK    alalThe Nameless City
+OK    alalThe Moon Bog
+OK    alalThe Moon Bog!
+OK    alalEx Oblivione
+OK    alalEx Oblivione!
+OK    alalThe Outsider
+OK    alalThe Outsider!
+OK    alalSweet Ermengarde
+OK    alalWhat the Moon Brings
+OK    alalWhat the Moon Brings!
+OK    alalAzathoth
+OK    alalAzathoth!
+OK    alalThe Hound
+OK    alalThe Hound!
+OK    alalThe Rats in the Walls
+OK    alalThe Rats in the Walls!
+OK    alalThe Unnamable
+OK    alalThe Festival
+OK    alalThe Festival!
+OK    alalThe Shunned House
+OK    alalThe Horror at Red Hook
+OK    alalThe Horror at Red Hook!
+OK    alalHe
+OK    alalIn the Vault
+OK    alalIn the Vault!
+OK    alalCool Air
+OK    alalCool Air!
+OK    alalPickman's Model
+OK    alalPickman's Model!
+OK    alalThe Silver Key
+OK    alalThe Descendant
+OK    alalThe Descendant!
+OK    alalThe Very Old Folk
+OK    alalThe Very Old Folk!
+OK    alalHistory of the Necronomicon
+OK    alalHistory of the Necronomicon!
+OK    alalIbid
+OK    alalIbid!
+OK    alalThe Book
+OK    alalThe Book!
+OK    alalThe Evil Clergyman
+OK    alalThe Evil Clergyman!
+OK    alalThe Shadow Out of Time
+OK    alalAbholos
+OK    alalAbholos!
+OK    alalAlala
+OK    alalAlala!
+OK      alalNecronomicon
+OK      alalNecronomicon!
+OK      alalAmmutseba
+OK      alalAmmutseba!
+OK      alalAphoom Zhah
+OK      alalAphoom Zhah!
+OK      alalApocolothoth
+OK      alalApocolothoth!
+OK      alalAtlach Nacha
+OK      alalAtlach Nacha!
+OK      alalAyi'ig
+OK      alalAyi'ig!
+OK      alalAylith
+OK      alalAylith!
+OK      alalBasatan
+OK      alalBasatan!
+OK      alalBugg Shash
+OK      alalBugg Shash!
+OK      alalByatis
+OK      alalByatis!
+OK      alalChaugnar Faugn
+OK      alalChaugnar Faugn!
+OK      alalCoatlicue
+OK      alalCoinchenn
+OK      alalCoinchenn!
+OK      alalCthaat
+OK      alalCthaat!
+OK      alalCthaeghya
+OK      alalCthaeghya!
+OK      alalCthugha
+OK      alalCthugha!
+OK      alalCthulhu
+OK      alalCthulhu!
+OK      alalCthylla
+OK      alalCthylla!
+OK      alalCtoggha
+OK      alalCtoggha!
+OK      alalCynothoglys
+OK      alalCynothoglys!
+OK      alalDhumin
+OK      alalDhumin!
+OK      alalDygra
+OK      alalDygra!
+OK      alalDythalla
+OK      alalDythalla!
+OK      alalEi'lor
+OK      alalEi'lor!
+OK      alalGhadamon
+OK      alalGhadamon!

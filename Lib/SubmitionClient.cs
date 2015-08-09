@@ -11,6 +11,7 @@ namespace Lib
 		private readonly int teamId;
 		private readonly string apiKey;
 		public static readonly SubmitionClient Default = new SubmitionClient(37, "0u0hbMTthhsUHWOZwAngrgZBZZM5J/OuXaexUvIsP0k=");
+		public static readonly SubmitionClient ForMining = new SubmitionClient(300, "F5zuiPDlHUUuOLC38CZpSBgD2G0WVpQWrmSIxJPFNNw=");
 
 		public SubmitionClient(int teamId, string apiKey)
 		{

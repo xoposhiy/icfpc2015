@@ -77,12 +77,12 @@ namespace ManualControl
                 g.FillEllipse(Brushes.LightSkyBlue, gx - f, gy - f, 2 * f, 2 * f);
             }
             g.DrawLines(pen, points);
-            g.DrawString($"{kx - LabelXOffset},{ky - LabetYOffset}",
-                         new Font("Arial", Radius / 2.5f),
-                         Brushes.Black,
-                         new Rectangle(gx - 100, gy - 100, 200, 200),
-                         new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center }
-                );
+            //g.DrawString($"{kx - LabelXOffset},{ky - LabetYOffset}",
+            //             new Font("Arial", Radius / 2.5f),
+            //             Brushes.Black,
+            //             new Rectangle(gx - 100, gy - 100, 200, 200),
+            //             new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center }
+            //    );
         }
 
         public void DrawHexagon(Graphics g, int x, int y, Pen pen, Brush brush, bool marked)
@@ -116,7 +116,7 @@ namespace ManualControl
                 }
             }
 
-            if (requestedLocation != null)
+            if (requestedLocation != null &&  !mapHistory.Playing)
             {
                 IEnumerable<Directions> path = null;
                 path = mapHistory.Solver.Finder.GetPath(
@@ -156,6 +156,8 @@ namespace ManualControl
 
         void SetRequestedLocation(Point location, int angle)
         {
+            if (mapHistory.Playing) return;
+
             if (requestedLocation != null
                 && requestedLocation.Position.Point == location
                 && requestedLocation.Position.Angle == angle)
@@ -186,6 +188,8 @@ namespace ManualControl
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
+            if (mapHistory.Playing) return;
+
             requestedAngle = e.Delta < 0 ? requestedAngle + 1 : requestedAngle - 1;
             requestedAngle = requestedAngle % Map.Unit.Unit.Period;
             SetRequestedLocation(GetLocation(e), requestedAngle);
@@ -194,6 +198,8 @@ namespace ManualControl
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            if (mapHistory.Playing) return;
+
             SetRequestedLocation(GetLocation(e), requestedAngle);
         }
 
@@ -201,6 +207,8 @@ namespace ManualControl
 
         protected override void OnDoubleClick(EventArgs e)
         {
+            if (mapHistory.Playing) return;
+
             if (requestedLocation != null)
                 MovementRequested(requestedLocation.Position);
         }

@@ -19,11 +19,22 @@ namespace ManualControl
 
         public bool Playing { get; private set; }
 
+        public event Action ContinuationRequest;
+
         public MainModel()
         {
             timer = new Timer();
             timer.Interval = 10;
-            timer.Tick += (s, a) => { History.Forward(); if (History.Ended) Pause(); };
+            timer.Tick += (s, a) =>
+            {
+                History.Forward();
+                if (History.Ended)
+                {
+                    Pause();
+                    if (ContinuationRequest != null) ContinuationRequest();
+
+                }
+            };
         }
 
         public void Play()

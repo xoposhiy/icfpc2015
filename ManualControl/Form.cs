@@ -131,6 +131,11 @@ namespace ManualControl
         private void RunBotIteration_Click(object sender, EventArgs e)
         {
             if (mapHistory.Playing) return;
+            MakeMove();
+        }
+
+        void MakeMove()
+        {
             var program = mapHistory.Solver.MakeMove(Map).ToPhrase().ToOriginalPhrase();
             mapHistory.History.Append(program, "Iter" + IterationNumber);
             IterationNumber++;
@@ -140,9 +145,12 @@ namespace ManualControl
         private void RunBotGame_Click(object sender, EventArgs e)
         {
             if (mapHistory.Playing) return;
-            var program = mapHistory.Solver.Solve(Map).Commands;
-            mapHistory.History.Append(program, "Game");
-            mapHistory.Play();
+            mapHistory.ContinuationRequest += () =>
+            {
+                if (!mapHistory.History.Items.Last().Map.IsOver)
+                    MakeMove();
+            };
+            MakeMove();
         }
   
 
