@@ -50,9 +50,9 @@ namespace Lib.Finder
         {
             var maxPrefixForDir = new Tuple<int, int>[dirs.Length];
             for (int i = 0; i < dirs.Length; i++)
-                maxPrefixForDir[i] = Tuple.Create(0, i);
+                maxPrefixForDir[i] = Tuple.Create(-1, i);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 var directions = Phrases.AsDirections[i];
                 for (int j = Math.Min(directions.Length - 1, history.Count); j >= 0; j--)
@@ -65,7 +65,7 @@ namespace Lib.Finder
                     {
                         int index = (int)directions[j];
                         var pair = maxPrefixForDir[index];
-                        if (j > pair.Item1)
+                        if (j >= pair.Item1)
                             maxPrefixForDir[index] = Tuple.Create(j, pair.Item2);
                         break;
                     }
