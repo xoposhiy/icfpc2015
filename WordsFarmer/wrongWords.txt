@@ -78,3 +78,7 @@ Period  alalNyarlathotep!   Nyarlathotep!
 Period  alalY'golonac!      Y'golonac!
 Period  alalturing!         turing!
 Period  alalturing          turing
+Period  alalmiskatonic!     miskatonic!
+Period  alalarkham!         arkham!
+Period  alalhoneycomb!      honeycomb!
+Period  alalblue hades!     blue hades!

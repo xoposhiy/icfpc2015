@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Lib.Models;
@@ -11,12 +12,15 @@ namespace Lib
         public static Phrase[] Words =
         {
             "Ei!", // powerBits: 1
-            "Ia! Ia!", // powerBits: 2
             "R'lyeh", // powerBits: 4
+            "Ia! Ia!", // powerBits: 2
             "Yuggoth", //powerBits: 8
             "YogSothoth", //powerBits: 32
-            "Necronomicon", // powerBits: 64
-            "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!", // powerBits: 516 = 512 + 4
+            "blue hades", //powerBits: 65536
+            "Tsathoggua", //powerBits: 16
+            "Necronomicon", //powerBits: 64
+            "cthulhu fhtagn!", //powerBits: 256
+            "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn." // powerBits: 516 = 512 + 4
         };
 
         public static string[] all = Words.Select(w => w.Original).ToArray();
@@ -46,7 +50,15 @@ namespace Lib
 
         public static int GetPowerScore(this string textInOriginalTongue)
         {
-            var pScore = new int[all.Length];
+            int score;
+            var words = GetPowerWords(textInOriginalTongue, out score);
+            return score + words.Distinct().Count() * 300;
+        }
+
+        public static IEnumerable<string> GetPowerWords(this string textInOriginalTongue, out int scoreWithoutUniqueBonus)
+        {
+            var words = new List<string>();
+            scoreWithoutUniqueBonus = 0;
             for (var index = 0; index < all.Length; index++)
             {
                 var phrase = all[index];
@@ -54,14 +66,13 @@ namespace Lib
                 int foundIndex;
                 while ((foundIndex = textInOriginalTongue.IndexOf(phrase, startIndex, StringComparison.InvariantCulture)) >= 0)
                 {
-                    if (pScore[index] == 0)
-                        pScore[index] = 300;
-                    pScore[index] += 2 * phrase.Length;
+                    scoreWithoutUniqueBonus += 2 * phrase.Length;
                     startIndex = foundIndex + 1;
+                    words.Add(phrase);
                 }
             }
-            return pScore.Sum();
-        }
+            return words;
+        } 
     }
 
     [TestFixture]

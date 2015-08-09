@@ -17,6 +17,7 @@ namespace Lib.ArenaImpl
             this.Problems = problems.Select(p => new ArenaProblem
             {
                 Problem = p,
+                Id = p.id,
                 MapResults = p.sourceSeeds.Select(seed => new ArenaMapResult { Seed = seed }).ToArray()
             }).ToArray();
         }
