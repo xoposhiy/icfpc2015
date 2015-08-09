@@ -26,18 +26,21 @@ namespace Lib.Intelligence
         {
             var suggestions = Oracle.GetSuggestions(map).ToList();
 
-            int magicNumber = 3;
+            int magicNumber = 0;
 
             double bestMetrics = -1;
             IEnumerable<Directions> bestPath = null;
             int bestSuggestionIndex = -1;
 
-            for (int i = 0; i < Math.Min(magicNumber, suggestions.Count); i++)
+            for (int i = 0; i < suggestions.Count; i++)
             {
+                if (suggestions[i].Metrics / suggestions[0].Metrics < 0.99) break;
+                magicNumber++;
+
                 var result = Finder.GetSpellLengthAndPath(map, suggestions[i].Position);
-                if(result == null) continue;
+                if (result == null) continue;
                 
-                var metrics = suggestions[i].Metrics + result.Item1 / 100.0;
+                var metrics = Math.Min(1, suggestions[i].Metrics + result.Item1 / 100.0);
                 if (metrics > bestMetrics)
                 {
                     bestMetrics = metrics;
