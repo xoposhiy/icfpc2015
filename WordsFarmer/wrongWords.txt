@@ -101,3 +101,6 @@ Period  alalicfpc2015       icfpc2015
 Period  alalInternational Conference on Functional ProgrammingInternational Conference on Functional Programming
 Period  alalconference2015  conference2015
 Period  alal2015            2015
+Period  alalvancouver       vancouver
+Period  alalvancouver2015   vancouver2015
+Period  alalvancouver 2015  vancouver 2015

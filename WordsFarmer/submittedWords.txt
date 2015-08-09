@@ -195,3 +195,4 @@ OK      alalBuckaroo Banzai Buckaroo Banzai
 OK      alalBuckarooBanzai  BuckarooBanzai
 OK      alalPlanet 10       Planet 10
 OK      alalYoyodyne        Yoyodyne
+OK      alalcanada          canada
