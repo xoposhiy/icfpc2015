@@ -51,12 +51,12 @@ namespace Lib
         {
             int score;
             var words = GetPowerWords(textInOriginalTongue, out score);
-            return score + words.Distinct().Count() * 300;
+            return score + words.Count * 300;
         }
 
-        public static IEnumerable<string> GetPowerWords(this string textInOriginalTongue, out int scoreWithoutUniqueBonus)
+        public static HashSet<string> GetPowerWords(this string textInOriginalTongue, out int scoreWithoutUniqueBonus)
         {
-            var words = new List<string>();
+            var distinctWords = new HashSet<string>();
             scoreWithoutUniqueBonus = 0;
             for (var index = 0; index < all.Length; index++)
             {
@@ -67,10 +67,10 @@ namespace Lib
                 {
                     scoreWithoutUniqueBonus += 2 * phrase.Length;
                     startIndex = foundIndex + 1;
-                    words.Add(phrase);
+                    distinctWords.Add(phrase);
                 }
             }
-            return words;
+            return distinctWords;
         } 
     }
 
