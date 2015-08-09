@@ -18,5 +18,7 @@ namespace Lib.Intelligence
         }
 
         public static readonly List<MephalaMetric> HolesOnly = new List<MephalaMetric> { new MephalaMetric(Metrics.ShouldNotCreateSimpleHoles, 1) };
+
+        public static readonly List<MephalaMetric> Combined = new List<MephalaMetric> { new MephalaMetric(Metrics.ShouldNotCreateSimpleHoles, 1), new MephalaMetric(Metrics.ShouldEraseLines,2) };
     }
 }
