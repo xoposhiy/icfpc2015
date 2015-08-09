@@ -14,7 +14,7 @@ namespace WordsFarmer
     {
 
         const string tag = "WordFarming";
-        static SubmitionClient client = SubmitionClient.Default;
+        static SubmitionClient client = SubmitionClient.ForMining;
 
 
         static List<WordPost> posts;
@@ -47,15 +47,16 @@ namespace WordsFarmer
             }
 
             File.AppendAllLines("..\\..\\wrondWords.txt",
-                wrongs.Select(z => string.Format("{0,-6}{1}", z.Status, z.Word))
+                wrongs.Select(z => string.Format("{0,-8}{1}", z.Status, z.Word))
                 );
 
             File.AppendAllLines ("..\\..\\submittedWords.txt",
-                wrongs.Select(z => string.Format("{0,-6}{1}", z.Status, z.Word))
+                posts.Select(z => string.Format("{0,-8}{1}", z.Status, z.Word))
                 );
 
             File.WriteAllLines("..\\..\\words.txt", words);
             
+           
 
             var subs = posts
                 .Select(z => new SubmitionJson
@@ -67,20 +68,22 @@ namespace WordsFarmer
                 }).ToArray();
 
             client.PostSubmissions(subs);
+
+            Console.WriteLine($"Submitted {posts.Count}, Rejected {wrongs.Count}, Left {words.Count}");
         }
 
         public static void ReadSubmissions()
         {
           
             var res = client.GetSubmissions();
-            foreach (var submission in res.Where(z => z.tag.StartsWith(tag)))
+            foreach (var submission in res.Where(z => z.tag.StartsWith(tag) && z.powerScore!=0))
                 Console.WriteLine("{0,-6}{1,-6}{2}", submission.powerScore, submission.score,submission.solution);
         }
 
 
         public static void Main()
         {
-           // PostWords(); return;
+          // PostWords(); return;
            ReadSubmissions();
         }
     }
