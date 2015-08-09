@@ -159,3 +159,39 @@ OK      alalcthulhu fhtagn! cthulhu fhtagn!
 OK      alalR'lYeh          R'lYeh
 OK      alalPh'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn.Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn.
 OK      alalpluto           pluto
+OK      alalNithon          Nithon
+OK      alalThog and Thok   Thog and Thok
+OK      alalCxaxukluth      Cxaxukluth
+OK      alaltok'lmetal      tok'l-metal
+OK      alaltok'l metal     tok'l metal
+OK      alalMigo            Mi-go
+OK      alalMi go           Mi go
+OK      alalplanet x        planet x
+OK      alalbanzai          banzai
+OK      alalbigboote        bigboote
+OK      alalbuckaroo        buckaroo
+OK      alalCharon          Charon
+OK      alalNix             Nix
+OK      alalHydra           Hydra
+OK      alalKerberos        Kerberos
+OK      alalStyx            Styx
+OK      alalMakemake        Makemake
+OK      alalEris            Eris
+OK      alalHaumea          Haumea
+OK      alalSedna           Sedna
+OK      alalOrcus           Orcus
+OK      alalIxion           Ixion
+OK      alalSila Nunam      Sila Nunam
+OK      alalSilaNunam       SilaNunam
+OK      alalCeres           Ceres
+OK      alalConway          Conway
+OK      alalCocke           Cocke
+OK      alalBackus          Backus
+OK      alalbigbooty        big-booty
+OK      alalbigbooty        bigbooty
+OK      alalbigbootay       bigboo-tay
+OK      alalbigbootay       bigbootay
+OK      alalBuckaroo Banzai Buckaroo Banzai
+OK      alalBuckarooBanzai  BuckarooBanzai
+OK      alalPlanet 10       Planet 10
+OK      alalYoyodyne        Yoyodyne

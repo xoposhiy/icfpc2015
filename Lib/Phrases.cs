@@ -14,6 +14,7 @@ namespace Lib
             "R'lyeh", // powerBits: 4
             "Ia! Ia!", // powerBits: 2
             "Yuggoth", //powerBits: 8
+            "Planet 10", //powerBits: 4096
             "YogSothoth", //powerBits: 32
             "blue hades", //powerBits: 65536
             "Tsathoggua", //powerBits: 16

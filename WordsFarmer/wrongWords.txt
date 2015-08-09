@@ -83,3 +83,21 @@ Period  alalarkham!         arkham!
 Period  alalhoneycomb!      honeycomb!
 Period  alalblue hades!     blue hades!
 Period  alalnibiru          nibiru
+Period  alalNibiru          Nibiru
+Period  alalbigboote!       bigboote!
+Period  alalBIGBOOTAY! TAY! TAY!BIG-BOO-TAY! TAY! TAY!
+Period  alalKuiper belt     Kuiper belt
+Period  alalVaruna          Varuna
+Period  alalQuaoar          Quaoar
+Period  alalOort cloud      Oort cloud
+Period  alalTriton          Triton
+Period  alalHopcroft        Hopcroft
+Period  alalBIGBOOTAY!      BIGBOOTAY!
+Period  alalicfp2015        icfp2015
+Period  alalicfp 2015       icfp 2015
+Period  alalicfp conference 2015icfp conference 2015
+Period  alalicfpconference2015icfpconference2015
+Period  alalicfpc2015       icfpc2015
+Period  alalInternational Conference on Functional ProgrammingInternational Conference on Functional Programming
+Period  alalconference2015  conference2015
+Period  alal2015            2015
