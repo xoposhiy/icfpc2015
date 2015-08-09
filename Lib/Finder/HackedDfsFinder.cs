@@ -50,7 +50,7 @@ namespace Lib.Finder
         {
             int phraseIndex = 0;
             int phrasePrefix = 0;
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 var directions = Phrases.AsDirections[i];
                 for (int j = 1; j <= Math.Min(directions.Length - 1, history.Count); j++)
@@ -59,7 +59,7 @@ namespace Lib.Finder
                     for (int k = 0; k < j && eq; k++)
                         if (directions[k] != history[history.Count - j + k])
                             eq = false;
-                    if (eq && j >= phrasePrefix)
+                    if (eq && j >= phrasePrefix && map.IsGoodPath(directions.Skip(j)))
                     {
                         phraseIndex = i;
                         phrasePrefix = j;

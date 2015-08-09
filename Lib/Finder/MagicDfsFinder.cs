@@ -46,16 +46,7 @@ namespace Lib.Finder
             return new UnitPosition(new Point(x, y), a);
         }
 
-        private bool IsGoodPath(Map map, IEnumerable<Directions> path)
-        {
-            foreach (var d in path)
-            {
-                if (!map.IsSafeMovement(d))
-                    return false;
-                map = map.Move(d);
-            }
-            return true;
-        }
+        
 
         public IEnumerable<Directions> GetPath(Map map, UnitPosition target)
         {
@@ -67,13 +58,13 @@ namespace Lib.Finder
                 var midPositionedUnit = new PositionedUnit(map.Unit.Unit, midPosition);
                 var midMap = new Map(map.Id, map.Filled, midPositionedUnit, map.NextUnits, map.UsedPositions, map.Scores);
 
-                if (!IsGoodPath(midMap, directions))
+                if (!midMap.IsGoodPath(directions))
                     continue;
                 var path = dfsFinder.GetPath(map, midPosition);
                 if (path == null)
                     continue;
                 var result = path.Concat(directions).ToArray();
-                if (IsGoodPath(map, result))
+                if (map.IsGoodPath(result))
                     return result;
             }
 

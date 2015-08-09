@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Lib.Models
@@ -19,5 +20,16 @@ namespace Lib.Models
 		{
 			return low <= x && x <= high;
 		}
-	}
+
+        public static bool IsGoodPath(this Map map, IEnumerable<Directions> path)
+        {
+            foreach (var d in path)
+            {
+                if (!map.IsSafeMovement(d))
+                    return false;
+                map = map.Move(d);
+            }
+            return true;
+        }
+    }
 }
