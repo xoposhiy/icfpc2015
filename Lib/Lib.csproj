@@ -115,6 +115,7 @@
     <Compile Include="Problems.cs" />
     <Compile Include="ProblemScore.cs" />
     <Compile Include="ProblemsTest.cs" />
+    <Compile Include="Scoreboard.cs" />
     <Compile Include="SubmissionHelpers_Test.cs" />
     <Compile Include="SubmissionResultJson.cs" />
     <Compile Include="SubmitionClient.cs" />

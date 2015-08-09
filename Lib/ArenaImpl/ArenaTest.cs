@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using ApprovalTests;
+using ApprovalUtilities.Utilities;
 using Lib.Finder;
 using Lib.Intelligence;
 using Newtonsoft.Json;
@@ -14,6 +16,7 @@ namespace Lib.ArenaImpl
     public class ArenaTest
     {
         [Test, Explicit]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public void EvaluateEdgeSolver()
         {
             EvaluateSolver(EdgeSolver());
@@ -33,9 +36,42 @@ namespace Lib.ArenaImpl
             if (maps.Length == 0)
                 maps = Enumerable.Range(0, ps.Count).ToArray();
             var arena = new Arena(maps.Select(i => ps[i]).ToArray());
-            var res = arena.RunAllProblems(solver);
+            ArenaModel res = arena.RunAllProblems(solver);
             File.WriteAllText("arena.json", JsonConvert.SerializeObject(res, Formatting.Indented));
             Approvals.Verify(res);
+        }
+
+        [Test, Explicit]
+        public void SendJson()
+        {
+            var client = SubmitionClient.Default;
+            var model = LoadModel();
+            var submissions = model.Problems.SelectMany(
+                p => p.MapResults.Select(r => new SubmitionJson
+                {
+                    problemId = p.Id,
+                    seed = r.Seed,
+                    solution = r.Result.Commands,
+                    tag = model.SolverName + "-" + DateTime.Now
+                })).ToArray();
+            client.PostSubmissions(submissions);
+        }
+
+        [Test]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        [Explicit]
+        public void EvaluateJson()
+        {
+            var model = LoadModel();
+            Approvals.Verify(model);
+        }
+
+        private static ArenaModel LoadModel()
+        {
+            var ps = Problems.LoadProblems();
+            var model = JsonConvert.DeserializeObject<ArenaModel>(File.ReadAllText("arena.json"));
+            model.Problems.Zip(ps, Tuple.Create).ForEach(t => t.Item1.Problem = t.Item2);
+            return model;
         }
 
         private static Solver EdgeSolver()
