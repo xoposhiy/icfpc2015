@@ -29,6 +29,14 @@ namespace Lib.ArenaImpl
             EvaluateSolver(EdgeSolver(), smallMaps);
         }
 
+        [Test]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public void FastOnBadProblems()
+        {
+            int[] smallMaps = { 23, 4, 9, 22 };
+            EvaluateSolver(EdgeSolver(), smallMaps);
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static void EvaluateSolver(Solver solver, params int[] maps)
         {
@@ -54,6 +62,7 @@ namespace Lib.ArenaImpl
                     solution = r.Result.Commands,
                     tag = model.SolverName + "-" + DateTime.Now
                 })).ToArray();
+            Console.WriteLine("submit problems: " + string.Join(", ", submissions.Select(s => s.problemId)));
             client.PostSubmissions(submissions);
         }
 
@@ -79,7 +88,7 @@ namespace Lib.ArenaImpl
             var finder = new MagicDfsFinder();
 
             var mephala = new MephalaOracle(finder, MephalaMetric.Keening);
-            var hircine = new HircineOracle(mephala,MephalaMetric.Keening,2, 5);
+            var hircine = new HircineOracle(mephala, MephalaMetric.Keening, 2, 5);
 
             var solver = new Solver(finder, mephala);
             return solver;
