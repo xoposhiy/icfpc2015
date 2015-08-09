@@ -32,5 +32,27 @@ namespace Lib.Intelligence
             }
             return score;
         }
+
+        
+        public static double ShouldEraseLines(Map map, PositionedUnit unit)
+        {
+            var lines = 0;
+            for (int y=0;y<map.Height;y++)
+            {
+                bool ok = true;
+                for (int x=0;x<map.Height;x++)
+                {
+                    if (!map.Filled[x, y] && !unit.Members.Contains(new Point(x, y)))
+                    {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok) lines++;
+            }
+            if (lines == 0) return 0;
+            if (lines == 1) return 0.1;
+            return 1;
+        }
     }
 }
