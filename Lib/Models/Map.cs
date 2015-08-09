@@ -14,6 +14,8 @@ namespace Lib.Models
         public readonly int Width;
         public readonly int Id;
         public readonly Scores Scores;
+        public readonly bool Died;
+
         public bool[,] Filled { get; }
         public readonly ImmutableHashSet<PositionedUnit> UsedPositions;
 
@@ -33,7 +35,7 @@ namespace Lib.Models
         {
         }
 
-        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores)
+        public Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, ImmutableHashSet<PositionedUnit> usedPositions, Scores scores, bool died = false)
         {
             Id = id;
             NextUnits = nextUnits;
@@ -43,6 +45,7 @@ namespace Lib.Models
             Unit = IsValidPosition(unit) ? unit : PositionedUnit.Null;
             UsedPositions = usedPositions.Add(Unit);
             Scores = scores;
+            Died = died;
         }
 
         public static PositionedUnit PositionNewUnit(int width, ImmutableStack<Unit> nextUnits)
@@ -156,7 +159,7 @@ namespace Lib.Models
 
         private Map Die()
         {
-            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, new Scores(0, 0));
+            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, new Scores(0, 0), died: true);
         }
     }
 

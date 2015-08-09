@@ -25,7 +25,7 @@ namespace Lib.Intelligence
                 yield return SimpleMetrics.GoDown;
                 yield return SimpleMetrics.EraseLines;
                 yield return ClosureIndex.Minimize;
-                yield return LineSlots.Maximize;
+ //               yield return LineSlots.Maximize;
             }
         }
 
@@ -39,10 +39,9 @@ namespace Lib.Intelligence
             return list;
         }
 
-        public static readonly List<WeightedMetric> Keening = CreateCombination(0.25, 0.5, 0.25, 0);
 
-        public static readonly List<WeightedMetric> Sunder = CreateCombination(0.25, 0.5, 0.25, 0.1);
-    }
+        public static readonly List<WeightedMetric> Keening = CreateCombination(0.25, 0.5, 0.25);
+   }
 
     public static class MephalaMetricListExtensions
     {

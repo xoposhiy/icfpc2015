@@ -10,6 +10,8 @@ namespace Lib.Intelligence
 {
     public class Solver : ISolver
     {
+        const double MagicConstant = 2;
+
         public readonly IFinder Finder;
         public readonly IOracle Oracle;
         private readonly string name;
@@ -34,7 +36,7 @@ namespace Lib.Intelligence
 
             for (int i = 0; i < suggestions.Count; i++)
             {
-                if (suggestions[i].Metrics / suggestions[0].Metrics < 0.99) break;
+                if (suggestions[i].Metrics / suggestions[0].Metrics < MagicConstant) break;
                 magicNumber++;
 
                 var result = Finder.GetSpellLengthAndPath(map, suggestions[i].Position);
@@ -80,7 +82,9 @@ namespace Lib.Intelligence
         public SolverResult Solve(Map map)
         {
             var t = ResultAsTuple(map);
-            return new SolverResult(name, t.Item2.Scores.TotalScores, t.Item1);
+            var commands = t.Item1.ToOriginalPhrase();
+            var score = t.Item2.Scores.TotalScores + commands.GetPowerScore();
+            return new SolverResult(name, score, commands);
         }
     }
 }

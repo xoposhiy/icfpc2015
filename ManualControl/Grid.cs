@@ -94,15 +94,7 @@ namespace ManualControl
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
-            g.Clear(Map.IsOver ? Color.LightCoral : Color.White);
-
-            g.DrawString(
-                Map.Scores.TotalScores.ToString(),
-                new Font("Arial", 15),
-                Brushes.Black,
-                new Point(0, 0)
-                );
-
+            g.Clear(Map.IsOver ? (Map.Died ? Color.LightCoral : Color.Gold) : Color.White);
 
             for (var x = 0; x < Map.Width; x++)
             {
