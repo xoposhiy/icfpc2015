@@ -67,10 +67,11 @@ namespace Lib.Finder
                 yield return list;
         }
 
-        public IEnumerable<Directions> GetPath(Map map, UnitPosition target)
+        public Tuple<int, IEnumerable<Directions>> GetSpellLengthAndPath(Map map, UnitPosition target)
         {
             foreach (var sequence in GenerateSpellsSequences(new List<Directions[]>()))
             {
+                var spellLength = sequence.Sum(s => s.Length);
                 var midPositions = new UnitPosition[sequence.Count];
                 var finish = target;
                 for (int i = 0; i < sequence.Count; i++)
@@ -84,15 +85,16 @@ namespace Lib.Finder
                 if (!ok)
                     continue;
 
-                var path = dfsFinder.GetPath(map, finish);
-                if (path == null)
+                var path = dfsFinder.GetSpellLengthAndPath(map, finish);
+                if (path == null || path.Item2 == null)
                     continue;
-                var result = path.Concat(((IEnumerable<Directions[]>)sequence).Reverse().SelectMany(s => s)).ToArray();
+                Directions[] result = path.Item2.Concat(((IEnumerable<Directions[]>)sequence).Reverse().SelectMany(s => s)).ToArray();
                 if (map.IsGoodPath(result))
-                    return result;
+                    return Tuple.Create<int, IEnumerable<Directions>>(
+                        spellLength + path.Item1, result);
             }
 
-            return dfsFinder.GetPath(map, target);
+            return dfsFinder.GetSpellLengthAndPath(map, target);
         }
 
         public IEnumerable<Map> GetReachablePositions(Map map)

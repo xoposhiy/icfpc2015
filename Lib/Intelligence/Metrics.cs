@@ -32,7 +32,6 @@ namespace Lib.Intelligence
             }
             return score;
         }
-
         
         public static double ShouldEraseLines(Map map, PositionedUnit unit)
         {
@@ -53,13 +52,6 @@ namespace Lib.Intelligence
             if (lines == 0) return 0;
             if (lines == 1) return 0.1;
             return 1;
-        }
-
-
-        public static double ShouldCountSpells()
-        {
-
-            return 0;
         }
     }
 }
