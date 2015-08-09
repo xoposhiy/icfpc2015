@@ -15,7 +15,7 @@ namespace Lib.ArenaImpl
             return 
                 SolverName + Environment.NewLine
                 + "TotalScore: " + TotalScore + Environment.NewLine
-                + "ProblemId\tAvgScore\tScoreBySeeds" + Environment.NewLine 
+                + "Id\tPerf\tAvg\tScoreBySeeds" + Environment.NewLine 
                 + string.Join(Environment.NewLine, lines);
         }
     }

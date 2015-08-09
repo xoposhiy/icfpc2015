@@ -64,6 +64,8 @@ namespace Lib.Finder
             }
         }
 
+        private static Random r = new Random();
+
         private void DfsStep(Map map, Directions d, int phraseIndex, int charIndex)
         {
             if (!map.IsSafeMovement(d)) return;
@@ -73,9 +75,9 @@ namespace Lib.Finder
             Parents.Add(pos, Tuple.Create(map, d));
             var phrase = Phrases.AsDirections[phraseIndex];
             if (charIndex < phrase.Length && phrase[charIndex] == d)
-                Dfs(newMap, phraseIndex, charIndex+1);
+                Dfs(newMap, phraseIndex, charIndex + 1);
             else
-                Dfs(newMap, (phraseIndex+1)%Phrases.AsDirections.Length, 0);
+                Dfs(newMap, (phraseIndex + 1) % Phrases.all.Length, 0);
         }
     }
 }

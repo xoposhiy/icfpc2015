@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -10,14 +13,15 @@ namespace Lib
         [Test]
         public void Test()
         {
-            Problems.LoadProblems();
-        }
-
-        [Test]
-        public void Beautify()
-        {
-            Problems.LoadProblems().ForEach(
-                p => File.WriteAllText("problems\\beauty_" + p.id + ".json", JsonConvert.SerializeObject(p, Formatting.Indented)));
+            var ps = Problems.LoadProblems();
+            foreach (var problem in ps)
+            {
+                var unitsCells = (int)problem.units.Average(u => u.members.Count) * problem.sourceLength;
+                var cells = unitsCells + problem.filled.Count;
+                var lines = cells / problem.width;
+                var scoreEstimate = unitsCells + 100 * lines;
+                Console.WriteLine($"{problem.id}\t{cells}\t{lines}\t{scoreEstimate}");
+            }
         }
     }
 }
