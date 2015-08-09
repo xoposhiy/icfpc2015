@@ -16,6 +16,7 @@ namespace Lib
 			"Yuggoth", //powerBits: 8
 			"YogSothoth", //powerBits: 32
 			"Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn!", // powerBits: 516 = 512 + 4
+            "Necronomicon", // powerBits: 64
         };
 
         public static string ToOriginalPhrase(this string text)
