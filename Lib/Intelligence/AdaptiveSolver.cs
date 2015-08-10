@@ -10,11 +10,11 @@ namespace Lib.Intelligence
     {
         private readonly Phrases phrases;
         private MagicDfsFinder finder;
-        private Solver fast;
-        private Solver fast2;
-        private Solver slowest;
-        private Solver slow;
-        private Solver fastest;
+        public Solver fast;
+        public Solver fast2;
+        public Solver slowest;
+        public Solver slow;
+        public Solver fastest;
 
         public string Name => "Adaptive";
 
@@ -36,7 +36,10 @@ namespace Lib.Intelligence
 
         public SolverResult Solve(Map map)
         {
-            if (map.Width * map.Height > 50 * 50) return fastest.Solve(map);
+            if (map.Width * map.Height > 50 * 50)
+            {
+                return fastest.Solve(map);
+            }
 
             var sw = Stopwatch.StartNew();
             var res = fast.Solve(map);
@@ -47,11 +50,10 @@ namespace Lib.Intelligence
                 if (res2.Score > res.Score) res = res2;
             }
 
-            if (sw.Elapsed.TotalSeconds < 4 && IsSmall(map))
+            if (sw.Elapsed.TotalSeconds < 10 && IsSmall(map))
             {
                 var solver = IsSmallest(map) ? slowest : slow;
-                Console.WriteLine($"{res.Score} on fast. Try slow " + solver);
-                var res2 = IsSmallest(map) ? slowest.Solve(map) : slow.Solve(map);
+                var res2 = solver.Solve(map);
                 if (res2.Score > res.Score) return res2;
             }
             return res;

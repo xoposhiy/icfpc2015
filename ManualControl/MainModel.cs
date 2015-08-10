@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Lib.ArenaImpl;
 using Lib.Intelligence;
 
 namespace ManualControl

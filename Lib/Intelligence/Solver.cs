@@ -36,14 +36,14 @@ namespace Lib.Intelligence
         public List<Directions> MakeMove(Map map)
         {
             var suggestions = Oracle.GetSuggestions(map).ToList();
-            log.Info(map);
-            LogSugessions("all", suggestions);
+            log.Info(map.Scores);
+//            LogSugessions("all", suggestions);
             if (suggestions.Count == 0) return null;
             var bestMetric = suggestions[0].Metrics;
             var selectedSugessions = suggestions
                 .Take(bestSugessionsCount)
                 .Where(s => s.Metrics >= bestMetric * metricEpsilon).ToList();
-            LogSugessions("selected", selectedSugessions);
+//            LogSugessions("selected", selectedSugessions);
             var sugestionsWithPaths =
                 from s in selectedSugessions
                 let path = GetPath(map, s).ToList()
@@ -51,7 +51,7 @@ namespace Lib.Intelligence
                 let powerScore = phrases.GetPowerScore(phrases.ToOriginalPhrase(phrase))
                 select new {s, path, phrase, powerScore};
             var theOne = sugestionsWithPaths.MaxItem(s => s.powerScore);
-            log.Info($"SelectedMove: {theOne.powerScore} {theOne.phrase}\r\n*{theOne.s} -> \r\n{theOne.s.LockedFinalMap}");
+//            log.Info($"SelectedMove: {theOne.powerScore} {theOne.phrase}\r\n*{theOne.s} -> \r\n{theOne.s.LockedFinalMap}");
             return theOne.path;
         }
 

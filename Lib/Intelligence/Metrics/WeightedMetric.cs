@@ -31,10 +31,24 @@ namespace Lib.Intelligence
             }
         }
 
-        public static List<WeightedMetric> CreateCombination(params double[] weights)
+
+        public static IEnumerable<Func<Map,Map,PositionedUnit,double>> KnownFunctions2
+        {
+            get
+            {
+                yield return SimpleMetrics.GoDown;
+                yield return SimpleMetrics.EraseLines;
+                yield return ClosureIndex.Minimize;
+                yield return LineSlots.Maximize;
+            }
+        }
+
+        public static readonly List<WeightedMetric> Keening2 = CreateCombination(KnownFunctions2, 0.25, 0.5, 0.25, 0);
+
+        public static List<WeightedMetric> CreateCombination(IEnumerable<Func<Map, Map, PositionedUnit, double>> knownFunctions, params double[] weights)
         {
             var list = new List<WeightedMetric>();
-            var functions = KnownFunctions.ToArray();
+            var functions = knownFunctions.ToArray();
             for (int i = 0; i < weights.Length; i++)
                 if (Math.Abs(weights[i]) > 0.01)
                     list.Add(new WeightedMetric(functions[i], weights[i]));
@@ -52,16 +66,16 @@ namespace Lib.Intelligence
         /// <summary>
         /// Для карт, где надо играть в тетрис (0, 4, 9, 23)
         /// </summary>
-        public static readonly List<WeightedMetric> Keening= CreateCombination(0.45, 0.95, 0.3, 0.6, 0.2);
+        public static readonly List<WeightedMetric> Keening= CreateCombination(KnownFunctions, 0.45, 0.95, 0.3, 0.6, 0.2);
 
         /// <summary>
         /// Для карт, где вместо фигурок сыпятся, например, Ктулху (13, 15, 20)
         /// </summary>
-        public static readonly List<WeightedMetric> Sunder = CreateCombination(0.45, 0.95, 0.20, 0.6, 0.60);
+        public static readonly List<WeightedMetric> Sunder = CreateCombination(KnownFunctions, 0.45, 0.95, 0.20, 0.6, 0.60);
 
 
         [Obsolete("For test purposes only")]
-        public static readonly List<WeightedMetric> Test = CreateCombination(0.45, 0.95, 0.20, 0.6, 0.60);
+        public static readonly List<WeightedMetric> Test = CreateCombination(KnownFunctions, 0.45, 0.95, 0.20, 0.6, 0.60);
     }
 
     public static class MephalaMetricListExtensions

@@ -32,7 +32,7 @@ namespace Lib.ArenaImpl
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void FastOnBadProblems()
         {
-            int[] smallMaps = { 24 };
+            int[] smallMaps = { 21, 20, 19, 17, 13 };
             EvaluateSolver(CuttingEdgeSolver(Phrases.DefaultPowerWords), smallMaps);
         }
 
@@ -103,8 +103,8 @@ namespace Lib.ArenaImpl
 
         public static ISolver CuttingEdgeSolver(string[] powerWords)
         {
-            var phrases = new Phrases(powerWords);
-            return new AdaptiveSolver(phrases);
+            var s = new AdaptiveSolver(new Phrases(powerWords));
+            return s;
         }
     }
 }
