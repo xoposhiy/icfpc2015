@@ -20,11 +20,11 @@ namespace Optimization
 
 
         static Random rnd = new Random();
-        static double step = 0.1;
+        static double step = 0.05;
         static double[] baseline = null;
         static Tuple<int, int>[] mapIndices = new Tuple<int, int>[]
         {
-                Tuple.Create(0,0), Tuple.Create(4,0)
+                Tuple.Create(0,0), Tuple.Create(4,0), Tuple.Create(9,0), Tuple.Create(23,0), Tuple.Create(11,0), Tuple.Create(5,0)
         };
         static Map[] maps;
 
