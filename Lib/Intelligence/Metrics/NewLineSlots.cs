@@ -20,7 +20,7 @@ namespace Lib.Intelligence.Metrics
                 return dp.X == dp.Y / 2;
         }
 
-        public static int CheckFillness(Map map)
+        public static int CheckReadinessForLine(Map map)
         {
             for (int y=map.Height-1;y>=0;y--)
             {
@@ -31,14 +31,13 @@ namespace Lib.Intelligence.Metrics
             return map.Height - 1;
         }
 
-        public static double BottomFillness(Map map, double bottomPercentage)
+        public static double CheckLayerFillness(Map map, int fromY, int ycount)
         {
-            var h = (int)(map.Height * bottomPercentage);
-            double count = 0;
-            for (int y = map.Height - h; y < map.Height; y++)
+            double filledCellsCount = 0;
+            for (int y = fromY; y < fromY+ycount; y++)
                 for (int x = 0; x < map.Width; x++)
-                    count += map.Filled[x, y] ? 1 : 0;
-            return count / (map.Width * h);    
+                    filledCellsCount += map.Filled[x, y] ? 1 : 0;
+            return filledCellsCount / (map.Width * ycount);    
 
         }
 
@@ -46,7 +45,7 @@ namespace Lib.Intelligence.Metrics
         {
             if (!before.NextUnits.Any(z => z.IsLine))
                 return 0;
-            if (BottomFillness(before,0.4) > 0.8) return 0;
+            if (CheckLayerFillness(before,0,2*before.Height/3) > 0.01) return 0;
 
             var any = unit.Members.Any(p => AtLine(before, p));
             var all = unit.Members.All(p => AtLine(before, p));
@@ -61,7 +60,7 @@ namespace Lib.Intelligence.Metrics
             {
                 if (all)
                 {
-                    if (CheckFillness(before) < unit.Members.Count())
+                    if (CheckReadinessForLine(before) < unit.Members.Count())
                         return -1;
                     return 1;
                 }
