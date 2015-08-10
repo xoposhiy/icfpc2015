@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lib.Finder;
 using Lib.Models;
 
@@ -11,55 +9,48 @@ namespace Lib.Intelligence
     public class HircineOracle : IOracle
     {
         private readonly IFinder finder;
-        IOracle backupOracle;
-        List<WeightedMetric> metric;
-        int lookupDepth;
-        int lookupWidth;
+        private readonly List<WeightedMetric> metric;
+        private readonly int lookupDepth;
+        private readonly int lookupWidth;
 
-
-        public HircineOracle(IFinder finder, IOracle backupOracle, List<WeightedMetric> metric, int lookupDepth, int lookupWidth)
+        public HircineOracle(IFinder finder, List<WeightedMetric> metric, int lookupDepth, int lookupWidth)
         {
             this.finder = finder;
-            this.backupOracle = backupOracle;
             this.metric = metric;
             this.lookupDepth = lookupDepth;
             this.lookupWidth = lookupWidth;
         }
 
-
-        double Evaluate(int step, Map map)
+        private Tuple<double, Map> Evaluate(int depth, Map map, double metricValue)
         {
-            if (step == lookupDepth) return map.Scores.TotalScores;
-            if (map.IsOver) return map.Scores.TotalScores;
-            return EvaluateSuggestions(step, map).OrderByDescending(z => z.Metrics).First().Metrics;
-
+            if (depth == lookupDepth)
+                return Tuple.Create(map.Scores.TotalScores + metricValue, map);
+            if (map.IsOver)
+                return Tuple.Create(0.0, map);
+            var bestMap = EvaluateSuggestions(depth, map).MaxItem(z => z.Metrics);
+            return Tuple.Create(bestMap.Metrics, bestMap.LockedFinalMap);
         }
 
-        IEnumerable<OracleSuggestion> EvaluateSuggestions(int step, Map map)
+        public IEnumerable<OracleSuggestion> EvaluateSuggestions(int depth, Map map)
         {
-            var reachable = new HashSet<UnitPosition>(finder.GetReachablePositions(map).Select(m => m.Unit.Position));
             var suggestions = OracleServices
-                .GetAllFinalPositions(map)
-                .Where(s => reachable.Contains(s.Position))
+                .GetReachableSugessions(finder, map)
                 .Select(suggestion => metric.Evaluate(map, suggestion))
                 .OrderByDescending(z => z.Metrics)
-                .Take(lookupWidth)
+                .Take(Math.Max(2, lookupWidth))
                 .ToList();
 
             return
                 from s in suggestions
-                let newMap = map.TeleportUnit(s.Position).LockUnit()
-                select new OracleSuggestion(s.Position, s.LockingDirection, Evaluate(step + 1, newMap));
+                let evaluatedFinalMap = Evaluate(depth + 1, s.LockedFinalMap, s.Metrics)
+                select new OracleSuggestion(
+                    s.Position, s.LockingDirection,
+                    evaluatedFinalMap.Item2, evaluatedFinalMap.Item1);
         }
-
 
         public IEnumerable<OracleSuggestion> GetSuggestions(Map map)
         {
-            var result = EvaluateSuggestions(0, map).OrderByDescending(z => z.Metrics).ToList();
-            foreach (var e in result)
-                yield return e;
-            foreach (var e in backupOracle.GetSuggestions(map))
-                yield return e;
+            return EvaluateSuggestions(0, map).OrderByDescending(z => z.Metrics);
         }
     }
 }

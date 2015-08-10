@@ -4,6 +4,7 @@ using System.Linq;
 using Lib.ArenaImpl;
 using Lib.Finder;
 using Lib.Models;
+using NLog;
 
 namespace Lib.Intelligence
 {
@@ -27,18 +28,33 @@ namespace Lib.Intelligence
 
         public string Name { get; }
 
-        public IEnumerable<Directions> MakeMove(Map map)
+        public List<Directions> MakeMove(Map map)
         {
             var suggestions = Oracle.GetSuggestions(map).ToList();
+            log.Info(map);
+            LogSugessions("all", suggestions);
             if (suggestions.Count == 0) return null;
             var bestMetric = suggestions[0].Metrics;
             var selectedSugessions = suggestions
                 .Take(bestSugessionsCount)
                 .Where(s => s.Metrics >= bestMetric * metricEpsilon).ToList();
-            return
-                selectedSugessions
-                    .Select(s => GetPath(map, s))
-                    .MaxItem(path => phrases.GetPowerScore(phrases.ToOriginalPhrase(path.ToPhrase())));
+            LogSugessions("selected", selectedSugessions);
+            var sugestionsWithPaths =
+                from s in selectedSugessions
+                let path = GetPath(map, s).ToList()
+                let phrase = path.ToPhrase()
+                let powerScore = phrases.GetPowerScore(phrases.ToOriginalPhrase(phrase))
+                select new {s, path, phrase, powerScore};
+            var theOne = sugestionsWithPaths.MaxItem(s => s.powerScore);
+            log.Info($"SelectedMove: {theOne.powerScore} {theOne.phrase}\r\n*{theOne.s} -> \r\n{theOne.s.LockedFinalMap}");
+            return theOne.path;
+        }
+
+        private static Logger log = LogManager.GetCurrentClassLogger();
+
+        private void LogSugessions(string which, IEnumerable<OracleSuggestion> suggestions)
+        {
+            log.Info(which + " sugessions:\r\n " + string.Join("\r\n", suggestions));
         }
 
         private IEnumerable<Directions> GetPath(Map map, OracleSuggestion s)

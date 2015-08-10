@@ -81,8 +81,8 @@
     <Compile Include="Finder\HackedDfsFinder.cs" />
     <Compile Include="Finder\IFinder.cs" />
     <Compile Include="Finder\MagicDfsFinder.cs" />
-    <Compile Include="Intelligence\AzuraOracle.cs" />
     <Compile Include="Intelligence\HircineOracle.cs" />
+    <Compile Include="Intelligence\HircineOracleTest.cs" />
     <Compile Include="Intelligence\IOracle.cs" />
     <Compile Include="Intelligence\Lookaheader.cs" />
     <Compile Include="Intelligence\WeightedMetric.cs" />
@@ -90,7 +90,6 @@
     <Compile Include="Intelligence\Metrics\ClosureIndex.cs" />
     <Compile Include="Intelligence\Metrics\LineSlots.cs" />
     <Compile Include="Intelligence\Metrics\Simple.cs" />
-    <Compile Include="Intelligence\NamiraOracle.cs" />
     <Compile Include="Intelligence\OracleExtensions.cs" />
     <Compile Include="Intelligence\OracleServices.cs" />
     <Compile Include="Intelligence\OracleSuggestion.cs" />

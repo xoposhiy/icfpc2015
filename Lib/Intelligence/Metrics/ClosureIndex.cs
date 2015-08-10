@@ -1,10 +1,6 @@
-﻿using Lib.Models;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Lib.Models;
 
 namespace Lib.Intelligence.Metrics
 {
@@ -21,6 +17,25 @@ namespace Lib.Intelligence.Metrics
             return result;
         }
 
+        public static double Index(Map _, Map map, PositionedUnit unit)
+        {
+            var bads =
+                from x in Enumerable.Range(0, map.Width)
+                from y in Enumerable.Range(0, map.Height)
+                where !map.Filled[x, y]
+                let cap = GetSmallCap(x, y).Where(map.IsInside)
+                let capSize = cap.Count()
+                let filledCapSize = cap.Count(p => map.Filled[p.X, p.Y])
+                select CapPenalty(filledCapSize, capSize, x == 0 || x == map.Width-1);
+            double max = map.Width * map.Height;
+            return (max  - bads.Sum()) / max;
+        }
+
+        private static double CapPenalty(int filledCapSize, int capSize, bool edge)
+        {
+            if (edge && filledCapSize > 0) return 10;
+            return filledCapSize == capSize ? 1 : filledCapSize > 0 ? 0.5 : 0;
+        }
 
         //public static bool IsConnected(int x1, int y1, int x2, int y2)
         //{
@@ -38,30 +53,58 @@ namespace Lib.Intelligence.Metrics
         //                yield return new Point(xx, yy); 
         //}
 
-        static double FindClosureIndex(Map map, int xmin, int xmax, int ymin, int ymax)
+        private static double FindClosureIndex(Map map, int xmin, int xmax, int ymin, int ymax)
         {
-            int pointsCount = 0;
+            var pointsCount = 0;
             double closure = 0;
-            for (int x = xmin; x <= xmax; x++)
-                for (int y = ymin; y <= ymax; y++)
+            for (var x = xmin; x <= xmax; x++)
+            {
+                for (var y = ymin; y <= ymax; y++)
                 {
                     if (!map.IsInside(new Point(x, y))) continue;
                     pointsCount++;
                     if (map.Filled[x, y]) continue;
                     closure += FindClosureIndex(x, y, map);
                 }
+            }
             return closure / pointsCount;
         }
 
-        static double FindClosureIndex(int x, int y, Map map)
+        private static double FindClosureIndex(int x, int y, Map map)
         {
             if (map.Filled[x, y]) return 0;
-            Point[] cap = null;
-            if (y % 2 == 0) cap = new[] { new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y) };
-            else cap = new[] { new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y) };
-            int problems = cap.Where(p => !map.IsInside(p) || map.Filled[p.X, p.Y]).Count();
+            var cap = GetCap(x, y);
+            var problems = cap.Where(p => !map.IsInside(p) || map.Filled[p.X, p.Y]).Count();
             return problems / 4.0;
         }
 
+        private static Point[] GetCap(int x, int y)
+        {
+            if (y % 2 == 0)
+            {
+                return new[]
+                {
+                    new Point(x - 1, y), new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y)
+                };
+            }
+            return new[]
+            {
+                new Point(x - 1, y), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x + 1, y)
+            };
+        }
+        private static Point[] GetSmallCap(int x, int y)
+        {
+            if (y % 2 == 0)
+            {
+                return new[]
+                {
+                    new Point(x - 1, y - 1), new Point(x, y - 1)
+                };
+            }
+            return new[]
+            {
+                new Point(x, y - 1), new Point(x + 1, y - 1)
+            };
+        }
     }
 }

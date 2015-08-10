@@ -7,7 +7,20 @@ namespace Lib.Models
 {
 	public static class CommonExtensions
 	{
-	    public static T MaxItem<T>(this IEnumerable<T> items, Func<T, double> getKey)
+        public static Random r = new Random(2345432);
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> items, Random random = null)
+        {
+            random = random ?? r;
+            var copy = items.ToList();
+            for (int i = 0; i < copy.Count; i++)
+            {
+                var nextIndex = random.Next(i, copy.Count);
+                yield return copy[nextIndex];
+                copy[nextIndex] = copy[i];
+            }
+        }
+
+        public static T MaxItem<T>(this IEnumerable<T> items, Func<T, double> getKey)
 	    {
 	        var best = default(T);
 	        double bestKey = double.MinValue;

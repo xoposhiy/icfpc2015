@@ -25,7 +25,7 @@ namespace Lib.Intelligence
                 yield return SimpleMetrics.GoDown;
                 yield return SimpleMetrics.EraseLines;
                 yield return ClosureIndex.Minimize;
-                yield return LineSlots.Maximize;
+                yield return SimpleMetrics.MapDown;
             }
         }
 
@@ -39,21 +39,33 @@ namespace Lib.Intelligence
             return list;
         }
 
-        public static readonly List<WeightedMetric> Keening = CreateCombination(0.25, 0.5, 0.25, 0);
+        public static readonly List<WeightedMetric> Debug = new List<WeightedMetric>
+        {
+            new WeightedMetric(SimpleMetrics.MapDown, 0.2),
+            new WeightedMetric(ClosureIndex.Index, 0.1)
+        };
+
+        public static readonly List<WeightedMetric> Keening = CreateCombination(0.25, 0.25, 0.25, 0.25);
 
         public static readonly List<WeightedMetric> Sunder = CreateCombination(0.25, 0.5, 0.25, 0.1);
     }
 
     public static class MephalaMetricListExtensions
     {
+        public static double Evaluate(this IEnumerable<WeightedMetric> metrics, Map before, Map after, PositionedUnit unit)
+        {
+            return metrics.Sum(z => z.Function(before, after, unit) * z.Weight);
+        }
+
         public static OracleSuggestion Evaluate(this IEnumerable<WeightedMetric> metrics, Map before, OracleSuggestion suggestions)
         {
-            var positionedUnit = new PositionedUnit(before.Unit.Unit, suggestions.Position);
+            var unit = new PositionedUnit(before.Unit.Unit, suggestions.Position);
             var after = before.TeleportUnit(suggestions.Position).LockUnit();
             return new OracleSuggestion(
                 suggestions.Position,
                 suggestions.LockingDirection,
-                metrics.Sum(z => z.Function(before, after, positionedUnit) * z.Weight));
+                after,
+                metrics.Evaluate(before, after, unit));
         }                
     }
     

@@ -38,6 +38,7 @@ namespace Lib.ArenaImpl
             for (int i = 0; i < problem.Problem.sourceSeeds.Count; i++)
             {
                 Run(problem, i, solver);
+                break; //TODO del
             }
             return new ArenaModel { Problems = Problems };
         }
@@ -49,6 +50,7 @@ namespace Lib.ArenaImpl
                 var prob = problem.Problem;
                 var result = solver.Solve(prob.ToMap(prob.sourceSeeds[seedIndex]));
                 problem.MapResults[seedIndex].Result = result;
+                Console.Write(result.Score + " ");
             }
             catch (Exception exception)
             {

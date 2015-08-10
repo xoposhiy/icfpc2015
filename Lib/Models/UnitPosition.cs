@@ -37,5 +37,10 @@ namespace Lib.Models
                 return (Point.GetHashCode() * 397) ^ Angle;
             }
         }
+
+        public override string ToString()
+        {
+            return $"Point: {Point}, Angle: {Angle}";
+        }
     }
 }

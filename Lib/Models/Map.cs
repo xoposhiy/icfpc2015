@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Text;
 using NUnit.Framework;
 
 namespace Lib.Models
@@ -15,23 +15,19 @@ namespace Lib.Models
         public readonly int Id;
         public readonly Scores Scores;
         public readonly bool Died;
-
-        public bool[,] Filled { get; }
         public readonly ImmutableHashSet<PositionedUnit> UsedPositions;
-
-        public PositionedUnit Unit { get; }
 
         public Map(int id, bool[,] filled, ImmutableStack<Unit> nextUnits, Scores scores)
             : this(id, filled,
-                  PositionNewUnit(filled.GetLength(0), nextUnits),
-                  nextUnits.TryPop(), scores)
+                   PositionNewUnit(filled.GetLength(0), nextUnits),
+                   nextUnits.TryPop(), scores)
         {
         }
 
         private Map(int id, bool[,] filled, PositionedUnit unit, ImmutableStack<Unit> nextUnits, Scores scores)
             : this(id, filled,
-                  unit,
-                  nextUnits, ImmutableHashSet<PositionedUnit>.Empty.Add(unit), scores)
+                   unit,
+                   nextUnits, ImmutableHashSet<PositionedUnit>.Empty.Add(unit), scores)
         {
         }
 
@@ -48,6 +44,35 @@ namespace Lib.Models
             Died = died;
         }
 
+        public double AverageDepth()
+        {
+            var filled =
+                from x in Enumerable.Range(0, Width)
+                from y in Enumerable.Range(0, Height)
+                where Filled[x, y]
+                select y;
+            return filled.Concat(new[] { Height + 1 }).Average();
+        }
+
+        public bool[,] Filled { get; }
+
+        public override string ToString()
+        {
+            var lines = Enumerable.Range(0, Height)
+                      .Select(y => (y % 2 == 1 ? " " : "")
+                                   + string.Join(" ",
+                                                 Enumerable
+                                                     .Range(0, Width)
+                                                     .Select(x => Filled[x, y] ? "#" : ".")))
+                                                     .Select(line => line.ToCharArray()).ToList();
+            foreach (var cell in Unit.Members)
+                lines[cell.Y][cell.X * 2 + cell.Y % 2] = 'X';
+            var s = string.Join("\r\n", lines.Select(l => new string(l)));
+            return $"Score: {Scores}\r\n{s}";
+        }
+
+        public PositionedUnit Unit { get; }
+
         public static PositionedUnit PositionNewUnit(int width, ImmutableStack<Unit> nextUnits)
         {
             if (nextUnits.IsEmpty) return PositionedUnit.Null;
@@ -61,11 +86,11 @@ namespace Lib.Models
         }
 
         public bool IsOver => ReferenceEquals(Unit, PositionedUnit.Null);
-        
+
         public Map LockUnit()
         {
             if (IsOver) return this;
-            bool[,] f = (bool[,])Filled.Clone();
+            var f = (bool[,])Filled.Clone();
             foreach (var cell in Unit.Members)
                 f[cell.X, cell.Y] = true;
 
@@ -83,7 +108,6 @@ namespace Lib.Models
             return new Map(Id, f, NextUnits, newScores);
         }
 
-
         public Map TeleportUnit(UnitPosition position)
         {
             return new Map(Id, Filled, new PositionedUnit(Unit.Unit, position), NextUnits, UsedPositions, Scores);
@@ -94,11 +118,11 @@ namespace Lib.Models
             var removedLines = 0;
             var width = map.GetLength(0);
             var height = map.GetLength(1);
-            for (int y = height - 1; y >= 0; y--)
+            for (var y = height - 1; y >= 0; y--)
             {
                 if (removedLines > 0)
                 {
-                    for (int x = 0; x < width; x++)
+                    for (var x = 0; x < width; x++)
                         map[x, y] = y >= removedLines && map[x, y - removedLines];
                 }
                 if (Enumerable.Range(0, width).All(x => map[x, y]))
@@ -137,7 +161,6 @@ namespace Lib.Models
             return p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Height;
         }
 
-
         public Map Move(Directions dir)
         {
             var newUnit = Unit.Move(dir);
@@ -159,7 +182,7 @@ namespace Lib.Models
 
         private Map Die()
         {
-            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, new Scores(0, 0), died: true);
+            return new Map(Id, Filled, PositionedUnit.Null, NextUnits, ImmutableHashSet<PositionedUnit>.Empty, new Scores(0, 0), true);
         }
     }
 

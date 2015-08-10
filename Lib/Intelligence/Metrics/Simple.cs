@@ -45,13 +45,16 @@ namespace Lib.Intelligence.Metrics
 
 
         /// new metrics
-        
+
         public static double GoDown(Map before, Map after, PositionedUnit unit)
         {
-            var result= (double)unit.Members.Average(z => z.Y) / after.Height;
-            return result;
+            return unit.Members.Average(z => z.Y) / after.Height;
+        }
+        public static double MapDown(Map before, Map after, PositionedUnit unit)
+        {
+            return after.AverageDepth() / after.Height;
         }
 
-     
+
     }
 }

@@ -8,6 +8,10 @@ namespace Lib.Models
 {
     public class Scores
     {
+        public override string ToString()
+        {
+            return $"({TotalScores}, {ClearedLinesCountAtThisMap})";
+        }
 
         public readonly int TotalScores;
         public readonly int ClearedLinesCountAtThisMap;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Lib.Finder;
 using Lib.Models;
 
 namespace Lib.Intelligence
@@ -29,21 +30,21 @@ namespace Lib.Intelligence
             yield return Directions.CCW;
         }
 
-        public static IEnumerable<OracleSuggestion> GetAllFinalPositions(Map map)
+        private static OracleSuggestion TryGetSugession(Map map, PositionedUnit unit)
         {
-            foreach (var position in GetAllUnitPositions(map))
-            {
-                var positionedUnit = map.Unit.WithNewPosition(position);
-                if (!map.IsValidPosition(positionedUnit)) continue;
+            return GetAllDirections()
+                .Where(dir => !map.IsValidPosition(unit.Move(dir)))
+                .Select(dir => new OracleSuggestion(unit.Position, dir, map.LockUnit()))
+                .FirstOrDefault();
+        }
 
-                var lockableDirections = GetAllDirections()
-                    .Where(dir => !map.IsValidPosition(positionedUnit.Move(dir)));
-                foreach (var dir in lockableDirections)
-                {
-                    yield return new OracleSuggestion(position, dir);
-                    break;
-                }
-            }
+        public static IEnumerable<OracleSuggestion> GetReachableSugessions(IFinder finder, Map map)
+        {
+            return
+                finder.GetReachablePositions(map)
+                      .Select(m => TryGetSugession(m, m.Unit))
+                      .Where(s => s != null);
+
         }
     }
 }

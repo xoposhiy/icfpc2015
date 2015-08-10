@@ -44,27 +44,6 @@ namespace Lib.Models
             return ds.Aggregate(map, (m, d) => m.Move(d));
         }
 
-        public static List<OracleSuggestion> SuggestAllFinalPositions(this Map map)
-        {
-            var goodStates = new List<OracleSuggestion>();
-
-            foreach (var pos in OracleServices.GetAllUnitPositions(map))
-            {
-                var positionedUnit = map.Unit.WithNewPosition(pos);
-                if (!map.IsValidPosition(positionedUnit)) continue;
-
-                foreach (var dir in OracleServices.GetAllDirections())  
-                {
-                    var nextPosition = positionedUnit.Move(dir);
-                    if (!map.IsValidPosition(nextPosition))
-                    {
-                        goodStates.Add(new OracleSuggestion(pos, dir));
-                    }
-                }
-            }
-            return goodStates;
-        }
-
         public static bool Contains(this Map map, Point point)
         {
             return point.X.InRange(0, map.Width - 1) && point.Y.InRange(0, map.Height - 1);
