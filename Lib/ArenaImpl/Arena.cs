@@ -38,7 +38,6 @@ namespace Lib.ArenaImpl
             for (int i = 0; i < problem.Problem.sourceSeeds.Count; i++)
             {
                 Run(problem, i, solver);
-                break; //TODO del
             }
             return new ArenaModel { Problems = Problems };
         }
