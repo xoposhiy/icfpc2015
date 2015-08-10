@@ -21,7 +21,14 @@ namespace Lib
             "Tsathoggua", //powerBits: 16
             "Necronomicon", //powerBits: 64
             "cthulhu fhtagn!", //powerBits: 256
-            "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn." // powerBits: 516 = 512 + 4
+            "Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn.", // powerBits: 516 = 512 + 4
+
+			"vigintillion",
+			"In his house at R'lyeh dead Cthulhu waits dreaming.",
+			"The Laundry",
+			"monkeyboy",
+			"John Bigboote",
+			"CASE NIGHTMARE GREEN",
         };
 
         public Phrases(string[] powerWords)
