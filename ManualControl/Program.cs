@@ -11,7 +11,7 @@ namespace ManualControl
         [STAThread]
         public static void Main()
         {
-            var map = Problems.LoadProblems()[5].ToMap(2);
+            var map = Problems.LoadProblems()[1].ToMap(2);
 
             var model = new MainModel() {FastForwardSteps = 1};
             var dfsFinder = new BfsNoMagicFinder();

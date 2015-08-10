@@ -24,7 +24,9 @@ namespace Optimization
         static double[] baseline = null;
         static Tuple<int, int>[] mapIndices = new Tuple<int, int>[]
         {
-                Tuple.Create(0,0), Tuple.Create(4,0), Tuple.Create(9,0), Tuple.Create(23,0), Tuple.Create(11,0), Tuple.Create(5,0)
+           //     Tuple.Create(0,0), Tuple.Create(2,0), Tuple.Create(4,0), Tuple.Create(9,0), Tuple.Create(23,0), // играть в тетрис
+           //     Tuple.Create(1,0), Tuple.Create(3,0), Tuple.Create(5,0), Tuple.Create(7,0) // разбирать говно
+                Tuple.Create(13,0), Tuple.Create(15,0), Tuple.Create(20,0) // хуи вместо фигур
         };
         static Map[] maps;
 
