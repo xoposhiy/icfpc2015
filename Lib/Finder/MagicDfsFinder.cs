@@ -9,14 +9,15 @@ namespace Lib.Finder
 {
     public class MagicDfsFinder : IFinder
     {
-        private const int MaxDepth = 3;
+        private readonly int maxDepth;
         private readonly IFinder dfsFinder;
         private readonly Phrases phrases;
         private readonly Directions[][] allSpells;
 
-        public MagicDfsFinder(Phrases phrases)
+        public MagicDfsFinder(Phrases phrases, int maxDepth = 3)
         {
             this.phrases = phrases;
+            this.maxDepth = maxDepth;
             dfsFinder = new HackedDfsFinder(phrases);
             allSpells = phrases.AsDirections.Reverse().ToArray();
         }
@@ -78,12 +79,13 @@ namespace Lib.Finder
         private IEnumerable<List<Directions[]>> GenerateSpellsSequences()
         {
             var list = new List<Directions[]>();
-            for (int length = MaxDepth; length >= 1; length--)
+            for (int length = maxDepth; length >= 1; length--)
                 foreach (var sequence in GenerateSpellsSequences(list, length))
                     yield return sequence;
         }
 
         private const bool ChooseCarefully = false;
+
 
         public Tuple<int, IEnumerable<Directions>> GetSpellLengthAndPath(Map map, UnitPosition target)
         {

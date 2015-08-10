@@ -105,13 +105,13 @@ namespace Lib.Intelligence.Metrics
             var given = GetCap(x, y).SelectMany(p => new[] { p.X, p.Y }).ToArray();
             Assert.AreEqual(coos, given);
         }
-
-        private static double FindClosureIndex(int x, int y, Map map)
+        
+        static int FindClosureIndex(int x, int y, Map map)
         {
             if (map.Filled[x, y]) return 0;
             var cap = GetCap(x, y);
-            var problems = cap.Where(p => !map.IsInside(p) || map.Filled[p.X, p.Y]).Count();
-            return problems / 4.0;
+            int problems = cap.Where(p => !map.IsInside(p) || map.Filled[p.X, p.Y]).Count();
+            return problems;
         }
 
         private static Point[] GetCap(int x, int y)

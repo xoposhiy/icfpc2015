@@ -81,6 +81,7 @@
     <Compile Include="Finder\HackedDfsFinder.cs" />
     <Compile Include="Finder\IFinder.cs" />
     <Compile Include="Finder\MagicDfsFinder.cs" />
+    <Compile Include="Intelligence\AdaptiveSolver.cs" />
     <Compile Include="Intelligence\HircineOracle.cs" />
     <Compile Include="Intelligence\HircineOracleTest.cs" />
     <Compile Include="Intelligence\IOracle.cs" />

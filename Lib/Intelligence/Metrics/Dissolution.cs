@@ -19,6 +19,15 @@ namespace Lib.Intelligence.Metrics
                 .Take(3)
                 .ToList();
 
+            if (counts[0].Before < before.Width / 3) return 0;
+
+            if (unit.Position.Point.Y==10)
+            {
+                var e = 0;
+            }
+
+            if (counts.Any(z => z.Delta < 0)) return 1;
+
             double factor = 1;
             double scores = 0;
             foreach (var e in counts)
@@ -26,8 +35,8 @@ namespace Lib.Intelligence.Metrics
                 scores += e.Delta * factor;
                 factor *= 0.5;
             }
-      
-            return scores/unit.Members.Count();
+
+            return scores / unit.Members.Count();
         }
         
 

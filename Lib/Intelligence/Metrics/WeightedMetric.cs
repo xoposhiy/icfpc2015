@@ -49,9 +49,19 @@ namespace Lib.Intelligence
 //            new WeightedMetric(SimpleMetrics.GoDown, 0.1)
         };
 
-        public static readonly List<WeightedMetric> Keening = CreateCombination(0.35, 1,0.1,0.45,0.2);
+        /// <summary>
+        /// Для карт, где надо играть в тетрис (0, 4, 9, 23)
+        /// </summary>
+        public static readonly List<WeightedMetric> Keening= CreateCombination(0.45, 0.95, 0.3, 0.6, 0.2);
 
-        public static readonly List<WeightedMetric> Sunder = CreateCombination(0.25, 0.5, 0.25, 0.1);
+        /// <summary>
+        /// Для карт, где вместо фигурок сыпятся, например, Ктулху (13, 15, 20)
+        /// </summary>
+        public static readonly List<WeightedMetric> Sunder = CreateCombination(0.45, 0.95, 0.20, 0.6, 0.60);
+
+
+        [Obsolete("For test purposes only")]
+        public static readonly List<WeightedMetric> Test = CreateCombination(0.45, 0.95, 0.20, 0.6, 0.60);
     }
 
     public static class MephalaMetricListExtensions

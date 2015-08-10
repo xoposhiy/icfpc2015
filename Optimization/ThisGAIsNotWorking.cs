@@ -70,7 +70,7 @@ namespace SetPartition
             maps = mapIndices
                 .Select(z => Problems.LoadProblems()[z.Item1].ToMap(z.Item2))
                 .ToArray();
-            baseline = maps.Select(z => Run(z, WeightedMetric.Keening)).ToArray();
+            baseline = maps.Select(z => Run(z, WeightedMetric.Test)).ToArray();
 
             var ga = new GeneticAlgorithm<ArrayChromosome<double>>(
                 () => new ArrayChromosome<double>(functions.Count)
