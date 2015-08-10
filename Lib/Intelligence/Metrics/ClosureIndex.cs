@@ -35,12 +35,16 @@ namespace Lib.Intelligence.Metrics
                     var delta = FindClosureIndex(x, y, after) - FindClosureIndex(x, y, before);
                     dict[delta]++;
                 }
-            if (dict[4] > 0 || dict[3] > 0) return 0;
-            if (dict[2] > 0 || dict[1] > 0) return 0.2;
-            if (dict[-1] > 0 || dict[-2] > 0) return 0.8;
-            if (dict[-3] > 0 || dict[-4] > 0) return 1;
+            double factor = 1;
+            double result = 0;
+            for (int i = 4; i > 0; i--)
+            {
+                result -= dict[i] * factor;
+                result += dict[-i] * factor;
+                factor /= 2;
+            }
 
-            return 0.5;
+            return result;
         }
 
 
