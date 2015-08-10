@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Lib.ArenaImpl;
 using Lib.Finder;
@@ -8,6 +9,57 @@ using NLog;
 
 namespace Lib.Intelligence
 {
+
+    public class AdaptiveSolver : ISolver
+    {
+        private readonly Phrases phrases;
+        private MagicDfsFinder finder;
+        private Solver fast;
+        private Solver slowest;
+        private Solver slow;
+
+        public string Name => "Adaptive";
+
+        public AdaptiveSolver(Phrases phrases)
+        {
+            this.phrases = phrases;
+            finder = new MagicDfsFinder(phrases);
+            IOracle mephalaOracle = new MephalaOracle(finder, WeightedMetric.Keening);
+            fast = BuildSolver(mephalaOracle);
+            slowest = BuildSolver(new HircineOracle(finder, WeightedMetric.Debug, 5, 5));
+            slow = BuildSolver(new HircineOracle(finder, WeightedMetric.Debug, 3, 5));
+        }
+
+        private Solver BuildSolver(IOracle mephalaOracle)
+        {
+            return new Solver(phrases, finder, mephalaOracle);
+        }
+
+        public SolverResult Solve(Map map)
+        {
+            var sw = Stopwatch.StartNew();
+            var res = fast.Solve(map);
+            if (sw.Elapsed.TotalSeconds < 4 && IsSmall(map))
+            {
+                var solver = IsSmallest(map) ? slowest : slow;
+                Console.WriteLine($"{res.Score} on fast. Try slow " + solver);
+                var res2 = IsSmallest(map) ? slowest.Solve(map) : slow.Solve(map);
+                if (res2.Score > res.Score) return res2;
+            }
+            return res;
+        }
+
+        private static bool IsSmall(Map map)
+        {
+            return map.Width * map.Height <= 15 * 10;
+        }
+
+        private static bool IsSmallest(Map map)
+        {
+            return map.Width * map.Height <= 10 * 10;
+        }
+    }
+
     public class Solver : ISolver
     {
         private readonly Phrases phrases;
@@ -15,6 +67,11 @@ namespace Lib.Intelligence
         public readonly IOracle Oracle;
         private readonly int bestSugessionsCount;
         private readonly double metricEpsilon;
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public Solver(Phrases phrases, IFinder finder, IOracle oracle, int bestSugessionsCount = 20, double metricEpsilon = 1)
         {

@@ -26,9 +26,10 @@ namespace Lib.ArenaImpl
         {
             foreach (var arenaProblem in Problems)
             {
+                Console.WriteLine(arenaProblem.Problem.id + " w=" + arenaProblem.Problem.width);
                 var sw = Stopwatch.StartNew();
                 RunProblem(arenaProblem, solver);
-                Console.WriteLine(arenaProblem.Problem.id + " " + sw.Elapsed);
+                Console.WriteLine(" " + sw.Elapsed);
             }
             return new ArenaModel { Problems = Problems, SolverName = solver.Name };
         }

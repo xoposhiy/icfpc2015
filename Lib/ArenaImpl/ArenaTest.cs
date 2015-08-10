@@ -37,7 +37,7 @@ namespace Lib.ArenaImpl
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static void EvaluateSolver(Solver solver, params int[] maps)
+        public static void EvaluateSolver(ISolver solver, params int[] maps)
         {
             var ps = Problems.LoadProblems();
             if (maps.Length == 0)
@@ -101,15 +101,16 @@ namespace Lib.ArenaImpl
             return model;
         }
 
-        public static Solver CuttingEdgeSolver(string[] powerWords)
+        public static ISolver CuttingEdgeSolver(string[] powerWords)
         {
             var phrases = new Phrases(powerWords);
+            var adaptive = new AdaptiveSolver(phrases);
             var finder = new MagicDfsFinder(phrases);
             var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
             var hircine = new HircineOracle(finder, WeightedMetric.Debug, 3, 3);
 
             var solver = new Solver(phrases, finder, hircine);
-            return solver;
+            return adaptive;
         }
     }
 }

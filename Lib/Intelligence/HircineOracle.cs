@@ -13,6 +13,11 @@ namespace Lib.Intelligence
         private readonly int lookupDepth;
         private readonly int lookupWidth;
 
+        public override string ToString()
+        {
+            return $"Hircine d={lookupDepth}, w={lookupWidth}";
+        }
+
         public HircineOracle(IFinder finder, List<WeightedMetric> metric, int lookupDepth, int lookupWidth)
         {
             this.finder = finder;
