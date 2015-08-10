@@ -38,7 +38,7 @@ namespace Lib.Models
 
             IsLine = Displacements
                 .Where(z => z != null)
-                .Any(z => z.All(x => x.Y== z[0].Y));
+                .Any(z => z.All(x => Math.Abs(x.Y-z[0].Y)<1e-5));
             IsLine = IsLine && members.Count() > 1;
         }
     }

@@ -25,29 +25,48 @@ namespace Lib.Intelligence.Metrics
             for (int y=map.Height-1;y>=0;y--)
             {
                 for (int x = 0; x < map.Width; x++)
-                    if (map.Filled[x, y] != AtLine(map, new Point(x, y)))
+                    if (map.Filled[x, y] == AtLine(map, new Point(x, y)))
                         return map.Height - 1 - y;
             }
             return map.Height - 1;
+        }
+
+        public static double BottomFillness(Map map, double bottomPercentage)
+        {
+            var h = (int)(map.Height * bottomPercentage);
+            double count = 0;
+            for (int y = map.Height - h; y < map.Height; y++)
+                for (int x = 0; x < map.Width; x++)
+                    count += map.Filled[x, y] ? 1 : 0;
+            return count / (map.Width * h);    
+
         }
 
         public static double Check(Map before, Map after, PositionedUnit unit)
         {
             if (!before.NextUnits.Any(z => z.IsLine))
                 return 0;
+            if (BottomFillness(before,0.4) > 0.8) return 0;
+
+            var any = unit.Members.Any(p => AtLine(before, p));
+            var all = unit.Members.All(p => AtLine(before, p));
+
             if (!unit.Unit.IsLine)
             {
-                if (unit.Members.Any(p => AtLine(before, p)))
+                if (any)
                     return -1;
                 return 0;
             }
             else
             {
-                if (CheckFillness(before) < unit.Members.Count())
-                    return -1;
-                if (unit.Members.All(p => AtLine(before, p)))
+                if (all)
+                {
+                    if (CheckFillness(before) < unit.Members.Count())
+                        return -1;
                     return 1;
-                return 0;
+                }
+                else if (any) return -1;
+                else return 0;
             }
         }
     }
