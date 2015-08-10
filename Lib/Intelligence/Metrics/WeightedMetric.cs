@@ -42,7 +42,7 @@ namespace Lib.Intelligence
         }
 
 
-        public static readonly List<WeightedMetric> Keening = CreateCombination(0.5, 1,0.3,100);
+        public static readonly List<WeightedMetric> Keening = CreateCombination(0.5, 1,0.3,1);
 
     }
 

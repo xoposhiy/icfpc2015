@@ -82,23 +82,9 @@ namespace WordsFarmer
 
         public static void Main()
         {
-            //PostWords(); return;
+            PostWords(); return;
             //ReadSubmissions(); return;
 
-            var origin = "BIG BOO TAY! TAY! TAY!" ;
-            for (int i = 0; i < 1000; i++)
-            {
-
-                var word = "";
-                for (int j = 0; j < i; j++)
-                {
-                    word += "al";
-                }
-                word += origin;
-                var post = WordChecker.PrepareWord(word, 0);
-                if (post.Status == WordStatus.OK)
-                    Console.WriteLine(post.OriginalWord);
-            }
         }
     }
 }

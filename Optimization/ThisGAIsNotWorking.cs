@@ -61,7 +61,7 @@ namespace SetPartition
         static double Baseline;
 
 
-        static void Main()
+        static void MainX()
         {
             functions= WeightedMetric.KnownFunctions.ToList();
 
