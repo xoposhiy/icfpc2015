@@ -55,6 +55,9 @@ namespace Lib.Intelligence.Metrics
             return after.AverageDepth() / after.Height;
         }
 
-
+        public static double Score(Map before, Map after, PositionedUnit arg3)
+        {
+            return (after.Scores.TotalScores - before.Scores.TotalScores) / 100.0;
+        }
     }
 }

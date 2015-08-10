@@ -30,6 +30,7 @@ namespace Lib
         [Test, Explicit]
         public void FindBadProblems()
         {
+            var jsons = Problems.LoadProblems();
             var myId = 37;
             var problems = LoadProblemRankings();
             var myRes = problems.Select(
@@ -38,7 +39,8 @@ namespace Lib
                 .ToList();
             foreach (var r in myRes)
             {
-                Console.WriteLine(r.Item1.ProblemId + "\t" + r.Item2.rank);   
+                var problemJson = jsons[r.Item1.ProblemId];
+                Console.WriteLine($"Id:{r.Item1.ProblemId} \tRank:{r.Item2.rank} \tScore:{r.Item2.score} \tSize:{problemJson.width}x{problemJson.height}");
             }
             Console.WriteLine(myRes.Sum(r => r.Item2.rank));
         }

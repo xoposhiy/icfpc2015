@@ -41,8 +41,10 @@ namespace Lib.Intelligence
 
         public static readonly List<WeightedMetric> Debug = new List<WeightedMetric>
         {
-            new WeightedMetric(SimpleMetrics.MapDown, 0.2),
-            new WeightedMetric(ClosureIndex.Index, 0.1)
+            new WeightedMetric(SimpleMetrics.MapDown, 0.1),
+            new WeightedMetric(ClosureIndex.Index, 0.05),
+            new WeightedMetric(SimpleMetrics.Score, 0.1),
+//            new WeightedMetric(SimpleMetrics.GoDown, 0.1)
         };
 
         public static readonly List<WeightedMetric> Keening = CreateCombination(0.25, 0.25, 0.25, 0.25);

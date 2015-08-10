@@ -26,7 +26,7 @@ namespace Lib.Intelligence
             if (depth == lookupDepth)
                 return Tuple.Create(map.Scores.TotalScores + metricValue, map);
             if (map.IsOver)
-                return Tuple.Create(0.0, map);
+                return Tuple.Create(map.Scores.TotalScores + 0.0, map);
             var bestMap = EvaluateSuggestions(depth, map).MaxItem(z => z.Metrics);
             return Tuple.Create(bestMap.Metrics, bestMap.LockedFinalMap);
         }
@@ -37,7 +37,7 @@ namespace Lib.Intelligence
                 .GetReachableSugessions(finder, map)
                 .Select(suggestion => metric.Evaluate(map, suggestion))
                 .OrderByDescending(z => z.Metrics)
-                .Take(Math.Max(2, lookupWidth))
+                .Take(Math.Max(2, lookupWidth - depth))
                 .ToList();
 
             return
