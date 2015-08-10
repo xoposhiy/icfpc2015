@@ -12,12 +12,9 @@ namespace Lib.Intelligence.Metrics
     [TestFixture]
    public  class LineSlots
     {
-        static double GetCountOfEmptyCellsInLine(Map map, int y)
-        {
-            return Enumerable.Range(0, map.Width)
-                .Where(x => !map.Filled[x,y])
-                .Count();
-        }
+        const int maxLineSlotLength = 3;
+
+
 
         static IEnumerable<Point> GetPath(int startX, int startY, double dx, double dy)
         {
@@ -62,9 +59,15 @@ namespace Lib.Intelligence.Metrics
                 if (!map.IsInside(p)) break;
                 if (map.Filled[p.X, p.Y]) break;
                 length++;
-                if (length >= 5) break;
+                if (length > maxLineSlotLength) return -1;
             }
             return length;
+        }
+
+        static int ResultingLength(params int[] lengthes)
+        {
+            if (lengthes.All(z => z < 0)) return -1;
+            return lengthes.Where(z => z >= 0).Max();
         }
 
         static double FindLinearityIndex(Map map)
@@ -75,13 +78,13 @@ namespace Lib.Intelligence.Metrics
                 for (int x = 0; x < map.Width; x++)
                 {
                     if (map.Filled[x, y]) continue;
-                    count++;
-                    var length = Math.Max(
+                    var length = ResultingLength(
                         GetPathLength(map, x, y, Directions.E),
-                        GetPathLength(map, x, y, Directions.SE));
-                    length = Math.Max(length,
+                        GetPathLength(map, x, y, Directions.SE),
                         GetPathLength(map, x, y, Directions.SW));
+                    if (length < 0) continue;
                     sum += length;
+                    count++;
                 }
             return sum / count;
         }
@@ -91,8 +94,8 @@ namespace Lib.Intelligence.Metrics
             var beforeIndex = FindLinearityIndex(before);
             var afterIndex = FindLinearityIndex(after);
             if (afterIndex < beforeIndex) return 0;
-            if (beforeIndex < 0.01) return 0;
-            return afterIndex / beforeIndex;
+            if (beforeIndex < 0.01) return 1;
+            return Math.Min(afterIndex / beforeIndex, 1);
         }
 
     }

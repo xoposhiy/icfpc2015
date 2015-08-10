@@ -25,7 +25,9 @@ namespace Lib.Intelligence
                 yield return SimpleMetrics.GoDown;
                 yield return SimpleMetrics.EraseLines;
                 yield return ClosureIndex.Minimize;
-                yield return SimpleMetrics.MapDown;
+                yield return NewLineSlots.Check;
+                yield return Dissolution.Perform;
+//                yield return LineSlots.Maximize;
             }
         }
 
@@ -47,7 +49,7 @@ namespace Lib.Intelligence
 //            new WeightedMetric(SimpleMetrics.GoDown, 0.1)
         };
 
-        public static readonly List<WeightedMetric> Keening = CreateCombination(0.25, 0.25, 0.25, 0.25);
+        public static readonly List<WeightedMetric> Keening = CreateCombination(0.35, 1,0.1,0.45,0.2);
 
         public static readonly List<WeightedMetric> Sunder = CreateCombination(0.25, 0.5, 0.25, 0.1);
     }

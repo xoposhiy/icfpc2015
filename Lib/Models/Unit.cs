@@ -13,6 +13,7 @@ namespace Lib.Models
         private static readonly PointsComparer pointsComparer = new PointsComparer();
         public readonly int Period;
         public readonly PointF[][] Displacements;
+        public readonly bool IsLine;
 
         public Unit(IEnumerable<Point> members, Point pivot)
         {
@@ -34,6 +35,11 @@ namespace Lib.Models
                     break;
                 }
             }
+
+            IsLine = Displacements
+                .Where(z => z != null)
+                .Any(z => z.All(x => Math.Abs(x.Y-z[0].Y)<1e-5));
+            IsLine = IsLine && members.Count() > 1;
         }
     }
 }

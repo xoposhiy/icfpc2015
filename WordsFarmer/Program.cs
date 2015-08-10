@@ -37,7 +37,7 @@ namespace WordsFarmer
             posts = new List<WordPost>();
             wrongs = new List<WordPost>();
 
-            while(posts.Count<49)
+            while (posts.Count < 49)
             {
                 if (words.Count == 0) break;
                 var word = words[0];
@@ -46,16 +46,16 @@ namespace WordsFarmer
             }
 
             File.AppendAllLines("..\\..\\wrongWords.txt",
-                wrongs.Select(z => string.Format("{0,-8}{1,-20}{2}", z.Status, z.Word,z.OriginalWord))
+                wrongs.Select(z => string.Format("{0,-8}{1,-20}{2}", z.Status, z.Word, z.OriginalWord))
                 );
 
-            File.AppendAllLines ("..\\..\\submittedWords.txt",
-                posts.Select(z => string.Format("{0,-8}{1,-20}{2}", z.Status, z.Word,z.OriginalWord))
+            File.AppendAllLines("..\\..\\submittedWords.txt",
+                posts.Select(z => string.Format("{0,-8}{1,-20}{2}", z.Status, z.Word, z.OriginalWord))
                 );
 
             File.WriteAllLines("..\\..\\words.txt", words);
-            
-           
+
+
 
             var subs = posts
                 .Select(z => new SubmitionJson
@@ -73,17 +73,18 @@ namespace WordsFarmer
 
         public static void ReadSubmissions()
         {
-          
+
             var res = client.GetSubmissions();
-            foreach (var submission in res.Where(z => z.tag.StartsWith(tag) && z.powerScore!=0))
-                Console.WriteLine("{0,-6}{1,-6}{2}", submission.powerScore, submission.score,submission.solution);
+            foreach (var submission in res.Where(z => z.tag.StartsWith(tag) && z.powerScore != 0))
+                Console.WriteLine("{0,-6}{1,-6}{2}", submission.powerScore, submission.score, submission.solution);
         }
 
 
         public static void Main()
         {
-           //PostWords(); return;
-           ReadSubmissions();
+            PostWords(); return;
+            //ReadSubmissions(); return;
+
         }
     }
 }

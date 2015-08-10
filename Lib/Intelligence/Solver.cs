@@ -24,9 +24,8 @@ namespace Lib.Intelligence
         {
             this.phrases = phrases;
             finder = new MagicDfsFinder(phrases);
-            IOracle mephalaOracle = new MephalaOracle(finder, WeightedMetric.Keening);
-            fast = BuildSolver(mephalaOracle);
-            slowest = BuildSolver(new HircineOracle(finder, WeightedMetric.Debug, 5, 5));
+            fast = BuildSolver(new MephalaOracle(finder, WeightedMetric.Keening));
+            slowest = BuildSolver(new HircineOracle(finder, WeightedMetric.Debug, 4, 5));
             slow = BuildSolver(new HircineOracle(finder, WeightedMetric.Debug, 3, 5));
         }
 

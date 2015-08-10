@@ -18,21 +18,29 @@ namespace SetPartition
     static class SetPartition
     {
         static Random rnd = new Random();
-        static Map initialMap = Problems.LoadProblems()[9].ToMap(0);
+        static Tuple<int, int>[] mapIndices = new Tuple<int, int>[]
+            {
+                Tuple.Create(0,0)
+            };
+        static Map[] maps;
+        static double[] baseline;
 
-        static List<Func<Map, Map, PositionedUnit, double>> functions = WeightedMetric.KnownFunctions.ToList();
+
+        static List<Func<Map, Map, PositionedUnit, double>> functions; 
 
         static double Run(ArrayChromosome<double> argument)
         {
-
             var Sunder = new List<WeightedMetric>();
             for (int i = 0; i < functions.Count; i++)
                 Sunder.Add(new WeightedMetric(functions[i], argument.Code[i]));
-            return Run(Sunder);
-            
+
+            var result = maps.Select(z => Run(z, Sunder)).ToArray();
+            for (int i = 0; i < result.Length; i++)
+                result[i] /= baseline[i];
+            return result.Average();
           }
 
-        static double Run(List<WeightedMetric> metric)
+        static double Run(Map map, List<WeightedMetric> metric)
         {
             var phrases = new Phrases(Phrases.DefaultPowerWords);
             var finder = new MagicDfsFinder(phrases);
@@ -40,9 +48,9 @@ namespace SetPartition
             var solver = new Solver(phrases, finder, mephala);
             // Console.Write("Solving ");
             //Console.WriteLine(argument.Code.Select(z => Math.Round(z, 3).ToString()).Aggregate((a, b) => a + " " + b));
-            var result = solver.Solve(initialMap);
+            var result = solver.Solve(map);
             //Console.WriteLine("Result" + result.Score + "\n\n");
-            return (double)result.Score/Baseline;
+            return result.Score;
         }
 
         static string Print(ArrayChromosome<double> argument)
@@ -54,10 +62,15 @@ namespace SetPartition
         static double Baseline;
 
 
-        static void Main()
+        static void MainX()
         {
-            Baseline = 1;
-            Baseline=Run(WeightedMetric.Keening);
+            functions= WeightedMetric.KnownFunctions.ToList();
+
+
+            maps = mapIndices
+                .Select(z => Problems.LoadProblems()[z.Item1].ToMap(z.Item2))
+                .ToArray();
+            baseline = maps.Select(z => Run(z, WeightedMetric.Keening)).ToArray();
 
             var ga = new GeneticAlgorithm<ArrayChromosome<double>>(
                 () => new ArrayChromosome<double>(functions.Count)
@@ -65,14 +78,14 @@ namespace SetPartition
 
             Solutions.AppearenceCount.MinimalPoolSize(ga, 10);
             Solutions.MutationOrigins.Random(ga,0.5);
-            Solutions.CrossFamilies.Random(ga, z => z * 0.5);
-            Solutions.Selections.Threashold(ga, 10);
+            //Solutions.CrossFamilies.Random(ga, z => z * 0.5);
+            Solutions.Selections.Threashold(ga, 8);
 
 
 
             ArrayGeneSolutions.Appearences.Double(ga);
             ArrayGeneSolutions.Mutators.Double(ga,0.1,0.1,0.5);
-            ArrayGeneSolutions.Crossover.Mix(ga);
+           // ArrayGeneSolutions.Crossover.Mix(ga);
 
 
 
