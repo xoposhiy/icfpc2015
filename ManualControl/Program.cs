@@ -15,7 +15,7 @@ namespace ManualControl
 
             var model = new MainModel() {FastForwardSteps = 1};
             var dfsFinder = new BfsNoMagicFinder();
-            var mephala = new MephalaOracle(dfsFinder, WeightedMetric.Keening);
+            var mephala = new MephalaOracle(dfsFinder, WeightedMetric.Test);
             //            model.Solver = new Lib.Intelligence.Solver(dfsFinder, new AzuraOracle());
             model.Solver = new Solver(dfsFinder, mephala);
             model.History = new History(map);

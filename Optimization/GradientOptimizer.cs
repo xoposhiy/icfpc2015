@@ -22,12 +22,13 @@ namespace Optimization
         static Random rnd = new Random();
         static double step = 0.05;
         static double[] baseline = null;
-        static Tuple<int, int>[] mapIndices = new Tuple<int, int>[]
-        {
-           //     Tuple.Create(0,0), Tuple.Create(2,0), Tuple.Create(4,0), Tuple.Create(9,0), Tuple.Create(23,0), // играть в тетрис
-           //     Tuple.Create(1,0), Tuple.Create(3,0), Tuple.Create(5,0), Tuple.Create(7,0) // разбирать говно
-                Tuple.Create(13,0), Tuple.Create(15,0), Tuple.Create(20,0) // хуи вместо фигур
-        };
+        static int[] mapIndices = new int[]
+        { 
+       //     0,4,9,23,  // играть в тетрис
+        //   1,5,7,// разбирать говно
+         //   13,15,20 // хуи вместо фигур
+    };
+        static int Seed = 4;
         static Map[] maps;
 
         static Result Shift(Result current, int coordinate, int direction, Func<double[], double> evaluator)
@@ -63,7 +64,7 @@ namespace Optimization
             for (int i=0;i<10;i++)
             {
                 var veryNew = Shift(newResult, coordinate, direction, evaluator);
-                if (veryNew.value < newResult.value) return newResult;
+                if (veryNew.value <= newResult.value) return newResult;
                 newResult = veryNew;
             }
             return newResult;
@@ -87,10 +88,16 @@ namespace Optimization
         static double[] Run(double[] vector)
         {
             var Sunder = new List<WeightedMetric>();
-            for (int i = 0; i < WeightedMetric.Keening.Count; i++)
-                Sunder.Add(new WeightedMetric(WeightedMetric.Keening[i].Function, vector[i]));
+            var functions = WeightedMetric.KnownFunctions.ToArray();
+            for (int i = 0; i < functions.Length; i++)
+                Sunder.Add(new WeightedMetric(functions[i], vector[i]));
 
-            var result = maps.Select(z => Run(z, Sunder)).ToArray();
+            var result = new double[maps.Length];
+            for (int i = 0; i < maps.Length; i++)
+            {
+                result[i] = Run(maps[i], Sunder);
+         //       Console.Write("." + maps[i].Id);
+            }
             return result;
         }
 
@@ -111,9 +118,18 @@ namespace Optimization
         public static void Main()
         {
             maps = mapIndices
-               .Select(z => Problems.LoadProblems()[z.Item1].ToMap(z.Item2))
+               .Select(z => Problems.LoadProblems()[z].ToMap(Seed))
                .ToArray();
-            var vector = WeightedMetric.Keening.Select(z => z.Weight).ToArray();
+
+
+            var vector = new double[WeightedMetric.KnownFunctions.Count()];
+            for (int i=0;i<WeightedMetric.KnownFunctions.Count();i++)
+            {
+                var test = WeightedMetric.Test.Where(z => z.Function == WeightedMetric.KnownFunctions.ElementAt(i)).FirstOrDefault();
+                if (test == null) continue;
+                vector[i] = test.Weight;
+            } 
+
             Console.Write(Print(vector)+"\t BASELINE");
             baseline = Run(vector);
             var current = new Result { vector = vector, value = 1 };

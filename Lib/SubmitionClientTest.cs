@@ -82,7 +82,7 @@ namespace Lib
         {
             var map = p.ToMap(seed);
             var finder = new MagicDfsFinder();
-            var bestRes = new Solver(finder, new MephalaOracle(finder, WeightedMetric.Keening)).Solve(map);
+            var bestRes = new Solver(finder, new MephalaOracle(finder, WeightedMetric.Test)).Solve(map);
 //            var s2 = new Solver(finder, new AzuraOracle()).Solve(map);
 //            var bestRes = new[] { s1, s2 }.OrderByDescending(s => s.Score).First();
             return new SubmitionJson

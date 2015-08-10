@@ -98,8 +98,8 @@ namespace Lib.ArenaImpl
         private static Solver EdgeSolver()
         {
             var finder = new MagicDfsFinder();
-            var mephala = new MephalaOracle(finder, WeightedMetric.Keening);
-            var hircine = new HircineOracle(finder, mephala, WeightedMetric.Keening, 2, 5);
+            var mephala = new MephalaOracle(finder, WeightedMetric.Test);
+            var hircine = new HircineOracle(finder, mephala, WeightedMetric.Test, 2, 5);
 
             var solver = new Solver(finder, mephala);
             return solver;
